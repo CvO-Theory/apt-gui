@@ -87,8 +87,9 @@ public class GraphvizParser {
 
 		while (!line.equals("stop")) {
 			line = reader.readLine();
-			if (line == null)
+			if (line == null) {
 				throw new ParseException("Premature end of input");
+			}
 
 			String[] words = line.split(" ");
 			switch (words[0]) {
@@ -111,15 +112,17 @@ public class GraphvizParser {
 	}
 
 	private void handleGraph(String[] words) throws ParseException {
-		if (words.length < 4)
+		if (words.length < 4) {
 			throw new ParseException("Invalid 'graph' line");
+		}
 		width = parseDoubleAndRound(words[2]);
 		height = parseDoubleAndRound(words[3]);
 	}
 
 	private void handleNode(String[] words) throws ParseException {
-		if (words.length < 4)
+		if (words.length < 4) {
 			throw new ParseException("Invalid 'node' line");
+		}
 		String node = words[1];
 		int x = parseDoubleAndRound(words[2]);
 		int y = parseDoubleAndRound(words[3]);
@@ -127,14 +130,16 @@ public class GraphvizParser {
 	}
 
 	private void handleEdge(String[] words) throws ParseException {
-		if (words.length < 6)
+		if (words.length < 6) {
 			throw new ParseException("Invalid 'edge' line");
+		}
 		String source = words[1];
 		String target = words[2];
 		int numPoints = parseInteger(words[3]);
 
-		if (words.length < 4 + numPoints * 2)
+		if (words.length < 4 + numPoints * 2) {
 			throw new ParseException("Invalid 'edge' line");
+		}
 
 		List<Point> breakpoints = new ArrayList<>(numPoints);
 		for (int i = 0; i < numPoints; i++) {
@@ -165,8 +170,9 @@ public class GraphvizParser {
 
 	private static int parseDoubleAndRound(String s) throws ParseException {
 		long result = Math.round(parseDouble(s));
-		if (result < Integer.MIN_VALUE || result > Integer.MAX_VALUE)
+		if (result < Integer.MIN_VALUE || result > Integer.MAX_VALUE) {
 			throw new ParseException("Value out of range for integer: " + s);
+		}
 		return (int) result;
 	}
 
@@ -185,6 +191,7 @@ public class GraphvizParser {
 	public Set<Edge> getEdges() {
 		return Collections.unmodifiableSet(edges);
 	}
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

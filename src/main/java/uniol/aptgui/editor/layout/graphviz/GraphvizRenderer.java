@@ -19,26 +19,10 @@
 
 package uniol.aptgui.editor.layout.graphviz;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.Writer;
 
-import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
-
-import uniol.apt.adt.IEdge;
-import uniol.apt.adt.IGraph;
 import uniol.apt.util.Pair;
-
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
 
 /**
  * Write a GraphvizDocument into the DOT file format.

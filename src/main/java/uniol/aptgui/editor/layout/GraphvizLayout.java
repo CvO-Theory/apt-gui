@@ -102,19 +102,22 @@ public class GraphvizLayout implements Layout {
 		int height = parser.getHeight();
 		for (GraphvizParser.Node node : parser.getNodes()) {
 			GraphicalNode graphical = document.getNodeByID(node.getId());
-			if (graphical == null)
+			if (graphical == null) {
 				throw new ParseException("Could not find node with id " + node.getId());
+			}
 			graphical.setCenter(transformPoint(height, node.getPosition()));
 		}
 
 		for (GraphvizParser.Edge edge : parser.getEdges()) {
 			GraphicalEdge graphical = document.getEdgeByIDs(edge.getSource(), edge.getTarget());
-			if (graphical == null)
+			if (graphical == null) {
 				throw new ParseException("Could not find edge from " + edge.getSource() + " to " + edge.getTarget());
+			}
 
 			// First, remove all breakpoints
-			while (graphical.getBreakpointCount() != 0)
+			while (graphical.getBreakpointCount() != 0) {
 				graphical.removeBreakpoint(0);
+			}
 
 			// Then, add new ones
 			for (Point point : edge.getBreakpoints()) {
@@ -131,7 +134,16 @@ public class GraphvizLayout implements Layout {
 		}
 	}
 
-	// Graphviz has the origin in bottom left, we don't. Fix this up by translating coordinates.
+	/**
+	 * Transforms a point from the graphviz coordinate system (origin
+	 * bottom-left) to the application coordinate system (origin top-left).
+	 *
+	 * @param height
+	 *                graphviz coordinate system height
+	 * @param point
+	 *                graphviz point
+	 * @return application point
+	 */
 	private Point transformPoint(int height, Point point) {
 		return new Point((int) point.getX(), height - (int) point.getY());
 	}
