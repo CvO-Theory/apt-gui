@@ -99,7 +99,7 @@ public class GraphvizDocument {
 
 			Pair<String, String> pair = new Pair<>(source, target);
 			boolean added = result.add(pair);
-			assert added = true;
+			assert added;
 		}
 		return result;
 	}
