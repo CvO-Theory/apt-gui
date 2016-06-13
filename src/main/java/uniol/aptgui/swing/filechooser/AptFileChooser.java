@@ -19,11 +19,13 @@
 
 package uniol.aptgui.swing.filechooser;
 
+import java.awt.Component;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -172,6 +174,37 @@ public class AptFileChooser extends JFileChooser {
 		} else {
 			return FileType.ANY;
 		}
+	}
+
+	/**
+	 * Shows the save file chooser. The user can select a file path and name
+	 * that should be saved to. If it already exists the user will be asked
+	 * if he wants to overwrite that file. Returns true if the user (still) wants
+	 * to save a file.
+	 *
+	 * @param dialogParent
+	 *                parent component for the dialog
+	 * @return true, if the save should be performed; false, if the process
+	 *         was cancelled by the user
+	 */
+	public boolean performInteraction(Component dialogParent) {
+		int fcRes;
+		while ((fcRes = showSaveDialog(dialogParent)) == JFileChooser.APPROVE_OPTION
+				&& getSelectedFileWithExtension().exists()) {
+			int ow = askOverwrite(getSelectedFileWithExtension(), dialogParent);
+			if (ow == JOptionPane.YES_OPTION) {
+				return true;
+			} else if (ow == JOptionPane.CANCEL_OPTION) {
+				return false;
+			}
+		}
+		return fcRes == JFileChooser.APPROVE_OPTION;
+	}
+
+	private int askOverwrite(File file, Component dialogParent) {
+		return JOptionPane.showConfirmDialog(dialogParent,
+			"A file with the name '" + file.getName() + "' already exists. Do you want to overwrite it?",
+			"Overwrite existing file?", JOptionPane.YES_NO_CANCEL_OPTION);
 	}
 
 }

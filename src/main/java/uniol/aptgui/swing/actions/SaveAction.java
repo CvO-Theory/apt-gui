@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
 import com.google.common.eventbus.EventBus;
@@ -57,15 +56,20 @@ public class SaveAction extends DocumentAction {
 		WindowId activeWindow = app.getActiveWindow();
 		Document<?> document = app.getDocument(activeWindow);
 		if (shouldShowSaveDialog(document)) {
-			AptFileChooser fc = AptFileChooser.saveChooser(document);
-			int res = fc.showSaveDialog((Component) app.getMainWindow().getView());
-			if (res == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFileWithExtension();
-				FileType type = fc.getSelectedFileType();
-				app.saveToFile(document, file, type);
-			}
+			handleSaveDialogInteraction(document);
 		} else {
 			app.saveToFile(document, document.getFile(), document.getFileType());
+		}
+	}
+
+	private void handleSaveDialogInteraction(Document<?> document) {
+		AptFileChooser fc = AptFileChooser.saveChooser(document);
+		Component parent = (Component) app.getMainWindow().getView();
+
+		if (fc.performInteraction(parent)) {
+			File file = fc.getSelectedFileWithExtension();
+			FileType type = fc.getSelectedFileType();
+			app.saveToFile(document, file, type);
 		}
 	}
 

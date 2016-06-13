@@ -23,8 +23,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
-import javax.swing.JFileChooser;
-
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
@@ -54,8 +52,8 @@ public class ExportAction extends DocumentAction {
 		Document<?> document = app.getDocument(activeWindow);
 
 		AptFileChooser fc = AptFileChooser.exportChooser(document);
-		int res = fc.showSaveDialog((Component) app.getMainWindow().getView());
-		if (res == JFileChooser.APPROVE_OPTION) {
+		Component parent = (Component) app.getMainWindow().getView();
+		if (fc.performInteraction(parent)) {
 			File exportFile = fc.getSelectedFileWithExtension();
 			if (fc.getSelectedFileType() == FileType.SVG) {
 				app.saveToFile(document, exportFile, FileType.SVG);
