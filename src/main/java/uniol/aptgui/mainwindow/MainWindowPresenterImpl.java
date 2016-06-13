@@ -204,12 +204,12 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 		}
 
 		if (window != null) {
-			updateWindowMenu();
 			Document<?> document = application.getDocument(id);
 			if (document != null) {
 				document.removeListener(documentListener);
 				window.removeWindowListener(windowListener);
 			}
+			updateWindowMenu();
 			eventBus.post(new WindowClosedEvent(id));
 		}
 	}
@@ -276,7 +276,7 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 
 	@Override
 	public void showModuleBrowser() {
-		if (moduleBrowserWindowId == null) {
+		if (!internalWindows.containsKey(moduleBrowserWindowId)) {
 			moduleBrowserWindowId = new WindowId(WindowType.MODULE_BROWSER);
 			ModuleBrowserPresenter moduleBrowser = injector.getInstance(ModuleBrowserPresenter.class);
 			InternalWindowPresenter iwp = createInternalWindow(moduleBrowserWindowId, moduleBrowser);

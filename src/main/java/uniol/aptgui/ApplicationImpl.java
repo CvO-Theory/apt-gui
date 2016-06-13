@@ -139,8 +139,8 @@ public class ApplicationImpl implements Application {
 		if (activeWindow == id) {
 			activeWindow = null;
 		}
-		documents.remove(id);
 		mainWindow.removeWindow(id);
+		documents.remove(id);
 		return true;
 	}
 
