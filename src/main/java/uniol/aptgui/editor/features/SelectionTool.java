@@ -87,6 +87,12 @@ public class SelectionTool extends Feature {
 	private TranslateBreakpointCommand translateBreakpointCommand;
 
 	/**
+	 * Flag that is set when a breakpoint has been created by dragging an
+	 * edge at a position where no breakpoint existed before.
+	 */
+	private boolean breakpointCreated;
+
+	/**
 	 * Creates a new SelectionTool that operates on the given document.
 	 *
 	 * @param document
@@ -96,8 +102,14 @@ public class SelectionTool extends Feature {
 		this.viewport = document.getViewport();
 		this.history = history;
 		this.editingOptions = editingOptions;
+
+	}
+
+	@Override
+	public void onActivated() {
 		this.dragType = DragType.NONE;
 		this.dragSource = null;
+		this.breakpointCreated = false;
 	}
 
 	@Override
@@ -132,7 +144,11 @@ public class SelectionTool extends Feature {
 
 		if (dragType == DragType.BREAKPOINT && !translateBreakpointCommand.isIdentity()) {
 			translateBreakpointCommand.unapplyTranslation();
-			history.mergeExecute("Create and Move Breakpoint", translateBreakpointCommand);
+			if (breakpointCreated) {
+				history.mergeExecute("Create and Move Breakpoint", translateBreakpointCommand);
+			} else {
+				history.execute(translateBreakpointCommand);
+			}
 		}
 		if (dragType == DragType.SELECTION && !translateElementsCommand.isIdentity()) {
 			translateElementsCommand.unapplyTranslation();
@@ -145,6 +161,7 @@ public class SelectionTool extends Feature {
 		}
 
 		dragType = DragType.NONE;
+		breakpointCreated = false;
 	}
 
 	@Override
@@ -218,6 +235,7 @@ public class SelectionTool extends Feature {
 				AddBreakpointCommand cmd = new AddBreakpointCommand(document, edge, modelPosition);
 				history.execute(cmd);
 				bpIndex = cmd.getNewBreakpointIndex();
+				breakpointCreated = true;
 			}
 			// If a breakpoint existed or was created, set it up for
 			// dragging.
