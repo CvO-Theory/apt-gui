@@ -76,6 +76,13 @@ public class History {
 	 *                command to be executed
 	 */
 	public void mergeExecute(String compoundName, Command command) {
+		if (executedCommands.isEmpty()) {
+			CompoundCommand compoundCmd = new CompoundCommand(compoundName);
+			compoundCmd.addCommand(command);
+			execute(compoundCmd);
+			return;
+		}
+
 		try {
 			command.execute();
 
