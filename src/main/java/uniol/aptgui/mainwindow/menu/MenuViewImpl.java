@@ -37,6 +37,7 @@ import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.JMenuBarView;
 import uniol.aptgui.swing.actions.CascadeWindowsAction;
 import uniol.aptgui.swing.actions.DeleteElementsAction;
+import uniol.aptgui.swing.actions.DotLayoutAction;
 import uniol.aptgui.swing.actions.ExitAction;
 import uniol.aptgui.swing.actions.ExportAction;
 import uniol.aptgui.swing.actions.ImportAction;
@@ -94,6 +95,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 	private final JMenu documentMenu;
 	private final JMenuItem renameDocument;
 	private final JMenuItem layoutRandom;
+	private final JMenuItem layoutDot;
 
 	private final JMenu moduleMenu;
 	private final JMenuItem moduleBrowser;
@@ -146,6 +148,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 		documentMenu = new JMenu("Document");
 		renameDocument = new JMenuItem(injector.getInstance(RenameDocumentAction.class));
 		layoutRandom = new JMenuItem(injector.getInstance(RandomLayoutAction.class));
+		layoutDot = new JMenuItem(injector.getInstance(DotLayoutAction.class));
 
 		// Modules
 		moduleMenu = new JMenu("Modules");
@@ -222,6 +225,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 
 		documentMenu.add(renameDocument);
 		documentMenu.add(layoutRandom);
+		documentMenu.add(layoutDot);
 
 	}
 
