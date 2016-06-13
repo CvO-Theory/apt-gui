@@ -171,6 +171,13 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	}
 
 	/**
+	 * Removes all breakpoints.
+	 */
+	public void removeAllBreakpoints() {
+		breakpoints.clear();
+	}
+
+	/**
 	 * Returns the amount of breakpoints this edge has.
 	 *
 	 * @return the amount of breakpoints
