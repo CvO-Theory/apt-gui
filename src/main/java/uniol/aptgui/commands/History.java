@@ -60,7 +60,7 @@ public class History {
 				eventBus.post(new HistoryChangedEvent(this));
 			}
 		} catch (Exception ex) {
-			application.getMainWindow().showException("Error", ex);
+			application.getMainWindow().showException("Command Exception", ex);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class History {
 				eventBus.post(new HistoryChangedEvent(this));
 			}
 		} catch (Exception ex) {
-			application.getMainWindow().showException("Error", ex);
+			application.getMainWindow().showException("Command Exception", ex);
 		}
 	}
 

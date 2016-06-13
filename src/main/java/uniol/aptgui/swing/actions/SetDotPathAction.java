@@ -1,7 +1,6 @@
 /*-
  * APT - Analysis of Petri Nets and labeled Transition systems
  * Copyright (C) 2016 Jonas Prellberg
- * Copyright (C) 2016 Uli Schlachter
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,41 +20,37 @@
 package uniol.aptgui.swing.actions;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import com.google.common.eventbus.EventBus;
+import javax.swing.AbstractAction;
+
 import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
-import uniol.aptgui.commands.ApplyLayoutCommand;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.layout.GraphvizLayout;
-import uniol.aptgui.swing.Resource;
-import uniol.aptgui.swing.actions.base.DocumentAction;
+import uniol.aptgui.editor.layout.LayoutOptions;
 
 @SuppressWarnings("serial")
-public class DotLayoutAction extends DocumentAction {
+public class SetDotPathAction extends AbstractAction {
 
-	private final GraphvizLayout graphvizLayout;
+	private static final String ACTION_NAME = "Set Graphviz dot Path";
+
+	private final Application app;
+	private final LayoutOptions layoutOptions;
 
 	@Inject
-	public DotLayoutAction(Application app, EventBus eventBus, GraphvizLayout graphvizLayout) {
-		super(app, eventBus);
-		this.graphvizLayout = graphvizLayout;
-		String name = "Graphviz dot Layout";
-		putValue(NAME, name);
-		putValue(SHORT_DESCRIPTION, name);
-		putValue(SMALL_ICON, Resource.getIconLayout());
-		putValue(MNEMONIC_KEY, KeyEvent.VK_D);
-		setEnabled(false);
-		eventBus.register(this);
+	public SetDotPathAction(Application app, LayoutOptions layoutOptions) {
+		this.app = app;
+		this.layoutOptions = layoutOptions;
+		putValue(NAME, ACTION_NAME);
+		putValue(SHORT_DESCRIPTION, ACTION_NAME);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Document<?> document = app.getActiveDocument();
-		if (document != null) {
-			app.getHistory().execute(new ApplyLayoutCommand(document, graphvizLayout));
+		String input = app.getMainWindow().showInputDialog(ACTION_NAME,
+				"Enter the path to the Graphviz dot executable file:",
+				layoutOptions.getGraphvizDotPath());
+		if (input != null && !input.trim().isEmpty()) {
+			layoutOptions.setGraphvizDotPath(input);
 		}
 	}
 

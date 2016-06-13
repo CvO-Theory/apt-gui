@@ -53,6 +53,7 @@ import uniol.aptgui.swing.actions.SaveAction;
 import uniol.aptgui.swing.actions.SaveAllAction;
 import uniol.aptgui.swing.actions.SaveAsAction;
 import uniol.aptgui.swing.actions.SetColorAction;
+import uniol.aptgui.swing.actions.SetDotPathAction;
 import uniol.aptgui.swing.actions.SetGridSpacingAction;
 import uniol.aptgui.swing.actions.SetGridVisibleAction;
 import uniol.aptgui.swing.actions.SetInitialStateAction;
@@ -86,12 +87,16 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 	private final JMenu editMenu;
 	private final JMenuItem undo;
 	private final JMenuItem redo;
-	private final JMenuItem snapToGrid;
 	private final JMenuItem setColor;
 	private final JMenuItem setLabel;
 	private final JMenuItem setTokens;
 	private final JMenuItem setInitialState;
 	private final JMenuItem delete;
+
+	private final JMenu editPreferencesMenu;
+	private final JMenuItem snapToGrid;
+	private final JMenuItem setGridSpacing;
+	private final JMenuItem setDotPath;
 
 	private final JMenu documentMenu;
 	private final JMenuItem renameDocument;
@@ -111,7 +116,6 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 	private final JMenuItem showIdLabelsPlace;
 	private final JMenuItem showIdLabelsTransition;
 	private final JMenuItem showGrid;
-	private final JMenuItem setGridSpacing;
 
 	private final JMenu windowMenu;
 	private final JMenuItem cascadeEditorWindows;
@@ -137,12 +141,16 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 		editMenu = new JMenu("Edit");
 		undo = new JMenuItem(injector.getInstance(UndoAction.class));
 		redo = new JMenuItem(injector.getInstance(RedoAction.class));
-		snapToGrid = new JCheckBoxMenuItem(injector.getInstance(SetSnapToGridAction.class));
 		setColor = new JMenuItem(injector.getInstance(SetColorAction.class));
 		setLabel = new JMenuItem(injector.getInstance(SetLabelAction.class));
 		setTokens = new JMenuItem(injector.getInstance(SetTokensAction.class));
 		setInitialState = new JMenuItem(injector.getInstance(SetInitialStateAction.class));
 		delete = new JMenuItem(injector.getInstance(DeleteElementsAction.class));
+
+		editPreferencesMenu = new JMenu("Preferences");
+		snapToGrid = new JCheckBoxMenuItem(injector.getInstance(SetSnapToGridAction.class));
+		setGridSpacing = new JMenuItem(injector.getInstance(SetGridSpacingAction.class));
+		setDotPath = new JMenuItem(injector.getInstance(SetDotPathAction.class));
 
 		snapToGrid.setSelected(editingOptions.isSnapToGridEnabled());
 
@@ -168,7 +176,6 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 		showIdLabelsPlace = new JCheckBoxMenuItem(injector.getInstance(SetPlaceIdLabelVisibleAction.class));
 		showIdLabelsTransition = new JCheckBoxMenuItem(injector.getInstance(SetTransitionIdLabelVisibleAction.class));
 		showGrid = new JCheckBoxMenuItem(injector.getInstance(SetGridVisibleAction.class));
-		setGridSpacing = new JMenuItem(injector.getInstance(SetGridSpacingAction.class));
 
 		showIdLabelsState.setSelected(renderingOptions.isStateIdLabelVisible());
 		showIdLabelsPlace.setSelected(renderingOptions.isPlaceIdLabelVisible());
@@ -214,13 +221,17 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 		editMenu.add(undo);
 		editMenu.add(redo);
 		editMenu.addSeparator();
-		editMenu.add(snapToGrid);
-		editMenu.addSeparator();
 		editMenu.add(setColor);
 		editMenu.add(setLabel);
 		editMenu.add(setTokens);
 		editMenu.add(setInitialState);
 		editMenu.add(delete);
+		editMenu.addSeparator();
+		editMenu.add(editPreferencesMenu);
+
+		editPreferencesMenu.add(snapToGrid);
+		editPreferencesMenu.add(setGridSpacing);
+		editPreferencesMenu.add(setDotPath);
 	}
 
 	private void setupDocumentMenu() {
@@ -252,7 +263,6 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 		viewMenu.add(showIdLabelsTransition);
 		viewMenu.addSeparator();
 		viewMenu.add(showGrid);
-		viewMenu.add(setGridSpacing);
 	}
 
 	private void setupWindowMenu() {

@@ -50,6 +50,7 @@ import uniol.aptgui.editor.document.PnDocument;
 import uniol.aptgui.editor.document.RenderingOptions;
 import uniol.aptgui.editor.document.TsDocument;
 import uniol.aptgui.editor.layout.Layout;
+import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.events.WindowFocusGainedEvent;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.parser.AptParser;
@@ -65,6 +66,7 @@ public class ApplicationImpl implements Application {
 	private final History history;
 	private final RenderingOptions renderingOptions;
 	private final EditingOptions editingOptions;
+	private final LayoutOptions layoutOptions;
 	private final DocumentRendererFactory documentRendererFactory;
 
 	/**
@@ -95,6 +97,7 @@ public class ApplicationImpl implements Application {
 			History history,
 			RenderingOptions renderingOptions,
 			EditingOptions editingOptions,
+			LayoutOptions layoutOptions,
 			Layout defaultLayout,
 			DocumentRendererFactory documentRendererFactory) {
 		this.mainWindow = mainWindow;
@@ -103,6 +106,7 @@ public class ApplicationImpl implements Application {
 		this.documents = new HashMap<>();
 		this.renderingOptions = renderingOptions;
 		this.editingOptions = editingOptions;
+		this.layoutOptions = layoutOptions;
 		this.layout = defaultLayout;
 		this.documentRendererFactory = documentRendererFactory;
 		this.executor = new ThreadPoolExecutor(2, Integer.MAX_VALUE, 1, TimeUnit.SECONDS,
@@ -295,6 +299,7 @@ public class ApplicationImpl implements Application {
 
 	@Override
 	public void closeNow() {
+		layoutOptions.saveToUserPreferences();
 		renderingOptions.saveToUserPreferences();
 		editingOptions.saveToUserPreferences();
 		mainWindow.close();
@@ -335,6 +340,11 @@ public class ApplicationImpl implements Application {
 	@Override
 	public EditingOptions getEditingOptions() {
 		return editingOptions;
+	}
+
+	@Override
+	public LayoutOptions getLayoutOptions() {
+		return layoutOptions;
 	}
 
 }

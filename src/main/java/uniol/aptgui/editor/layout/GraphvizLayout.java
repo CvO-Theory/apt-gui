@@ -20,6 +20,7 @@
 
 package uniol.aptgui.editor.layout;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -31,11 +32,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import java.awt.Point;
+import com.google.inject.Inject;
 
 import uniol.apt.io.parser.ParseException;
-
-import uniol.aptgui.Application;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
 import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
@@ -48,22 +47,21 @@ import uniol.aptgui.editor.layout.graphviz.GraphvizRenderer;
  */
 public class GraphvizLayout implements Layout {
 
-	private final Application application;
-	private final String graphvizCommand;
+	private final LayoutOptions layoutOptions;
 
-	public GraphvizLayout(Application application, String graphvizCommand) {
-		this.application = application;
-		this.graphvizCommand = graphvizCommand;
+	@Inject
+	public GraphvizLayout(LayoutOptions layoutOptions) {
+		this.layoutOptions = layoutOptions;
 	}
 
 	@Override
-	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1) {
+	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1) throws LayoutException {
 		// TODO: This ignores EditingOptions. How could they be integrated?
 		GraphvizDocument graphvizDoc = new GraphvizDocument(document);
 		try {
 			doLayout(graphvizDoc);
 		} catch (IOException | ParseException e) {
-			application.getMainWindow().showException("Layout exception", e);
+			throw new LayoutException(e);
 		}
 	}
 
@@ -73,6 +71,7 @@ public class GraphvizLayout implements Layout {
 	}
 
 	private void doLayout(GraphvizDocument document) throws IOException, ParseException {
+		String graphvizCommand = layoutOptions.getGraphvizDotPathAsFile().getAbsolutePath();
 		Process graphviz = new ProcessBuilder(graphvizCommand, "-Tplain")
 			.redirectError(ProcessBuilder.Redirect.INHERIT)
 			.start();

@@ -110,7 +110,7 @@ public interface MainWindowPresenter extends Presenter<MainWindowView> {
 	String getWindowTitle(WindowId id);
 
 	/**
-	 * Shows a dialog that asks for the name of a new document.
+	 * Shows a dialog that asks for user input.
 	 *
 	 * @param title
 	 *                the dialog's title

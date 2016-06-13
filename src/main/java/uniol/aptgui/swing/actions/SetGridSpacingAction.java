@@ -48,6 +48,10 @@ public class SetGridSpacingAction extends AbstractAction {
 		String defaultValue = String.valueOf(eo.getGridSpacing());
 		String input = app.getMainWindow().showInputDialog("Set Grid Spacing",
 				"New width and height between grid lines:", defaultValue);
+		if (input == null) {
+			return;
+		}
+
 		try {
 			int newValue = Integer.valueOf(input);
 			if (newValue > 0) {

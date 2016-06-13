@@ -41,8 +41,11 @@ public interface Layout {
 	 *                upper x-axis bound of layout area
 	 * @param y1
 	 *                upper y-axis bound of layout area
+	 * @throws LayoutException
+	 *                 Wrapper around exceptions that may occur during the
+	 *                 layout process
 	 */
-	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1);
+	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1) throws LayoutException;
 
 	/**
 	 * Returns a user-friendly name of this layout algorithm.

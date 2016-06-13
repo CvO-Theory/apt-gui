@@ -40,6 +40,7 @@ import uniol.apt.adt.extension.IExtensible;
 import uniol.aptgui.editor.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.layout.Layout;
+import uniol.aptgui.editor.layout.LayoutException;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.PersistentProperties;
 
@@ -477,8 +478,11 @@ public abstract class Document<T> {
 	 *
 	 * @param layout
 	 *                layout to apply
+	 * @throws LayoutException
+	 *                 exception wrapper around exceptions that may occur
+	 *                 during the layout process
 	 */
-	public void applyLayout(Layout layout) {
+	public void applyLayout(Layout layout) throws LayoutException {
 		Point min = viewport.transformInverse(viewport.getTopLeft());
 		Point max = viewport.transformInverse(viewport.getBottomRight());
 		layout.applyTo(this, min.x, min.y, max.x, max.y);

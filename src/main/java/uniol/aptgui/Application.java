@@ -31,6 +31,7 @@ import uniol.aptgui.commands.History;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.EditingOptions;
 import uniol.aptgui.editor.document.RenderingOptions;
+import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
@@ -76,6 +77,13 @@ public interface Application {
 	 * @return the application-wide editing options object
 	 */
 	EditingOptions getEditingOptions();
+
+	/**
+	 * Returns the application-wide layout options object.
+	 *
+	 * @return the application-wide layout options object
+	 */
+	LayoutOptions getLayoutOptions();
 
 	/**
 	 * Returns the application-wide executor service that allows to submit
