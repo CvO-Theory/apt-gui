@@ -22,6 +22,7 @@ package uniol.aptgui.mainwindow;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
@@ -150,6 +151,11 @@ public class MainWindowViewImpl extends JFrameView<MainWindowPresenter> implemen
 				// Ignore.
 			}
 		}
+	}
+
+	@Override
+	public Rectangle getDesktopPaneBounds() {
+		return jDesktopPane.getBounds();
 	}
 
 }

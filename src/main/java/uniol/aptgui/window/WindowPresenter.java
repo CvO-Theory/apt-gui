@@ -136,6 +136,20 @@ public interface WindowPresenter {
 	 */
 	void setPosition(int x, int y);
 
+	/**
+	 * Sets the window bounds.
+	 *
+	 * @param x
+	 *                x position in relation to parent
+	 * @param y
+	 *                y position in relation to parent
+	 * @param width
+	 *                window width
+	 * @param height
+	 *                window height
+	 */
+	void setBounds(int x, int y, int width, int height);
+
 	/// VIEW EVENTS ///
 
 	/**

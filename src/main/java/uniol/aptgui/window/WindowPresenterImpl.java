@@ -225,6 +225,12 @@ public abstract class WindowPresenterImpl<P extends Presenter<V> & WindowPresent
 		view.setPosition(x, y);
 	}
 
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		view.ignoreNextWindowMovedEvent();
+		view.setBounds(x, y, width, height);
+	}
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

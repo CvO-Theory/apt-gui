@@ -83,6 +83,20 @@ public interface WindowView {
 	void setPosition(int x, int y);
 
 	/**
+	 * Sets the window bounds.
+	 *
+	 * @param x
+	 *                x position in relation to parent
+	 * @param y
+	 *                y position in relation to parent
+	 * @param width
+	 *                window width
+	 * @param height
+	 *                window height
+	 */
+	void setBounds(int x, int y, int width, int height);
+
+	/**
 	 * Makes the view implementation ignore the next window moved event so
 	 * that it is not reported to the presenter.
 	 */

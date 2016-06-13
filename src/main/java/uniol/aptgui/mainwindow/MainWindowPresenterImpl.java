@@ -22,7 +22,10 @@ package uniol.aptgui.mainwindow;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -448,6 +451,43 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 	@Override
 	public void unfocusAllInternalWindows() {
 		view.unfocusAllInternalWindows();
+	}
+
+	@Override
+	public void tileEditorWindows() {
+		List<InternalWindowPresenter> editors = new ArrayList<>();
+		for (InternalWindowPresenter iwp : internalWindows.values()) {
+			if (iwp.getWindowId().getType().isEditorWindow()) {
+				editors.add(iwp);
+			}
+		}
+
+		if (editors.isEmpty()) {
+			return;
+		}
+
+		Rectangle bounds = view.getDesktopPaneBounds();
+		int rows = (int) Math.floor(Math.sqrt(editors.size()));
+		int cols = (int) Math.ceil(Math.sqrt(editors.size()));
+		if (rows * cols < editors.size()) {
+			rows += 1;
+		}
+		int windowWidth = bounds.width / cols;
+		int windowHeight = bounds.height / rows;
+
+		Iterator<InternalWindowPresenter> iter = editors.iterator();
+		for (int row = 0; row < rows; row++) {
+			for (int col = 0; col < cols; col++) {
+				if (!iter.hasNext()) {
+					return;
+				}
+
+				InternalWindowPresenter iwp = iter.next();
+				int x = col * windowWidth;
+				int y = row * windowHeight;
+				iwp.setBounds(x, y, windowWidth, windowHeight);
+			}
+		}
 	}
 
 }

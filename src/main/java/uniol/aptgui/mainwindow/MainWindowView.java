@@ -54,6 +54,13 @@ public interface MainWindowView extends View<MainWindowPresenter> {
 	Rectangle getBounds();
 
 	/**
+	 * Returns the bounds of the pane that contains all internal windows.
+	 *
+	 * @return the bounds of the pane that contains all internal windows
+	 */
+	Rectangle getDesktopPaneBounds();
+
+	/**
 	 * Removes focus from all internal windows.
 	 */
 	void unfocusAllInternalWindows();

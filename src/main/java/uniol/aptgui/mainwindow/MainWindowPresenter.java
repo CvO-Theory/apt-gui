@@ -156,6 +156,11 @@ public interface MainWindowPresenter extends Presenter<MainWindowView> {
 	void cascadeWindows();
 
 	/**
+	 * Arranges the internal editor windows in tiles.
+	 */
+	void tileEditorWindows();
+
+	/**
 	 * Transforms an internal window to an external window.
 	 *
 	 * @param id
