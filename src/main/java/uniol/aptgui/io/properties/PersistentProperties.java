@@ -60,6 +60,15 @@ public class PersistentProperties {
 	}
 
 	/**
+	 * Returns true if there are no properties to be applied.
+	 *
+	 * @return true if there are no properties to be applied
+	 */
+	public boolean isEmpty() {
+		return properties.isEmpty();
+	}
+
+	/**
 	 * Parses the string that is the value of the persistent extension
 	 * "property".
 	 *

@@ -26,6 +26,7 @@ import uniol.apt.io.renderer.RenderException;
 import uniol.apt.io.renderer.impl.AptLTSRenderer;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 /**
  * Renders transition systems but excludes any non-structural information from
@@ -36,7 +37,7 @@ public class TsStructureDocumentRenderer implements DocumentRenderer {
 	@Override
 	public void render(Document<?> document, File file) throws RenderException, IOException {
 		assert document instanceof TsDocument;
-		document.removePersistentModelExtensions();
+		new PersistentDocumentProperties(document).removePersistentModelExtensions();
 		TsDocument tsDocument = (TsDocument) document;
 		AptLTSRenderer renderer = new AptLTSRenderer();
 		renderer.renderFile(tsDocument.getModel(), file);

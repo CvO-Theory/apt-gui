@@ -17,29 +17,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.io.renderer;
+package uniol.aptgui.editor.layout;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.inject.Inject;
 
-import uniol.apt.io.renderer.RenderException;
-import uniol.apt.io.renderer.impl.AptPNRenderer;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.io.properties.PersistentDocumentProperties;
+import uniol.aptgui.editor.document.EditingOptions;
+import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
 
 /**
- * Renders Petri nets but excludes any non-structural information from the file.
+ * Random layout that only modifies nodes that do not yet have layout
+ * information.
  */
-public class PnStructureDocumentRenderer implements DocumentRenderer {
+public class PreservingRandomLayout extends RandomLayout {
+
+	@Inject
+	public PreservingRandomLayout(EditingOptions editingOptions) {
+		super(editingOptions);
+	}
 
 	@Override
-	public void render(Document<?> document, File file) throws RenderException, IOException {
-		assert document instanceof PnDocument;
-		new PersistentDocumentProperties(document).removePersistentModelExtensions();
-		PnDocument pnDocument = (PnDocument) document;
-		AptPNRenderer renderer = new AptPNRenderer();
-		renderer.renderFile(pnDocument.getModel(), file);
+	protected void applyTo(GraphicalNode node, int x0, int y0, int x1, int y1) {
+		if (!node.canDraw()) {
+			super.applyTo(node, x0, y0, x1, y1);
+		}
 	}
 
 }

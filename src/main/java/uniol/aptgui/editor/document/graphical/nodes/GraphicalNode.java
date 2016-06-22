@@ -68,6 +68,11 @@ public abstract class GraphicalNode extends GraphicalElement {
 	}
 
 	@Override
+	public boolean canDraw() {
+		return center != null;
+	}
+
+	@Override
 	public boolean coversPoint(Point point) {
 		return center != null;
 	}

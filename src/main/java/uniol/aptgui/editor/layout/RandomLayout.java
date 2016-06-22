@@ -60,11 +60,15 @@ public class RandomLayout implements Layout {
 			// Only nodes are positioned directly.
 			if (elem instanceof GraphicalNode) {
 				GraphicalNode node = (GraphicalNode) elem;
-				int x = randomInt(x0, x1);
-				int y = randomInt(y0, y1);
-				node.setCenter(getCenter(x, y));
+				applyTo(node, x0, y0, x1, y1);
 			}
 		}
+	}
+
+	protected void applyTo(GraphicalNode node, int x0, int y0, int x1, int y1) {
+		int x = randomInt(x0, x1);
+		int y = randomInt(y0, y1);
+		node.setCenter(getCenter(x, y));
 	}
 
 	/**

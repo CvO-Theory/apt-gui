@@ -27,10 +27,11 @@ import uniol.apt.io.renderer.impl.AptLTSRenderer;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.TsDocument;
 import uniol.aptgui.io.properties.GraphicalElementTransformer;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 /**
- * Renders transition systems with layout and other visual properties persisted in the
- * file.
+ * Renders transition systems with layout and other visual properties persisted
+ * in the file.
  */
 public class TsDocumentRenderer implements DocumentRenderer {
 
@@ -39,7 +40,7 @@ public class TsDocumentRenderer implements DocumentRenderer {
 	@Override
 	public void render(Document<?> document, File file) throws RenderException, IOException {
 		assert document instanceof TsDocument;
-		document.renderPersistentModelExtensions(transformer);
+		new PersistentDocumentProperties(document).renderPersistentModelExtensions(transformer);
 		TsDocument tsDocument = (TsDocument) document;
 		AptLTSRenderer renderer = new AptLTSRenderer();
 		renderer.renderFile(tsDocument.getModel(), file);

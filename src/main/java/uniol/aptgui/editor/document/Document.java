@@ -32,17 +32,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Function;
-
-import uniol.apt.adt.extension.Extensible;
-import uniol.apt.adt.extension.ExtensionProperty;
 import uniol.apt.adt.extension.IExtensible;
 import uniol.aptgui.editor.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutException;
 import uniol.aptgui.io.FileType;
-import uniol.aptgui.io.properties.PersistentProperties;
 
 /**
  * <p>
@@ -616,53 +611,16 @@ public abstract class Document<T> {
 	}
 
 	/**
-	 * Turns all properties of GraphicalElements with associated model
-	 * elements into their string representation and sets them as an
-	 * extension on the model element. This extension will be written to a
-	 * file when saved using an APT renderer.
-	 *
-	 * @param transformer
-	 *                function that generates the string representation of a
-	 *                GraphicalElement
+	 * Returns true if every element in this document has all its absolutely
+	 * necessary layout information.
 	 */
-	public void renderPersistentModelExtensions(Function<GraphicalElement, String> transformer) {
+	public boolean hasCompleteLayout() {
 		for (GraphicalElement elem : elements.keySet()) {
-			String representation = transformer.apply(elem);
-			IExtensible extensible = getAssociatedModelElement(elem);
-			if (!representation.isEmpty()) {
-				extensible.putExtension(
-					GraphicalElement.EXTENSION_KEY_PERSISTENT,
-					representation,
-					ExtensionProperty.WRITE_TO_FILE
-				);
-			} else {
-				extensible.removeExtension(GraphicalElement.EXTENSION_KEY_PERSISTENT);
+			if (!elem.canDraw()) {
+				return false;
 			}
 		}
-	}
-
-	/**
-	 * Iterates over all elements and tries to retrieve the persistent
-	 * graphical extension. If it exists, the GraphicalElement associated
-	 * with the model element gets updated according to the extension's
-	 * value. If it does not exist, nothing happens.
-	 */
-	public void parsePersistentModelExtensions() {
-		for (GraphicalElement elem : elements.keySet()) {
-			Extensible modelElem = getAssociatedModelElement(elem);
-			PersistentProperties pp = new PersistentProperties(modelElem);
-			pp.applyAll(elem);
-		}
-	}
-
-	/**
-	 * Removes all persistent extensions from the model elements.
-	 */
-	public void removePersistentModelExtensions() {
-		for (GraphicalElement elem : elements.keySet()) {
-			IExtensible extensible = getAssociatedModelElement(elem);
-			extensible.removeExtension(GraphicalElement.EXTENSION_KEY_PERSISTENT);
-		}
+		return true;
 	}
 
 }

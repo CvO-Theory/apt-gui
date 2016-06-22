@@ -61,6 +61,11 @@ public abstract class GraphicalEdge extends GraphicalElement {
 		this.label = "";
 	}
 
+	@Override
+	public boolean canDraw() {
+		return true;
+	}
+
 	/**
 	 * Returns the source node of this edge.
 	 *

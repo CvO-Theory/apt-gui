@@ -30,6 +30,8 @@ import uniol.apt.io.parser.impl.AptPNParser;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.PnDocument;
 import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 public class AptParser {
 
@@ -45,13 +47,25 @@ public class AptParser {
 		assert (petriNet != null && transitionSystem == null)
 		    || (petriNet == null && transitionSystem != null);
 
-		Document<?> result = null;
-		if (petriNet != null) {
-			result = new PnDocument(petriNet);
-		} else if (transitionSystem != null) {
-			result = new TsDocument(transitionSystem);
-		}
+		return createDocument();
+	}
+
+	private Document<?> createDocument() {
+		// Create document from either the PN or TS
+		Document<?> result = petriNet != null ? new PnDocument(petriNet) : new TsDocument(transitionSystem);
+		// Restore layout if possible
+		new PersistentDocumentProperties(result).parsePersistentModelExtensions();
+		// Set file path
 		result.setFile(file);
+		// Set file type depending on document type and layout
+		// information
+		if (result instanceof PnDocument) {
+			result.setFileType(result.hasCompleteLayout() ? FileType.PETRI_NET
+					: FileType.PETRI_NET_ONLY_STRUCTURE);
+		} else {
+			result.setFileType(result.hasCompleteLayout() ? FileType.TRANSITION_SYSTEM
+					: FileType.TRANSITION_SYSTEM_ONLY_STRUCTURE);
+		}
 		return result;
 	}
 

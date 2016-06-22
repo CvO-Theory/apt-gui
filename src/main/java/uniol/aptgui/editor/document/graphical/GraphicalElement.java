@@ -165,6 +165,15 @@ public abstract class GraphicalElement {
 	 */
 	public abstract Rectangle getBounds();
 
+	/**
+	 * Returns true if all necessary attribute for drawing this element have
+	 * been set.
+	 *
+	 * @return true if all necessary attribute for drawing this element have
+	 *         been set
+	 */
+	public abstract boolean canDraw();
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

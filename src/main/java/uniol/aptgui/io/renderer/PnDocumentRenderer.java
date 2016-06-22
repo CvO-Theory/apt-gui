@@ -27,6 +27,7 @@ import uniol.apt.io.renderer.impl.AptPNRenderer;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.PnDocument;
 import uniol.aptgui.io.properties.GraphicalElementTransformer;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 /**
  * Renders Petri nets with layout and other visual properties persisted in the
@@ -39,7 +40,7 @@ public class PnDocumentRenderer implements DocumentRenderer {
 	@Override
 	public void render(Document<?> document, File file) throws RenderException, IOException {
 		assert document instanceof PnDocument;
-		document.renderPersistentModelExtensions(transformer);
+		new PersistentDocumentProperties(document).renderPersistentModelExtensions(transformer);
 		PnDocument pnDocument = (PnDocument) document;
 		AptPNRenderer renderer = new AptPNRenderer();
 		renderer.renderFile(pnDocument.getModel(), file);

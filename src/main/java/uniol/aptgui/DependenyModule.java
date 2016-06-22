@@ -34,7 +34,7 @@ import uniol.aptgui.editor.document.EditingOptions;
 import uniol.aptgui.editor.document.RenderingOptions;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutOptions;
-import uniol.aptgui.editor.layout.RandomLayout;
+import uniol.aptgui.editor.layout.PreservingRandomLayout;
 import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.MainWindowPresenterImpl;
@@ -98,7 +98,7 @@ public class DependenyModule extends AbstractModule {
 		bind(ModuleBrowserView.class).to(ModuleBrowserViewImpl.class);
 		bind(ModulePresenter.class).to(ModulePresenterImpl.class);
 		bind(ModuleView.class).to(ModuleViewImpl.class);
-		bind(Layout.class).to(RandomLayout.class);
+		bind(Layout.class).to(PreservingRandomLayout.class);
 	}
 
 	private RenderingOptions getRenderingOptionsInstance() {
