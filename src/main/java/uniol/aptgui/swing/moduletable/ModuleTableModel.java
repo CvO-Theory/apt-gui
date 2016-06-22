@@ -26,9 +26,7 @@ import javax.swing.table.AbstractTableModel;
 import uniol.apt.module.Module;
 
 /**
- * Table model for the module browser. It has two columns: The first contains
- * the module name, the second contains the category.
- *
+ * Table model for the module browser.
  */
 @SuppressWarnings("serial")
 public class ModuleTableModel extends AbstractTableModel {
