@@ -48,10 +48,10 @@ import uniol.aptgui.editor.document.TsDocument;
 import uniol.aptgui.events.ModuleExecutedEvent;
 import uniol.aptgui.events.WindowClosedEvent;
 import uniol.aptgui.mainwindow.WindowId;
+import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.mainwindow.WindowType;
 import uniol.aptgui.swing.parametertable.PropertyTableModel;
 import uniol.aptgui.swing.parametertable.PropertyType;
-import uniol.aptgui.swing.parametertable.WindowRef;
 
 public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, ModuleView> implements ModulePresenter {
 

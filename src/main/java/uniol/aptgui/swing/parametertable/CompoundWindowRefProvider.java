@@ -22,6 +22,9 @@ package uniol.aptgui.swing.parametertable;
 import java.util.ArrayList;
 import java.util.List;
 
+import uniol.aptgui.mainwindow.WindowRef;
+import uniol.aptgui.mainwindow.WindowRefProvider;
+
 /**
  * Allows to group multiple WindowRefProviders into a single one.
  */

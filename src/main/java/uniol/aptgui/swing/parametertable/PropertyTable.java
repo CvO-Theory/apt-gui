@@ -22,6 +22,8 @@ package uniol.aptgui.swing.parametertable;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import uniol.aptgui.mainwindow.WindowRefProvider;
+
 /**
  * Table that allows to use window references in editors and also allows for
  * different types in each row.

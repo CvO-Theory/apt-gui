@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import uniol.apt.module.Module;
 import uniol.aptgui.Presenter;
 import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.extensionbrowser.ExtensionBrowserPresenter;
 
 public interface MainWindowPresenter extends Presenter<MainWindowView> {
 
@@ -85,6 +86,13 @@ public interface MainWindowPresenter extends Presenter<MainWindowView> {
 	 *                window id
 	 */
 	void focus(WindowId id);
+
+	/**
+	 * Opens and brings the extension browser to front.
+	 *
+	 * @return the extension browser presenter
+	 */
+	ExtensionBrowserPresenter showExtensionBrowser();
 
 	/**
 	 * Opens and brings the module browser window to front.

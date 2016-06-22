@@ -31,6 +31,7 @@ import uniol.aptgui.commands.History;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.EditingOptions;
 import uniol.aptgui.editor.document.RenderingOptions;
+import uniol.aptgui.editor.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
@@ -227,6 +228,25 @@ public interface Application {
 	 * and open them.
 	 */
 	void openModuleBrowser();
+
+	/**
+	 * Opens the extension browser and pre-selects the given document.
+	 *
+	 * @param document
+	 *                document to show in extension browser
+	 */
+	void openExtensionBrowser(Document<?> document);
+
+	/**
+	 * Opens the extension browser and pre-selects the given document and
+	 * graphical element.
+	 *
+	 * @param document
+	 *                document to show in extension browser
+	 * @param elem
+	 *                graphical element to show in extension browser
+	 */
+	void openExtensionBrowser(Document<?> document, GraphicalElement elem);
 
 	/**
 	 * Opens the given document in an editor window and returns the window

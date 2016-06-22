@@ -20,8 +20,8 @@
 package uniol.aptgui.module;
 
 import uniol.aptgui.View;
+import uniol.aptgui.mainwindow.WindowRefProvider;
 import uniol.aptgui.swing.parametertable.PropertyTableModel;
-import uniol.aptgui.swing.parametertable.WindowRefProvider;
 
 public interface ModuleView extends View<ModulePresenter> {
 

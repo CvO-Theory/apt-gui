@@ -17,41 +17,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.module;
+package uniol.aptgui.mainwindow;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.mainwindow.WindowId;
-import uniol.aptgui.mainwindow.WindowRef;
-import uniol.aptgui.mainwindow.WindowRefProvider;
-import uniol.aptgui.mainwindow.WindowType;
+/**
+ * Functional interface that returns a list of window references.
+ */
+public interface WindowRefProvider {
 
-public class WindowRefProviderImpl implements WindowRefProvider {
-
-	private final Application application;
-	private final WindowType filter;
-
-	public WindowRefProviderImpl(Application application, WindowType filter) {
-		this.application = application;
-		this.filter = filter;
-	}
-
-	@Override
-	public List<WindowRef> getWindowReferences() {
-		List<WindowRef> refs = new ArrayList<>();
-
-		for (WindowId id : application.getDocumentWindows()) {
-			if (id.getType() == filter) {
-				Document<?> doc = application.getDocument(id);
-				refs.add(new WindowRef(id, doc));
-			}
-		}
-
-		return refs;
-	}
+	List<WindowRef> getWindowReferences();
 
 }
 

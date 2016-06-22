@@ -17,13 +17,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.swing.parametertable;
+package uniol.aptgui.swing.extensiontable;
 
-import java.util.List;
+import java.awt.event.MouseEvent;
 
-public interface WindowRefProvider {
+import javax.swing.JTable;
 
-	List<WindowRef> getWindowReferences();
+@SuppressWarnings("serial")
+public class ExtensionTable extends JTable {
+
+	@Override
+	public String getToolTipText(MouseEvent event) {
+		int row = convertRowIndexToModel(rowAtPoint(event.getPoint()));
+		int col = convertColumnIndexToModel(columnAtPoint(event.getPoint()));
+		return getModel().getValueAt(row, col).toString();
+	}
 
 }
 

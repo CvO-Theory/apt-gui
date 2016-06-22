@@ -25,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+import uniol.aptgui.mainwindow.WindowRef;
+
 @SuppressWarnings("serial")
 public class WindowRefRenderer extends JLabel implements TableCellRenderer {
 

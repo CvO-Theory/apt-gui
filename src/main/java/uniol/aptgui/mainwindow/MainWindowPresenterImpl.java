@@ -49,6 +49,7 @@ import uniol.aptgui.events.DocumentSelectionChangedEvent;
 import uniol.aptgui.events.WindowClosedEvent;
 import uniol.aptgui.events.WindowFocusGainedEvent;
 import uniol.aptgui.events.WindowOpenedEvent;
+import uniol.aptgui.extensionbrowser.ExtensionBrowserPresenter;
 import uniol.aptgui.mainwindow.menu.MenuPresenter;
 import uniol.aptgui.mainwindow.toolbar.ToolbarPresenter;
 import uniol.aptgui.module.ModulePresenter;
@@ -112,6 +113,11 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 	 * Module browser window id.
 	 */
 	private WindowId moduleBrowserWindowId;
+
+	/**
+	 * Extension browser window id.
+	 */
+	private WindowId extensionBrowserWindowId;
 
 	/**
 	 * Listener for Document events. It updates the menu so that an
@@ -488,6 +494,21 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 				iwp.setBounds(x, y, windowWidth, windowHeight);
 			}
 		}
+	}
+
+	@Override
+	public ExtensionBrowserPresenter showExtensionBrowser() {
+		if (!internalWindows.containsKey(extensionBrowserWindowId)) {
+			extensionBrowserWindowId = new WindowId(WindowType.EXTENSION_BROWSER);
+			ExtensionBrowserPresenter extensionBrowser = injector
+					.getInstance(ExtensionBrowserPresenter.class);
+			InternalWindowPresenter iwp = createInternalWindow(extensionBrowserWindowId, extensionBrowser);
+			iwp.setTitle("Extension Browser");
+			showInternalWindow(extensionBrowserWindowId);
+		}
+
+		focus(extensionBrowserWindowId);
+		return (ExtensionBrowserPresenter) internalWindows.get(extensionBrowserWindowId).getContentPresenter();
 	}
 
 }

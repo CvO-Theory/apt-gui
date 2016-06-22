@@ -63,6 +63,7 @@ import uniol.aptgui.swing.actions.SetSnapToGridAction;
 import uniol.aptgui.swing.actions.SetStateIdLabelVisibleAction;
 import uniol.aptgui.swing.actions.SetTokensAction;
 import uniol.aptgui.swing.actions.SetTransitionIdLabelVisibleAction;
+import uniol.aptgui.swing.actions.ShowDocumentExtensionsAction;
 import uniol.aptgui.swing.actions.ShowWindowAction;
 import uniol.aptgui.swing.actions.TileEditorWindowsAction;
 import uniol.aptgui.swing.actions.UndoAction;
@@ -99,6 +100,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 	private final JMenuItem setDotPath;
 
 	private final JMenu documentMenu;
+	private final JMenuItem showDocumentExtensions;
 	private final JMenuItem renameDocument;
 	private final JMenuItem layoutRandom;
 	private final JMenuItem layoutDot;
@@ -156,6 +158,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 
 		// Document
 		documentMenu = new JMenu("Document");
+		showDocumentExtensions = new JMenuItem(injector.getInstance(ShowDocumentExtensionsAction.class));
 		renameDocument = new JMenuItem(injector.getInstance(RenameDocumentAction.class));
 		layoutRandom = new JMenuItem(injector.getInstance(RandomLayoutAction.class));
 		layoutDot = new JMenuItem(injector.getInstance(DotLayoutAction.class));
@@ -237,6 +240,7 @@ public class MenuViewImpl extends JMenuBarView<MenuPresenter> implements MenuVie
 	private void setupDocumentMenu() {
 		add(documentMenu);
 
+		documentMenu.add(showDocumentExtensions);
 		documentMenu.add(renameDocument);
 		documentMenu.add(layoutRandom);
 		documentMenu.add(layoutDot);

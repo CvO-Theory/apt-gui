@@ -39,11 +39,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
+import uniol.aptgui.mainwindow.WindowRefProvider;
 import uniol.aptgui.swing.JPanelView;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.parametertable.PropertyTable;
 import uniol.aptgui.swing.parametertable.PropertyTableModel;
-import uniol.aptgui.swing.parametertable.WindowRefProvider;
 
 @SuppressWarnings("serial")
 public class ModuleViewImpl extends JPanelView<ModulePresenter> implements ModuleView {

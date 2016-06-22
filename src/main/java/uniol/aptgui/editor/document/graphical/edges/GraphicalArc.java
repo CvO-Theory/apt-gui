@@ -28,6 +28,11 @@ public class GraphicalArc extends GraphicalEdge implements HasLabel {
 		super(source, target);
 	}
 
+	@Override
+	public String toUserString() {
+		return "Arc from " + source.toUserString() + " to " + target.toUserString();
+	}
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

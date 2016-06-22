@@ -89,6 +89,11 @@ public class GraphicalTransition extends GraphicalNode implements HasLabel {
 		);
 	}
 
+	@Override
+	public String toUserString() {
+		return getId() + " (Transition)";
+	}
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

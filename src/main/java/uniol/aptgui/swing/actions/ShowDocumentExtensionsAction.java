@@ -17,40 +17,41 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.module;
+package uniol.aptgui.swing.actions;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionEvent;
+
+import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.mainwindow.WindowId;
-import uniol.aptgui.mainwindow.WindowRef;
-import uniol.aptgui.mainwindow.WindowRefProvider;
-import uniol.aptgui.mainwindow.WindowType;
+import uniol.aptgui.swing.actions.base.DocumentAction;
 
-public class WindowRefProviderImpl implements WindowRefProvider {
+/**
+ * Action that opens a new view that shows the extensions of the currently
+ * focused document
+ */
+@SuppressWarnings("serial")
+public class ShowDocumentExtensionsAction extends DocumentAction {
 
-	private final Application application;
-	private final WindowType filter;
-
-	public WindowRefProviderImpl(Application application, WindowType filter) {
-		this.application = application;
-		this.filter = filter;
+	@Inject
+	public ShowDocumentExtensionsAction(Application app, EventBus eventBus) {
+		super(app, eventBus);
+		String name = "Show Extensions";
+		putValue(NAME, name);
+		putValue(SHORT_DESCRIPTION, name);
 	}
 
 	@Override
-	public List<WindowRef> getWindowReferences() {
-		List<WindowRef> refs = new ArrayList<>();
+	public void actionPerformed(ActionEvent e) {
+		Document<?> document = app.getActiveDocument();
+		app.openExtensionBrowser(document);
+	}
 
-		for (WindowId id : application.getDocumentWindows()) {
-			if (id.getType() == filter) {
-				Document<?> doc = application.getDocument(id);
-				refs.add(new WindowRef(id, doc));
-			}
-		}
-
-		return refs;
+	@Override
+	protected boolean checkEnabled(Document<?> document, Class<?> commonBaseTestClass) {
+		return true;
 	}
 
 }

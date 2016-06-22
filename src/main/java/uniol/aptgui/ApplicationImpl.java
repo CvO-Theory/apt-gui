@@ -49,6 +49,7 @@ import uniol.aptgui.editor.document.EditingOptions;
 import uniol.aptgui.editor.document.PnDocument;
 import uniol.aptgui.editor.document.RenderingOptions;
 import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.editor.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.events.WindowFocusGainedEvent;
@@ -345,6 +346,16 @@ public class ApplicationImpl implements Application {
 	@Override
 	public LayoutOptions getLayoutOptions() {
 		return layoutOptions;
+	}
+
+	@Override
+	public void openExtensionBrowser(Document<?> document) {
+		mainWindow.showExtensionBrowser().select(document);
+	}
+
+	@Override
+	public void openExtensionBrowser(Document<?> document, GraphicalElement elem) {
+		mainWindow.showExtensionBrowser().select(document, elem);
 	}
 
 }

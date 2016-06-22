@@ -17,11 +17,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.swing.parametertable;
+package uniol.aptgui.mainwindow;
 
 import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.mainwindow.WindowId;
 
+/**
+ * Class that matches a window id with its document.
+ */
 public class WindowRef {
 
 	private final WindowId windowId;

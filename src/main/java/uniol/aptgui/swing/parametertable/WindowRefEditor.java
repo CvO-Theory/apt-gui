@@ -25,6 +25,9 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
+import uniol.aptgui.mainwindow.WindowRef;
+import uniol.aptgui.mainwindow.WindowRefProvider;
+
 @SuppressWarnings("serial")
 public class WindowRefEditor extends DefaultCellEditor {
 

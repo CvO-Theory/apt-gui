@@ -38,6 +38,11 @@ public class GraphicalFlow extends GraphicalEdge {
 		setLabel(String.valueOf(multiplicity));
 	}
 
+	@Override
+	public String toUserString() {
+		return "Flow from " + source.toUserString() + " to " + target.toUserString();
+	}
+
 }
 
 // vim: ft=java:noet:sw=8:sts=8:ts=8:tw=120

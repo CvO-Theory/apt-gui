@@ -22,6 +22,7 @@ package uniol.aptgui.swing.parametertable;
 import uniol.apt.adt.PetriNetOrTransitionSystem;
 import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.ts.TransitionSystem;
+import uniol.aptgui.mainwindow.WindowRef;
 
 public enum PropertyType {
 
