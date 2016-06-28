@@ -20,9 +20,11 @@
 package uniol.aptgui.swing.filechooser;
 
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -48,6 +50,8 @@ public class AptFileChooser extends JFileChooser {
 	private static FileFilter filterPng = new FileNameExtensionFilter("PNG raster image", "png");
 
 	private static Map<FileFilter, FileType> fileTypeMapping;
+
+	private static final String PREF_KEY_INIT_DIRECTORY = "initialFileChooserDirectory";
 
 	static {
 		fileTypeMapping = new HashMap<>();
@@ -134,7 +138,17 @@ public class AptFileChooser extends JFileChooser {
 	 * Force creation through static factory methods.
 	 */
 	private AptFileChooser() {
-		// Empty
+		setCurrentDirectory(getInitialDirectory());
+	}
+
+	/**
+	 * Returns the initial directory for a file chooser.
+	 * @return directory File object
+	 */
+	private File getInitialDirectory() {
+		Preferences prefs = Preferences.userNodeForPackage(AptFileChooser.class);
+		String path = prefs.get(PREF_KEY_INIT_DIRECTORY, System.getProperty("user.home"));
+		return new File(path);
 	}
 
 	/**
@@ -176,6 +190,24 @@ public class AptFileChooser extends JFileChooser {
 		}
 	}
 
+	@Override
+	public int showOpenDialog(Component parent) throws HeadlessException {
+		int res = super.showOpenDialog(parent);
+		if (res == APPROVE_OPTION) {
+			saveSelectedDirectory();
+		}
+		return res;
+	}
+
+	@Override
+	public int showSaveDialog(Component parent) throws HeadlessException {
+		int res = super.showSaveDialog(parent);
+		if (res == APPROVE_OPTION) {
+			saveSelectedDirectory();
+		}
+		return res;
+	}
+
 	/**
 	 * Shows the save file chooser. The user can select a file path and name
 	 * that should be saved to. If it already exists the user will be asked
@@ -187,24 +219,28 @@ public class AptFileChooser extends JFileChooser {
 	 * @return true, if the save should be performed; false, if the process
 	 *         was cancelled by the user
 	 */
-	public boolean performInteraction(Component dialogParent) {
-		int fcRes;
-		while ((fcRes = showSaveDialog(dialogParent)) == JFileChooser.APPROVE_OPTION
+	public boolean performSaveInteraction(Component dialogParent) {
+		while (showSaveDialog(dialogParent) == JFileChooser.APPROVE_OPTION
 				&& getSelectedFileWithExtension().exists()) {
 			int ow = askOverwrite(getSelectedFileWithExtension(), dialogParent);
 			if (ow == JOptionPane.YES_OPTION) {
-				return true;
+				break;
 			} else if (ow == JOptionPane.CANCEL_OPTION) {
 				return false;
 			}
 		}
-		return fcRes == JFileChooser.APPROVE_OPTION;
+		return true;
 	}
 
 	private int askOverwrite(File file, Component dialogParent) {
 		return JOptionPane.showConfirmDialog(dialogParent,
 			"A file with the name '" + file.getName() + "' already exists. Do you want to overwrite it?",
 			"Overwrite existing file?", JOptionPane.YES_NO_CANCEL_OPTION);
+	}
+
+	private void saveSelectedDirectory() {
+		Preferences prefs = Preferences.userNodeForPackage(AptFileChooser.class);
+		prefs.put(PREF_KEY_INIT_DIRECTORY, getCurrentDirectory().getAbsolutePath());
 	}
 
 }

@@ -66,7 +66,7 @@ public class SaveAction extends DocumentAction {
 		AptFileChooser fc = AptFileChooser.saveChooser(document);
 		Component parent = (Component) app.getMainWindow().getView();
 
-		if (fc.performInteraction(parent)) {
+		if (fc.performSaveInteraction(parent)) {
 			File file = fc.getSelectedFileWithExtension();
 			FileType type = fc.getSelectedFileType();
 			app.saveToFile(document, file, type);

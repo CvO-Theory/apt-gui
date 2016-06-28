@@ -53,7 +53,7 @@ public class ExportAction extends DocumentAction {
 
 		AptFileChooser fc = AptFileChooser.exportChooser(document);
 		Component parent = (Component) app.getMainWindow().getView();
-		if (fc.performInteraction(parent)) {
+		if (fc.performSaveInteraction(parent)) {
 			File exportFile = fc.getSelectedFileWithExtension();
 			if (fc.getSelectedFileType() == FileType.SVG) {
 				app.saveToFile(document, exportFile, FileType.SVG);
