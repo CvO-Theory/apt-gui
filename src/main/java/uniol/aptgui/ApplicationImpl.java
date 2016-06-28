@@ -229,9 +229,6 @@ public class ApplicationImpl implements Application {
 		assert document != null;
 		try {
 			documentRendererFactory.get(type).render(document, file);
-			document.setFile(file);
-			document.setFileType(type);
-			document.fireDocumentChanged(false);
 		} catch (Exception e) {
 			mainWindow.showException("Save Error", e);
 		}

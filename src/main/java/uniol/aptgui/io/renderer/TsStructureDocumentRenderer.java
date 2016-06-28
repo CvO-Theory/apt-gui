@@ -26,6 +26,7 @@ import uniol.apt.io.renderer.RenderException;
 import uniol.apt.io.renderer.impl.AptLTSRenderer;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 /**
@@ -37,8 +38,18 @@ public class TsStructureDocumentRenderer implements DocumentRenderer {
 	@Override
 	public void render(Document<?> document, File file) throws RenderException, IOException {
 		assert document instanceof TsDocument;
-		new PersistentDocumentProperties(document).removePersistentModelExtensions();
-		TsDocument tsDocument = (TsDocument) document;
+		document.setFile(file);
+		document.setFileType(FileType.TRANSITION_SYSTEM_ONLY_STRUCTURE);
+		document.fireDocumentChanged(false);
+		processPersistentExtensions(new PersistentDocumentProperties(document));
+		callRenderer((TsDocument) document, file);
+	}
+
+	private void processPersistentExtensions(PersistentDocumentProperties pdp) {
+		pdp.removePersistentModelExtensions();
+	}
+
+	private void callRenderer(TsDocument tsDocument, File file) throws RenderException, IOException {
 		AptLTSRenderer renderer = new AptLTSRenderer();
 		renderer.renderFile(tsDocument.getModel(), file);
 	}

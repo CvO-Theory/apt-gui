@@ -26,6 +26,7 @@ import uniol.apt.io.renderer.RenderException;
 import uniol.apt.io.renderer.impl.AptPNRenderer;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.PnDocument;
+import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
 /**
@@ -36,8 +37,18 @@ public class PnStructureDocumentRenderer implements DocumentRenderer {
 	@Override
 	public void render(Document<?> document, File file) throws RenderException, IOException {
 		assert document instanceof PnDocument;
-		new PersistentDocumentProperties(document).removePersistentModelExtensions();
-		PnDocument pnDocument = (PnDocument) document;
+		document.setFile(file);
+		document.setFileType(FileType.PETRI_NET_ONLY_STRUCTURE);
+		document.fireDocumentChanged(false);
+		processPersistentExtensions(new PersistentDocumentProperties(document));
+		callRenderer((PnDocument) document, file);
+	}
+
+	private void processPersistentExtensions(PersistentDocumentProperties pdp) {
+		pdp.removePersistentModelExtensions();
+	}
+
+	private void callRenderer(PnDocument pnDocument, File file) throws RenderException, IOException {
 		AptPNRenderer renderer = new AptPNRenderer();
 		renderer.renderFile(pnDocument.getModel(), file);
 	}
