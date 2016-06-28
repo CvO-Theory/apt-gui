@@ -162,6 +162,10 @@ public class AptFileChooser extends JFileChooser {
 		File file = getSelectedFile();
 		FileFilter filter = getFileFilter();
 
+		if (file == null) {
+			return null;
+		}
+
 		if (filter instanceof ParserFileFilter) {
 			ParserFileFilter pFilter = (ParserFileFilter) filter;
 			if (!pFilter.accept(file)) {
@@ -220,16 +224,17 @@ public class AptFileChooser extends JFileChooser {
 	 *         was cancelled by the user
 	 */
 	public boolean performSaveInteraction(Component dialogParent) {
-		while (showSaveDialog(dialogParent) == JFileChooser.APPROVE_OPTION
+		int fcRes;
+		while ((fcRes = showSaveDialog(dialogParent)) == JFileChooser.APPROVE_OPTION
 				&& getSelectedFileWithExtension().exists()) {
 			int ow = askOverwrite(getSelectedFileWithExtension(), dialogParent);
 			if (ow == JOptionPane.YES_OPTION) {
-				break;
+				return true;
 			} else if (ow == JOptionPane.CANCEL_OPTION) {
 				return false;
 			}
 		}
-		return true;
+		return fcRes == JFileChooser.APPROVE_OPTION;
 	}
 
 	private int askOverwrite(File file, Component dialogParent) {
