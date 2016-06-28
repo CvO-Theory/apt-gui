@@ -51,7 +51,7 @@ public class GraphvizRenderer {
 			writer.append(source);
 			writer.append("\" -> \"");
 			writer.append(target);
-			writer.append("\";\n");
+			writer.append("\" [minlen=80];\n");
 		}
 
 		writer.append(FILE_POSTAMBLE);
