@@ -26,6 +26,7 @@ import com.google.inject.Inject;
 import uniol.aptgui.editor.document.Document;
 import uniol.aptgui.editor.document.EditingOptions;
 import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
 import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.features.ToolUtil;
 
@@ -57,10 +58,14 @@ public class RandomLayout implements Layout {
 	@Override
 	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1) {
 		for (GraphicalElement elem : document.getGraphicalElements()) {
-			// Only nodes are positioned directly.
 			if (elem instanceof GraphicalNode) {
+				// Only nodes are positioned directly.
 				GraphicalNode node = (GraphicalNode) elem;
 				applyTo(node, x0, y0, x1, y1);
+			} else if (elem instanceof GraphicalEdge) {
+				// Straighten all edges.
+				GraphicalEdge edge = (GraphicalEdge) elem;
+				edge.removeAllBreakpoints();
 			}
 		}
 	}
