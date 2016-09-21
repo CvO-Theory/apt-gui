@@ -117,6 +117,7 @@ public abstract class CreateEdgeTool<T extends Document<?>, U extends GraphicalE
 		// Hide GraphicalEdge.
 		if (graphicalEdge != null) {
 			document.remove(graphicalEdge);
+			document.fireDocumentDirty();
 			graphicalEdge = null;
 		}
 	}
@@ -124,6 +125,9 @@ public abstract class CreateEdgeTool<T extends Document<?>, U extends GraphicalE
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() != MouseEvent.BUTTON1) {
+			// Cancel current action
+			onDeactivated();
+			onActivated();
 			return;
 		}
 
