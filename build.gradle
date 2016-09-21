@@ -7,9 +7,11 @@ repositories {
     mavenCentral()
 }
 
+// TODO: automatically build the apt submodule
+
 dependencies {
 	// APT dependencies
-	compile files('../apt/apt.jar')
+	compile files('submodules/apt/apt.jar')
 
 	// APT-GUI dependencies
 	compile 'com.google.inject:guice:4.0'

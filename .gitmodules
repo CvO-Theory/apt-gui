@@ -1,0 +1,3 @@
+[submodule "submodules/apt"]
+	path = submodules/apt
+	url = https://github.com/CvO-Theory/apt.git
