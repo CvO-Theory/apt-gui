@@ -19,6 +19,8 @@
 
 package uniol.aptgui;
 
+import java.io.File;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -31,9 +33,10 @@ import com.google.inject.Injector;
  */
 public class Main implements Runnable {
 
-	public static void main(String args[]) {
+	private final String[] commandLineArgs;
 
-		SwingUtilities.invokeLater(new Main());
+	public Main(String[] commandLineArgs) {
+		this.commandLineArgs = commandLineArgs;
 	}
 
 	@Override
@@ -43,6 +46,12 @@ public class Main implements Runnable {
 		Injector injector = Guice.createInjector(new DependenyModule());
 		Application app = injector.getInstance(Application.class);
 		app.show();
+
+		// Open files if any were supplied at the command line
+		for (String filename : commandLineArgs) {
+			File file = new File(filename);
+			app.openFile(file);
+		}
 	}
 
 	private void setLookAndFeel() {
@@ -55,6 +64,10 @@ public class Main implements Runnable {
 			}
 		} catch (Exception e) {
 		}
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Main(args));
 	}
 
 }
