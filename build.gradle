@@ -7,7 +7,12 @@ repositories {
     mavenCentral()
 }
 
-// TODO: automatically build the apt submodule
+// Build apt before compiling Java code
+ant.importBuild('submodules/apt/build.xml') { antTargetName ->
+    'apt_' + antTargetName
+}
+compileJava.dependsOn apt_jar
+clean.dependsOn apt_clean
 
 dependencies {
 	// APT dependencies
