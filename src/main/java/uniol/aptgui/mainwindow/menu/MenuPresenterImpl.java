@@ -103,7 +103,18 @@ public class MenuPresenterImpl extends AbstractPresenter<MenuPresenter, MenuView
 		for (Module module : recentlyUsedModules) {
 			names.add(module.getName());
 		}
-		String value = String.join(PREF_DELIMITER, names);
+
+		// Do the following, but in a Java-7-compatible way
+		// String value = String.join(PREF_DELIMITER, names);
+		StringBuilder result = new StringBuilder();
+		String add = "";
+		for (String name : names) {
+			result.append(add);
+			result.append(name);
+			add = PREF_DELIMITER;
+		}
+		String value = result.toString();
+
 		// Save to preferences
 		Preferences prefs = Preferences.userNodeForPackage(MenuPresenterImpl.class);
 		prefs.put(PREF_KEY_RECENT_MODULES, value);

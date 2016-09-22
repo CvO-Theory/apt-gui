@@ -60,7 +60,16 @@ public class GraphicalElementTransformer implements Function<GraphicalElement, S
 			properties.add(repr);
 		}
 
-		return String.join("; ", properties);
+		// Do the following, but in a Java-7-compatible way
+		// return String.join("; ", properties);
+		StringBuilder result = new StringBuilder();
+		String add = "";
+		for (String property : properties) {
+			result.append(add);
+			result.append(property);
+			add = "; ";
+		}
+		return result.toString();
 	}
 
 	/**
@@ -75,7 +84,17 @@ public class GraphicalElementTransformer implements Function<GraphicalElement, S
 		for (Point bp : edge.getBreakpoints()) {
 			coordinates.add(String.format("%d,%d", bp.x, bp.y));
 		}
-		return String.format("bp %s", String.join(" ", coordinates));
+
+		// Do the following, but in a Java-7-compatible way
+		// return String.format("bp %s", String.join(" ", coordinates));
+		StringBuilder result = new StringBuilder("bp ");
+		String add = "";
+		for (String coordinate : coordinates) {
+			result.append(add);
+			result.append(coordinate);
+			add = " ";
+		}
+		return result.toString();
 	}
 
 	/**
