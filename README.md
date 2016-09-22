@@ -2,6 +2,9 @@
 
 This is a graphical user interface for [apt](https://github.com/CvO-Theory/apt).
 
+A pre-build "apt-gui.jar" files is available
+[here](https://cvo-theory.github.io/apt-gui-builds/apt-gui.jar).
+
 ## Screenshot
 
 ![Screenshot of APT-GUI](/screenshot.png?raw=true "Screenshot taken 2016/06/28")
