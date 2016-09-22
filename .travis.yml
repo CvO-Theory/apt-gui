@@ -7,3 +7,8 @@ script:
   - ./gradlew test
   - ./gradlew javadoc
   - ./gradlew jar
+after_success:
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ]; then ./publish-jar.sh; fi
+env:
+  global:
+    secure: l3f3BM8RoWQatgAsanyyPohUfhTeA6IksY3GvRQwjeISXSC7qXmDqGS8k3aDD4ULB3rCjJA+RgK6L89mKlus5BKz7eLcHS1HgKpgWMDUbSL+SqcYIH53//QfLV6WRS/yfzQ+uvMKTGCcXYX8BwAf2EX4b2n+0Nw/o6Iwfi7K/cBEjlkAs9of2H4LcuhbMohTS0jj0hu5/ttFBNsojYjGuClieYNLxC2xjVuNs3MEXxTur0CI2HXGfFPzr2O4d2w3zkOsbhOH3YRHmuzkvpqb3o8se0FE5FBWyc1yoYsJpgBvVuwdsQ6l5SqoPiCsrec1eK5fDk+0q3SjL+gcmyI8Eco68Jt3726Qx0P7DtQw66Oa5sbvn4G68haaVKqJPcLZJiHsMF/EaNfgqXHstg7o5vDjL0HbFlsRGFr0ly4QDckn6R63ADULlBOol5a7iBR6oniz4Id4ywlWOTKdVJn+sgeYtg7Js9Y6vo/bJTgnO9Lobtcuy8nfKK070T+JCXqExB5qRUsgi++e9QlCy12K/ssN4nSBk1TPYnBXKWfZDs2/rfyBBCclrPBuznbIpo/DpxkiMvDLqLtcRiuBLBRUVjKDwR96tjvzRbsvZDuKSnV0wTJrO9Edxj9yUwupgONfhN6qz5D8r1PjMRKxTy4YWLDCURXrWedvtzM1WsEnIFM=
