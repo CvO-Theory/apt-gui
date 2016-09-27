@@ -2,7 +2,7 @@
 
 This is a graphical user interface for [apt](https://github.com/CvO-Theory/apt).
 
-A pre-build "apt-gui.jar" files is available
+A pre-built "apt-gui.jar" file is available
 [here](https://cvo-theory.github.io/apt-gui-builds/apt-gui.jar).
 
 ## Screenshot
@@ -11,24 +11,26 @@ A pre-build "apt-gui.jar" files is available
 
 ## How to build
 
-It is expected that the root folder of apt is next to the root folder of apt-gui in the file system.
+apt-gui depends on apt which is included as a git submodule. Therefore either clone with
 
 ```
-home/
- |--- apt/
- |     |--- classes/
- |     |--- lib/
- |     |--- build.xml
- |     |--- apt.jar
- |--- apt-gui/
-       |--- build.gradle
+git clone --recursive https://github.com/jprellberg/apt-gui.git
 ```
 
-You need to build apt first since the apt/apt.jar is expected to be available for compilation of apt-gui. Then you can build apt-gui using the following commands:
+or run
+
+```
+git submodule init
+git submodule update
+```
+
+after cloning.
+
+After cloning you can build apt-gui with
 
 ```
 cd apt-gui
 ./gradlew jar
 ```
 
-Some other available build targets are: eclipse, javadoc
+Some other available build targets are: clean, eclipse, javadoc
