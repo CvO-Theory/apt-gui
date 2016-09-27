@@ -25,6 +25,8 @@ import com.google.inject.Singleton;
 
 import uniol.apt.module.AptModuleRegistry;
 import uniol.apt.module.ModuleRegistry;
+import uniol.apt.ui.ParametersTransformer;
+import uniol.apt.ui.impl.AptParametersTransformer;
 import uniol.aptgui.commands.History;
 import uniol.aptgui.editor.EditorPresenter;
 import uniol.aptgui.editor.EditorPresenterImpl;
@@ -84,6 +86,7 @@ public class DependenyModule extends AbstractModule {
 		bind(EditingOptions.class).toInstance(getEditingOptionsInstance());
 		bind(LayoutOptions.class).toInstance(getLayoutOptionsInstance());
 		bind(ModuleRegistry.class).toInstance(AptModuleRegistry.INSTANCE);
+		bind(ParametersTransformer.class).toInstance(AptParametersTransformer.INSTANCE);
 
 		// Normal bindings
 		bind(MainWindowPresenter.class).to(MainWindowPresenterImpl.class);

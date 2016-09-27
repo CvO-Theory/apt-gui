@@ -19,8 +19,9 @@
 
 package uniol.aptgui.module;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Future;
@@ -35,11 +36,10 @@ import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.module.Module;
 import uniol.apt.module.exception.ModuleException;
-import uniol.apt.module.impl.ModuleInvoker;
 import uniol.apt.module.impl.ModuleUtils;
 import uniol.apt.module.impl.Parameter;
 import uniol.apt.module.impl.ReturnValue;
-import uniol.apt.ui.impl.AptParametersTransformer;
+import uniol.apt.ui.ParametersTransformer;
 import uniol.aptgui.AbstractPresenter;
 import uniol.aptgui.Application;
 import uniol.aptgui.editor.document.Document;
@@ -56,6 +56,8 @@ import uniol.aptgui.swing.parametertable.PropertyType;
 public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, ModuleView> implements ModulePresenter {
 
 	private final Application application;
+	private final ParametersTransformer parametersTransformer;
+	private final ModuleRunner moduleRunner;
 
 	private WindowId windowId;
 	private Module module;
@@ -67,12 +69,19 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	private PropertyTableModel parameterTableModel;
 	private PropertyTableModel resultTableModel;
 
-	private Future<List<Object>> moduleFuture;
+	/**
+	 * Future giving access to the module execution happening in another
+	 * thread.
+	 */
+	private Future<Map<String, Object>> moduleFuture;
 
 	@Inject
-	public ModulePresenterImpl(ModuleView view, Application application) {
+	public ModulePresenterImpl(ModuleView view, Application application,
+			ParametersTransformer parametersTransformer, ModuleRunner moduleRunner) {
 		super(view);
 		this.application = application;
+		this.parametersTransformer = parametersTransformer;
+		this.moduleRunner = moduleRunner;
 		application.getEventBus().register(this);
 	}
 
@@ -106,9 +115,9 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	@Override
 	public void onRunButtonClicked() {
 		try {
-			Object[] paramValues = getParameterValues();
+			Map<String, Object> paramValues = getParameterValues();
 			// Make sure all parameters are filled in.
-			if (paramValues.length < parameters.size()) {
+			if (paramValues.size() < parameters.size()) {
 				view.showErrorTooFewParameters();
 				return;
 			}
@@ -122,13 +131,12 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		}
 	}
 
-	private Future<List<Object>> invokeModule(final Object[] paramValues) {
-		return application.getExecutorService().submit(new Callable<List<Object>>() {
+	private Future<Map<String, Object>> invokeModule(final Map<String, Object> paramValues) {
+		return application.getExecutorService().submit(new Callable<Map<String, Object>>() {
 			@Override
-			public List<Object> call() throws Exception {
-				ModuleInvoker invoker = new ModuleInvoker();
-				List<Object> filledReturnValues = invoker.invoke(module, paramValues);
-				return filledReturnValues;
+			public Map<String, Object> call() throws Exception {
+				Map<String, Object> returnValues = moduleRunner.run(module, paramValues);
+				return returnValues;
 			}
 		});
 	}
@@ -148,14 +156,16 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	 * @return
 	 * @throws ModuleException
 	 */
-	private Object[] getParameterValues() throws ModuleException {
-		List<Object> result = new ArrayList<>();
+	private Map<String, Object> getParameterValues() throws ModuleException {
+		Map<String, Object> result = new HashMap<>();
 		for (int row = 0; row < parameterTableModel.getRowCount(); row++) {
 			if (parameterTableModel.getPropertyValueAt(row) != null) {
-				result.add(getParameterValueAt(row));
+				String name = parameterTableModel.getPropertyNameAt(row);
+				Object value = getParameterValueAt(row);
+				result.put(name, value);
 			}
 		}
-		return result.toArray();
+		return result;
 	}
 
 	/**
@@ -195,7 +205,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 			throw new AssertionError();
 		default:
 			String value = parameterTableModel.getPropertyValueAt(row);
-			Object modelValue = AptParametersTransformer.INSTANCE.transform(value, allParameters.get(row).getKlass());
+			Object modelValue = parametersTransformer.transform(value, allParameters.get(row).getKlass());
 			return modelValue;
 		}
 	}
@@ -206,7 +216,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	 */
 	private void waitForModuleExecution() {
 		try {
-			final List<Object> filledReturnValues = moduleFuture.get();
+			final Map<String, Object> filledReturnValues = moduleFuture.get();
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -233,49 +243,38 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		}
 	}
 
-	private void showModuleResults(List<Object> filledReturnValues) {
-		// Filter null-results.
-		List<String> nonNullReturnNames = new ArrayList<>();
-		List<Object> nonNullReturnValues = new ArrayList<>();
-		for (int row = 0; row < filledReturnValues.size(); row++) {
-			Object retVal = filledReturnValues.get(row);
-			if (retVal != null) {
-				String name = returnValues.get(row).getName();
-				nonNullReturnNames.add(name);
-				nonNullReturnValues.add(retVal);
-			}
-		}
+	private void showModuleResults(Map<String, Object> filledReturnValues) {
+		// Fill table model
+		resultTableModel = new PropertyTableModel("Result", "Value", filledReturnValues.size());
+		int row = 0;
+		for (ReturnValue rv : returnValues) {
+			String name = rv.getName();
+			Object value = filledReturnValues.get(name);
+			PropertyType type = PropertyType.fromModelType(value.getClass());
 
-		// Fill table model.
-		resultTableModel = new PropertyTableModel("Result", "Value", nonNullReturnValues.size());
-		for (int i = 0; i < nonNullReturnValues.size(); i++) {
-			Object retVal = nonNullReturnValues.get(i);
-			Class<?> retClass = retVal.getClass();
-			String name = nonNullReturnNames.get(i);
-			PropertyType type = PropertyType.fromModelType(retClass);
-
-			// Transform model objects to their proxy counterparts
-			// for display.
+			// Transform model objects to their proxy counterparts for display
 			switch (type) {
 			case PETRI_NET: {
-				PetriNet pn = (PetriNet) retVal;
+				PetriNet pn = (PetriNet) value;
 				Document<?> doc = new PnDocument(pn);
 				WindowRef ref = openDocument(doc);
-				resultTableModel.setProperty(i, type, name, ref);
+				resultTableModel.setProperty(row, type, name, ref);
 				break;
 			}
 			case TRANSITION_SYSTEM: {
-				TransitionSystem ts = (TransitionSystem) retVal;
+				TransitionSystem ts = (TransitionSystem) value;
 				Document<?> doc = new TsDocument(ts);
 				WindowRef ref = openDocument(doc);
-				resultTableModel.setProperty(i, type, name, ref);
+				resultTableModel.setProperty(row, type, name, ref);
 				break;
 			}
 			default:
-				String proxy = retVal.toString();
-				resultTableModel.setProperty(i, type, name, proxy);
+				String proxy = value.toString();
+				resultTableModel.setProperty(row, type, name, proxy);
 				break;
 			}
+
+			row += 1;
 		}
 
 		view.setResultTableModel(resultTableModel);
