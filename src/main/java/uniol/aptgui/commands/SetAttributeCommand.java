@@ -19,6 +19,7 @@
 
 package uniol.aptgui.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uniol.aptgui.editor.document.Document;
@@ -43,7 +44,7 @@ public abstract class SetAttributeCommand<T, U> extends Command {
 
 	public SetAttributeCommand(Document<?> document, List<T> elements, U newValue) {
 		this.document = document;
-		this.elements = elements;
+		this.elements = new ArrayList<>(elements);
 		this.newValue = newValue;
 		this.oldValues = getAttributeValues(elements);
 	}

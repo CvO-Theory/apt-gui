@@ -21,6 +21,7 @@ package uniol.aptgui.commands;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class SetColorCommand extends Command {
 
 	public SetColorCommand(Document<?> document, Set<GraphicalElement> selection, Color newColor) {
 		this.document = document;
-		this.selection = selection;
+		this.selection = new HashSet<>(selection);
 		this.newColor = newColor;
 	}
 
