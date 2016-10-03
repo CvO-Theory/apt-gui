@@ -11,6 +11,7 @@ repositories {
 ant.importBuild('submodules/apt/build.xml') { antTargetName ->
     'apt_' + antTargetName
 }
+eclipseClasspath.dependsOn apt_jar
 compileJava.dependsOn apt_jar
 clean.dependsOn apt_clean
 
