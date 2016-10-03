@@ -110,7 +110,7 @@ public class GraphicalElementTransformer implements Function<GraphicalElement, S
 	 * GraphicalElement or null if the element is the default color (black).
 	 */
 	private String getColorRepresentation(GraphicalElement elem) {
-		if (elem.getColor().equals(Color.BLACK)) {
+		if (Color.BLACK.equals(elem.getColor())) {
 			return null;
 		} else {
 			return String.format("col %s", colorToRgbString(elem.getColor()));
