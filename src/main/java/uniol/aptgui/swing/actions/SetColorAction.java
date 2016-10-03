@@ -21,9 +21,11 @@ package uniol.aptgui.swing.actions;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Set;
 
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -42,6 +44,8 @@ import uniol.aptgui.swing.actions.base.DocumentAction;
 @SuppressWarnings("serial")
 public class SetColorAction extends DocumentAction {
 
+	private static final JColorChooser COLOR_CHOOSER = new JColorChooser();
+
 	@Inject
 	public SetColorAction(Application app, EventBus eventBus) {
 		super(app, eventBus);
@@ -55,13 +59,21 @@ public class SetColorAction extends DocumentAction {
 	public void actionPerformed(ActionEvent e) {
 		Document<?> document = app.getActiveDocument();
 		Set<GraphicalElement> selection = document.getSelection();
-		Color result = JColorChooser.showDialog(
-				app.getMainWindow().getDialogParent(),
-				"Set Color", getInitialValue(selection));
+		Color result = getUserColorChoice(selection);
 		if (result != null) {
 			Command cmd = new SetColorCommand(document, selection, result);
 			app.getHistory().execute(cmd);
 		}
+	}
+
+	private Color getUserColorChoice(Set<GraphicalElement> selection) {
+		COLOR_CHOOSER.setColor(getInitialValue(selection));
+		ColorTracker ok = new ColorTracker(COLOR_CHOOSER);
+		JDialog dialog = JColorChooser.createDialog(
+				app.getMainWindow().getDialogParent(),
+				"Set Color", true, COLOR_CHOOSER, ok, null);
+	        dialog.setVisible(true); // Blocking call
+	        return ok.getColor();
 	}
 
 	private Color getInitialValue(Set<GraphicalElement> selection) {
@@ -79,6 +91,23 @@ public class SetColorAction extends DocumentAction {
 	@Override
 	protected boolean checkEnabled(Document<?> document, Class<?> commonBaseTestClass) {
 		return !document.getSelection().isEmpty();
+	}
+
+	private static class ColorTracker implements ActionListener {
+		private final JColorChooser chooser;
+		private Color color;
+
+		public ColorTracker(JColorChooser c) {
+			chooser = c;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			color = chooser.getColor();
+		}
+
+		public Color getColor() {
+			return color;
+		}
 	}
 
 }
