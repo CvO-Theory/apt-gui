@@ -172,10 +172,12 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	private Object modelToView(Object value) {
 		if (value instanceof PetriNet) {
 			Document<?> doc = new PnDocument((PetriNet) value);
+			doc.setHasUnsavedChanges(true);
 			WindowRef ref = openDocument(doc);
 			return ref;
 		} else if (value instanceof TransitionSystem) {
 			Document<?> doc = new TsDocument((TransitionSystem) value);
+			doc.setHasUnsavedChanges(true);
 			WindowRef ref = openDocument(doc);
 			return ref;
 		} else {
