@@ -22,6 +22,9 @@ package uniol.aptgui.swing.parametertable;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import uniol.apt.adt.PetriNetOrTransitionSystem;
+import uniol.apt.adt.pn.PetriNet;
+import uniol.apt.adt.ts.TransitionSystem;
 import uniol.aptgui.mainwindow.WindowRefProvider;
 
 /**
@@ -74,16 +77,18 @@ public class PropertyTable extends JTable {
 		int modelColumn = convertColumnIndexToModel(column);
 		if (modelColumn == 1 && dataModel != null) {
 			int modelRow = convertRowIndexToModel(row);
-			PropertyType type = dataModel.getPropertyTypeAt(modelRow);
-			switch (type) {
-			case PETRI_NET:
+			Class<?> type = dataModel.getPropertyTypeAt(modelRow);
+			// Set up custom editors for some types
+			if (type.equals(PetriNet.class)) {
 				return pnEditor;
-			case TRANSITION_SYSTEM:
+			} else if (type.equals(TransitionSystem.class)) {
 				return tsEditor;
-			case PETRI_NET_OR_TRANSITION_SYSTEM:
+			} else if (type.equals(PetriNetOrTransitionSystem.class)) {
 				return pnOrTsEditor;
-			default:
-				return getDefaultEditor(type.getProxyType());
+			} else if (type.equals(Boolean.class)) {
+				return getDefaultEditor(Boolean.class);
+			} else {
+				return getDefaultEditor(String.class);
 			}
 		}
 

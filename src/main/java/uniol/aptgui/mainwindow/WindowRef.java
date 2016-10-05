@@ -19,6 +19,8 @@
 
 package uniol.aptgui.mainwindow;
 
+import java.util.Objects;
+
 import uniol.aptgui.document.Document;
 
 /**
@@ -41,6 +43,29 @@ public class WindowRef {
 
 	public Document<?> getDocument() {
 		return document;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((windowId == null) ? 0 : windowId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		WindowRef other = (WindowRef) obj;
+		return Objects.equals(windowId, other.windowId);
 	}
 
 	@Override

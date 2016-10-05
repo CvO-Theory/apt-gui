@@ -28,7 +28,7 @@ import javax.swing.table.AbstractTableModel;
 public class PropertyTableModel extends AbstractTableModel {
 
 	private String[] columnNames;
-	private PropertyType[] rowTypes;
+	private Class<?>[] rowTypes;
 	private Object[][] content;
 	private boolean editable;
 
@@ -36,7 +36,7 @@ public class PropertyTableModel extends AbstractTableModel {
 		this.columnNames = new String[2];
 		this.columnNames[0] = nameHeading;
 		this.columnNames[1] = valueHeading;
-		this.rowTypes = new PropertyType[rows];
+		this.rowTypes = new Class<?>[rows];
 		this.content = new Object[rows][2];
 	}
 
@@ -48,7 +48,7 @@ public class PropertyTableModel extends AbstractTableModel {
 		this.editable = editable;
 	}
 
-	public PropertyType getPropertyTypeAt(int rowIndex) {
+	public Class<?> getPropertyTypeAt(int rowIndex) {
 		return rowTypes[rowIndex];
 	}
 
@@ -69,7 +69,7 @@ public class PropertyTableModel extends AbstractTableModel {
 	 * @param type
 	 * @param name
 	 */
-	public void setProperty(int rowIndex, PropertyType type, String name) {
+	public void setProperty(int rowIndex, Class<?> type, String name) {
 		setProperty(rowIndex, type, name, null);
 	}
 
@@ -82,7 +82,7 @@ public class PropertyTableModel extends AbstractTableModel {
 	 * @param name
 	 * @param value
 	 */
-	public void setProperty(int rowIndex, PropertyType type, String name, Object value) {
+	public void setProperty(int rowIndex, Class<?> type, String name, Object value) {
 		rowTypes[rowIndex] = type;
 		content[rowIndex][0] = name;
 		content[rowIndex][1] = value;

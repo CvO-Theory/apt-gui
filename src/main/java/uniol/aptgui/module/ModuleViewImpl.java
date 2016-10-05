@@ -26,6 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -39,6 +42,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
+import uniol.apt.module.exception.ModuleException;
+import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.mainwindow.WindowRefProvider;
 import uniol.aptgui.swing.JPanelView;
 import uniol.aptgui.swing.Resource;
@@ -57,8 +62,11 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 	private JTabbedPane tabbedPane;
 	private JPanel parametersContainer;
 	private PropertyTable parametersTable;
+	private PropertyTableModel parametersTableModel;
+
 	private JPanel resultsContainer;
 	private PropertyTable resultsTable;
+	private PropertyTableModel resultsTableModel;
 
 	private JPanel bottomPanel;
 	private JLabel progressSpinner;
@@ -105,7 +113,10 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 				if (e.getClickCount() == 2) {
 					int viewRow = resultsTable.getSelectedRow();
 					int modelRow = resultsTable.convertRowIndexToModel(viewRow);
-					getPresenter().onResultsTableDoubleClick(modelRow);
+					Object value = resultsTableModel.getPropertyValueAt(modelRow);
+					if (value instanceof WindowRef) {
+						getPresenter().focusWindow((WindowRef) value);
+					}
 				}
 			}
 		});
@@ -166,34 +177,71 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 	}
 
 	@Override
-	public void setParameterTableModel(PropertyTableModel model) {
-		parametersTable.setModel(model);
-	}
-
-	@Override
 	public void showErrorTooFewParameters() {
 		JOptionPane.showMessageDialog(this, "Too few parameters supplied.", "Cannot run module",
 				JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
-	public void setResultTableModel(PropertyTableModel resultTableModel) {
-		resultsTable.setModel(resultTableModel);
-	}
-
-	@Override
-	public void setPetriNetWindowRefProvider(WindowRefProvider refProvider) {
+	public void setPNWindowRefProvider(WindowRefProvider refProvider) {
 		parametersTable.setPetriNetWindowRefProvider(refProvider);
 	}
 
 	@Override
-	public void setTransitionSystemWindowRefProvider(WindowRefProvider refProvider) {
+	public void setTSWindowRefProvider(WindowRefProvider refProvider) {
 		parametersTable.setTransitionSystemWindowRefProvider(refProvider);
 	}
 
 	@Override
 	public void showResultsPane() {
 		tabbedPane.setSelectedIndex(1);
+	}
+
+	@Override
+	public void setParameters(Map<String, Class<?>> parameters) {
+		parametersTableModel = new PropertyTableModel("Parameter", "Value", parameters.size());
+		parametersTableModel.setEditable(true);
+
+		int row = 0;
+		for (Entry<String, Class<?>> param : parameters.entrySet()) {
+			parametersTableModel.setProperty(row, param.getValue(), param.getKey());
+			row += 1;
+		}
+
+		parametersTable.setModel(parametersTableModel);
+	}
+
+	@Override
+	public Map<String, Object> getParameterValues() throws ModuleException {
+		Map<String, Object> result = new HashMap<>();
+		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
+			if (parametersTableModel.getPropertyValueAt(row) != null) {
+				String name = parametersTableModel.getPropertyNameAt(row);
+				Object value = parametersTableModel.getPropertyValueAt(row);
+				result.put(name, value);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public void unsetParameterValue(Object value) {
+		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
+			if (value.equals(parametersTableModel.getPropertyValueAt(row))) {
+				parametersTableModel.setPropertyValue(row, null);
+			}
+		}
+	}
+
+	@Override
+	public void setReturnValues(Map<String, Object> returnValues) {
+		resultsTableModel = new PropertyTableModel("Result", "Value", returnValues.size());
+		int row = 0;
+		for (Entry<String, Object> rv : returnValues.entrySet()) {
+			resultsTableModel.setProperty(row, Object.class, rv.getKey(), rv.getValue());
+			row += 1;
+		}
+		resultsTable.setModel(resultsTableModel);
 	}
 
 }

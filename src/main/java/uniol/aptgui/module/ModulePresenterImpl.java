@@ -19,7 +19,7 @@
 
 package uniol.aptgui.module;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -31,7 +31,6 @@ import javax.swing.SwingUtilities;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import uniol.apt.adt.PetriNetOrTransitionSystem;
 import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.module.Module;
@@ -49,8 +48,6 @@ import uniol.aptgui.events.WindowClosedEvent;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.mainwindow.WindowType;
-import uniol.aptgui.swing.parametertable.PropertyTableModel;
-import uniol.aptgui.swing.parametertable.PropertyType;
 
 public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, ModuleView> implements ModulePresenter {
 
@@ -61,11 +58,8 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	private WindowId windowId;
 	private Module module;
 
-	private List<Parameter> parameters;
-	private List<Parameter> allParameters;
-
-	private PropertyTableModel parameterTableModel;
-	private PropertyTableModel resultTableModel;
+	private Map<String, Class<?>> allParameters;
+	private Map<String, Class<?>> requiredParameters;
 
 	/**
 	 * Future giving access to the module execution happening in another
@@ -91,37 +85,121 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	@Override
 	public void setModule(Module module) {
 		this.module = module;
-		parameters = ModuleUtils.getParameters(module);
-		allParameters = ModuleUtils.getAllParameters(module);
+		allParameters = toParameterTypeMap(ModuleUtils.getAllParameters(module));
+		requiredParameters = toParameterTypeMap(ModuleUtils.getParameters(module));
 
-		parameterTableModel = new PropertyTableModel("Parameter", "Value", allParameters.size());
-		parameterTableModel.setEditable(true);
-		for (int i = 0; i < allParameters.size(); i++) {
-			Parameter param = allParameters.get(i);
-			parameterTableModel.setProperty(i, PropertyType.fromModelType(param.getKlass()),
-					param.getName());
-		}
-
+		view.setParameters(allParameters);
 		view.setDescription(module.getLongDescription());
-		view.setPetriNetWindowRefProvider(new WindowRefProviderImpl(application, WindowType.PETRI_NET));
-		view.setTransitionSystemWindowRefProvider(
-				new WindowRefProviderImpl(application, WindowType.TRANSITION_SYSTEM));
-		view.setParameterTableModel(parameterTableModel);
+		view.setPNWindowRefProvider(new WindowRefProviderImpl(application, WindowType.PETRI_NET));
+		view.setTSWindowRefProvider(new WindowRefProviderImpl(application, WindowType.TRANSITION_SYSTEM));
+	}
+
+	/**
+	 * Transforms a list of module parameters into a map that matches
+	 * parameter name to the value's expected type.
+	 *
+	 * @param moduleParameters
+	 *                parameters of an APT module
+	 * @return map of parameter names to types
+	 */
+	private Map<String, Class<?>> toParameterTypeMap(List<Parameter> moduleParameters) {
+		Map<String, Class<?>> viewParameters = new LinkedHashMap<>();
+		for (Parameter param : moduleParameters) {
+			viewParameters.put(param.getName(), param.getKlass());
+		}
+		return viewParameters;
+	}
+
+	/**
+	 * Transforms a map containing parameter values from the view to a map
+	 * containing parameter values that are of the correct model types.
+	 *
+	 * @param viewParameterValues
+	 *                map of parameter names to the values input by the
+	 *                user; these will be proxy objects in some cases such
+	 *                as WindowRef objects for PetriNet or TransitionSystem
+	 * @return map of parameter names to correctly typed values
+	 * @throws ModuleException
+	 */
+	private Map<String, Object> fromViewParameterValues(Map<String, Object> viewParameterValues)
+			throws ModuleException {
+		Map<String, Object> modelParameters = new LinkedHashMap<>();
+		for (String paramName : viewParameterValues.keySet()) {
+			Object value = viewParameterValues.get(paramName);
+			Class<?> targetClass = allParameters.get(paramName);
+			modelParameters.put(paramName, viewToModel(value, targetClass));
+		}
+		return modelParameters;
+	}
+
+	private Object viewToModel(Object value, Class<?> targetClass) throws ModuleException {
+		if (targetClass.isAssignableFrom(value.getClass())) {
+			return value;
+		} else if (value instanceof WindowRef) {
+			// Unwrap window references to their
+			// model object (PetriNet or TransitionSystem)
+			WindowRef ref = (WindowRef) value;
+			return ref.getDocument().getModel();
+		} else if (value instanceof String) {
+			// Transform everything else from the
+			// string representation to its model object
+			return parametersTransformer.transform(value.toString(), targetClass);
+		} else {
+			// Should not happen because the PropertyTable should
+			// always return Strings in the non-special cases
+			throw new AssertionError();
+		}
+	}
+
+	/**
+	 * Transforms a map containing module return values to a map where the
+	 * values are replaced with the proper view proxy objects.
+	 *
+	 * @param moduleReturnValues
+	 * @return
+	 */
+	private Map<String, Object> toViewReturnValues(Map<String, Object> moduleReturnValues) {
+		Map<String, Object> viewReturnValues = new LinkedHashMap<>();
+		for (String paramName : moduleReturnValues.keySet()) {
+			Object value = moduleReturnValues.get(paramName);
+			if (value != null) {
+				viewReturnValues.put(paramName, modelToView(value));
+			}
+		}
+		return viewReturnValues;
+	}
+
+	private Object modelToView(Object value) {
+		if (value instanceof PetriNet) {
+			Document<?> doc = new PnDocument((PetriNet) value);
+			WindowRef ref = openDocument(doc);
+			return ref;
+		} else if (value instanceof TransitionSystem) {
+			Document<?> doc = new TsDocument((TransitionSystem) value);
+			WindowRef ref = openDocument(doc);
+			return ref;
+		} else {
+			return value.toString();
+		}
 	}
 
 	@Override
 	public void onRunButtonClicked() {
 		try {
-			Map<String, Object> paramValues = getParameterValues();
-			// Make sure all parameters are filled in.
-			if (paramValues.size() < parameters.size()) {
-				view.showErrorTooFewParameters();
-				return;
+			Map<String, Object> paramValues = fromViewParameterValues(view.getParameterValues());
+			// Make sure all required parameters are filled in
+			for (String name : requiredParameters.keySet()) {
+				if (paramValues.get(name) == null) {
+					view.showErrorTooFewParameters();
+					return;
+				}
 			}
+
 			// Module is executed on another thread.
 			moduleFuture = invokeModule(paramValues);
 			view.setModuleRunning(true);
-			// Invoke new thread that blocks until results are available.
+			// Invoke new thread that blocks until results are
+			// available.
 			displayResultsWhenFinished();
 		} catch (Exception e) {
 			application.getMainWindow().showException("Module exception", e);
@@ -148,66 +226,6 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	}
 
 	/**
-	 * Returns an array of non-null parameter values as model objects.
-	 *
-	 * @return
-	 * @throws ModuleException
-	 */
-	private Map<String, Object> getParameterValues() throws ModuleException {
-		Map<String, Object> result = new HashMap<>();
-		for (int row = 0; row < parameterTableModel.getRowCount(); row++) {
-			if (parameterTableModel.getPropertyValueAt(row) != null) {
-				String name = parameterTableModel.getPropertyNameAt(row);
-				Object value = getParameterValueAt(row);
-				result.put(name, value);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Returns the parameter value from the parameter table.
-	 *
-	 * @param row
-	 *                parameter row
-	 * @return parameter value as model object
-	 * @throws ModuleException
-	 */
-	private Object getParameterValueAt(int row) throws ModuleException {
-		PropertyType type = parameterTableModel.getPropertyTypeAt(row);
-		WindowRef ref;
-		switch (type) {
-		case PETRI_NET:
-			ref = parameterTableModel.getPropertyValueAt(row);
-			if (ref.getDocument() instanceof PnDocument) {
-				PetriNet pn = (PetriNet) ref.getDocument().getModel();
-				return new PetriNet(pn);
-			}
-		case TRANSITION_SYSTEM:
-			ref = parameterTableModel.getPropertyValueAt(row);
-			if (ref.getDocument() instanceof TsDocument) {
-				TransitionSystem ts = (TransitionSystem) ref.getDocument().getModel();
-				return new TransitionSystem(ts);
-			}
-		case PETRI_NET_OR_TRANSITION_SYSTEM:
-			ref = parameterTableModel.getPropertyValueAt(row);
-			if (ref.getDocument() instanceof PnDocument) {
-				PetriNet pn = (PetriNet) ref.getDocument().getModel();
-				return new PetriNetOrTransitionSystem(pn);
-			}
-			if (ref.getDocument() instanceof TsDocument) {
-				TransitionSystem ts = (TransitionSystem) ref.getDocument().getModel();
-				return new PetriNetOrTransitionSystem(ts);
-			}
-			throw new AssertionError();
-		default:
-			String value = parameterTableModel.getPropertyValueAt(row);
-			Object modelValue = parametersTransformer.transform(value, allParameters.get(row).getKlass());
-			return modelValue;
-		}
-	}
-
-	/**
 	 * Blocks until the module future result is available and then shows the
 	 * module results in the view.
 	 */
@@ -218,7 +236,8 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 				@Override
 				public void run() {
 					showModuleResults(filledReturnValues);
-					application.getEventBus().post(new ModuleExecutedEvent(ModulePresenterImpl.this, module));
+					application.getEventBus().post(
+							new ModuleExecutedEvent(ModulePresenterImpl.this, module));
 				}
 			});
 		} catch (InterruptedException | CancellationException ex) {
@@ -227,7 +246,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					application.getMainWindow().showException("Module Execution Exception", ex);
+					application.getMainWindow().showException("Module execution exception", ex);
 				}
 			});
 		} finally {
@@ -241,39 +260,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	}
 
 	private void showModuleResults(Map<String, Object> filledReturnValues) {
-		// Fill table model
-		resultTableModel = new PropertyTableModel("Result", "Value", filledReturnValues.size());
-		int row = 0;
-		for (String name : filledReturnValues.keySet()) {
-			Object value = filledReturnValues.get(name);
-			PropertyType type = PropertyType.fromModelType(value.getClass());
-
-			// Transform model objects to their proxy counterparts for display
-			switch (type) {
-			case PETRI_NET: {
-				PetriNet pn = (PetriNet) value;
-				Document<?> doc = new PnDocument(pn);
-				WindowRef ref = openDocument(doc);
-				resultTableModel.setProperty(row, type, name, ref);
-				break;
-			}
-			case TRANSITION_SYSTEM: {
-				TransitionSystem ts = (TransitionSystem) value;
-				Document<?> doc = new TsDocument(ts);
-				WindowRef ref = openDocument(doc);
-				resultTableModel.setProperty(row, type, name, ref);
-				break;
-			}
-			default:
-				String proxy = value.toString();
-				resultTableModel.setProperty(row, type, name, proxy);
-				break;
-			}
-
-			row += 1;
-		}
-
-		view.setResultTableModel(resultTableModel);
+		view.setReturnValues(toViewReturnValues(filledReturnValues));
 		view.showResultsPane();
 	}
 
@@ -286,15 +273,8 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	@Subscribe
 	public void onWindowClosedEvent(WindowClosedEvent e) {
 		// Unset window chosen as a parameter if it was closed
-		for (int row = 0; row < parameterTableModel.getRowCount(); row++) {
-			PropertyType type = parameterTableModel.getPropertyTypeAt(row);
-			if (type == PropertyType.PETRI_NET || type == PropertyType.TRANSITION_SYSTEM) {
-				WindowRef ref = parameterTableModel.getPropertyValueAt(row);
-				if (ref != null && ref.getWindowId() == e.getWindowId()) {
-					parameterTableModel.setPropertyValue(row, null);
-				}
-			}
-		}
+		WindowRef ref = new WindowRef(e.getWindowId(), application.getDocument(e.getWindowId()));
+		view.unsetParameterValue(ref);
 
 		// Cancel module execution when parent window closes
 		if (e.getWindowId() == windowId && moduleFuture != null) {
@@ -303,14 +283,10 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	}
 
 	@Override
-	public void onResultsTableDoubleClick(int modelRow) {
-		PropertyType type = resultTableModel.getPropertyTypeAt(modelRow);
-		if (type == PropertyType.PETRI_NET || type == PropertyType.TRANSITION_SYSTEM) {
-			WindowRef ref = resultTableModel.getPropertyValueAt(modelRow);
-			// If the referenced window is still open, focus it.
-			if (application.getDocument(ref.getWindowId()) != null) {
-				application.focusWindow(ref.getWindowId());
-			}
+	public void focusWindow(WindowRef ref) {
+		// If the referenced window is still open, focus it.
+		if (application.getDocument(ref.getWindowId()) != null) {
+			application.focusWindow(ref.getWindowId());
 		}
 	}
 

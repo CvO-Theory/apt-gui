@@ -22,6 +22,7 @@ package uniol.aptgui.module;
 import uniol.apt.module.Module;
 import uniol.aptgui.Presenter;
 import uniol.aptgui.mainwindow.WindowId;
+import uniol.aptgui.mainwindow.WindowRef;
 
 /**
  * The ModulePresenter controls a GUI component that allows to set input
@@ -53,12 +54,11 @@ public interface ModulePresenter extends Presenter<ModuleView> {
 	void onRunButtonClicked();
 
 	/**
-	 * Called when a row in the results table is double clicked.
+	 * Focuses the window identified by the window reference.
 	 *
-	 * @param modelRow
-	 *                row in model index
+	 * @param ref
 	 */
-	void onResultsTableDoubleClick(int modelRow);
+	void focusWindow(WindowRef ref);
 
 }
 
