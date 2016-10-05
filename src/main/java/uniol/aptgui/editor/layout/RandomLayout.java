@@ -57,17 +57,34 @@ public class RandomLayout implements Layout {
 
 	@Override
 	public void applyTo(Document<?> document, int x0, int y0, int x1, int y1) {
+		// Position nodes first
 		for (GraphicalElement elem : document.getGraphicalElements()) {
 			if (elem instanceof GraphicalNode) {
-				// Only nodes are positioned directly.
 				GraphicalNode node = (GraphicalNode) elem;
 				applyTo(node, x0, y0, x1, y1);
-			} else if (elem instanceof GraphicalEdge) {
-				// Straighten all edges.
-				GraphicalEdge edge = (GraphicalEdge) elem;
-				edge.removeAllBreakpoints();
 			}
 		}
+		// Then edges
+		for (GraphicalElement elem : document.getGraphicalElements()) {
+			if (elem instanceof GraphicalEdge) {
+				// Straighten edges
+				GraphicalEdge edge = (GraphicalEdge) elem;
+				edge.removeAllBreakpoints();
+				// Special case for loops
+				if (edge.getSource().equals(edge.getTarget())) {
+					createLoop(edge.getSource(), edge);
+				}
+			}
+		}
+	}
+
+	private void createLoop(GraphicalNode node, GraphicalEdge edge) {
+		Point p1 = new Point((int)node.getCenter().getX() - 30, (int)node.getCenter().getY() - 30);
+		Point p2 = new Point((int)node.getCenter().getX() - 20, (int)node.getCenter().getY() - 50);
+		Point p3 = new Point((int)node.getCenter().getX(), (int)node.getCenter().getY() - 50);
+		edge.addBreakpoint(p1);
+		edge.addBreakpoint(p2);
+		edge.addBreakpoint(p3);
 	}
 
 	protected void applyTo(GraphicalNode node, int x0, int y0, int x1, int y1) {
