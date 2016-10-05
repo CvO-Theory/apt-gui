@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.edges;
+package uniol.aptgui.document.graphical.edges;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.acos;
@@ -34,9 +34,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import uniol.aptgui.editor.document.RenderingOptions;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Abstract base class for all graphical elements that are edge-like. Each

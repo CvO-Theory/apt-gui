@@ -17,42 +17,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.commands;
+package uniol.aptgui.document.graphical.edges;
 
-import java.awt.Point;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
-import uniol.aptgui.document.Document;
-import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+public class GraphicalFlow extends GraphicalEdge {
 
-public class RemoveBreakpointCommand extends Command {
+	protected Integer multiplicity;
 
-	private final Document<?> document;
-	private final GraphicalEdge edge;
-	private final int bpIndex;
-	private Point oldBreakpoint;
+	public GraphicalFlow(GraphicalNode source, GraphicalNode target) {
+		super(source, target);
+	}
 
-	public RemoveBreakpointCommand(Document<?> document, GraphicalEdge edge, int bpIndex) {
-		this.document = document;
-		this.edge = edge;
-		this.bpIndex = bpIndex;
+	public Integer getMultiplicity() {
+		return multiplicity;
+	}
+
+	public void setMultiplicity(Integer multiplicity) {
+		this.multiplicity = multiplicity;
+		setLabel(String.valueOf(multiplicity));
 	}
 
 	@Override
-	public String getName() {
-		return "Remove Breakpoint";
-	}
-
-	@Override
-	public void execute() {
-		oldBreakpoint = edge.getBreakpoint(bpIndex);
-		edge.removeBreakpoint(bpIndex);
-		document.fireDocumentChanged(true);
-	}
-
-	@Override
-	public void undo() {
-		edge.addBreakpoint(bpIndex, oldBreakpoint);
-		document.fireDocumentChanged(true);
+	public String toUserString() {
+		return "Flow from " + source.toUserString() + " to " + target.toUserString();
 	}
 
 }

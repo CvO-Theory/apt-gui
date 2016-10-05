@@ -28,10 +28,10 @@ import com.google.common.eventbus.EventBus;
 
 import uniol.apt.module.Module;
 import uniol.aptgui.commands.History;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.RenderingOptions;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.mainwindow.MainWindowPresenter;

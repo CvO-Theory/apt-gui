@@ -21,8 +21,8 @@ package uniol.aptgui.editor.layout;
 
 import com.google.inject.Inject;
 
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Random layout that only modifies nodes that do not yet have layout

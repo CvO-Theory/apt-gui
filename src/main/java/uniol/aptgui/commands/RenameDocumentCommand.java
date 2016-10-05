@@ -19,7 +19,7 @@
 
 package uniol.aptgui.commands;
 
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 /**
  * Command that renames a document.

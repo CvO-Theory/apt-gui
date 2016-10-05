@@ -30,11 +30,11 @@ import uniol.apt.adt.pn.Node;
 import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.pn.Place;
 import uniol.apt.adt.pn.Transition;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalFlow;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalFlow;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Command that removes a set of GraphicalElements from a Petri net document and

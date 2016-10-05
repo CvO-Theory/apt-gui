@@ -22,7 +22,7 @@ package uniol.aptgui.extensionbrowser;
 import java.util.List;
 
 import uniol.aptgui.View;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.swing.extensiontable.ExtensionTableModel;
 

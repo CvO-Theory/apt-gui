@@ -19,7 +19,7 @@
 
 package uniol.aptgui.mainwindow;
 
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 /**
  * Class that matches a window id with its document.

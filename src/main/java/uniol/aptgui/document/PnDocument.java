@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document;
+package uniol.aptgui.document;
 
 import java.awt.Graphics2D;
 import java.util.HashMap;
@@ -30,10 +30,10 @@ import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.pn.Place;
 import uniol.apt.adt.pn.Token;
 import uniol.apt.adt.pn.Transition;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalFlow;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalTransition;
+import uniol.aptgui.document.graphical.edges.GraphicalFlow;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.graphical.nodes.GraphicalTransition;
 
 public class PnDocument extends Document<PetriNet> {
 

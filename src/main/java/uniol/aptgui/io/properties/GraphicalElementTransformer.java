@@ -26,9 +26,9 @@ import java.util.List;
 
 import com.google.common.base.Function;
 
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Function implementation that transforms GraphicalElement properties to their

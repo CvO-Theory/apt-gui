@@ -17,31 +17,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.edges;
+package uniol.aptgui.document;
 
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+public interface DocumentListener {
 
-public class GraphicalFlow extends GraphicalEdge {
+	/**
+	 * Called when the document changes visually.
+	 */
+	void onDocumentDirty(Document<?> source);
 
-	protected Integer multiplicity;
+	/**
+	 * Called when the document changes structurally.
+	 */
+	void onDocumentChanged(Document<?> source);
 
-	public GraphicalFlow(GraphicalNode source, GraphicalNode target) {
-		super(source, target);
-	}
-
-	public Integer getMultiplicity() {
-		return multiplicity;
-	}
-
-	public void setMultiplicity(Integer multiplicity) {
-		this.multiplicity = multiplicity;
-		setLabel(String.valueOf(multiplicity));
-	}
-
-	@Override
-	public String toUserString() {
-		return "Flow from " + source.toUserString() + " to " + target.toUserString();
-	}
+	/**
+	 * Called when the selection in this Document changes.
+	 *
+	 * @param source
+	 *                the document that this call originates from
+	 */
+	void onSelectionChanged(Document<?> source);
 
 }
 

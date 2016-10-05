@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document;
+package uniol.aptgui.document;
 
 import java.awt.Graphics2D;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import uniol.apt.adt.exception.StructureException;
 import uniol.apt.adt.ts.Arc;
 import uniol.apt.adt.ts.State;
 import uniol.apt.adt.ts.TransitionSystem;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalArc;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
+import uniol.aptgui.document.graphical.edges.GraphicalArc;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 
 public class TsDocument extends Document<TransitionSystem> {
 

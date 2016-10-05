@@ -24,8 +24,8 @@ import java.io.IOException;
 
 import uniol.apt.io.renderer.RenderException;
 import uniol.apt.io.renderer.impl.AptLTSRenderer;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.GraphicalElementTransformer;
 import uniol.aptgui.io.properties.PersistentDocumentProperties;

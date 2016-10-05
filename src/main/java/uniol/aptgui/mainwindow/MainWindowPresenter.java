@@ -25,7 +25,7 @@ import java.awt.Rectangle;
 
 import uniol.apt.module.Module;
 import uniol.aptgui.Presenter;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.extensionbrowser.ExtensionBrowserPresenter;
 
 public interface MainWindowPresenter extends Presenter<MainWindowView> {

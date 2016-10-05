@@ -26,12 +26,12 @@ import uniol.aptgui.commands.AddBreakpointCommand;
 import uniol.aptgui.commands.History;
 import uniol.aptgui.commands.TranslateBreakpointCommand;
 import uniol.aptgui.commands.TranslateElementsCommand;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.Viewport;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.Viewport;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.features.base.Feature;
 
 /**

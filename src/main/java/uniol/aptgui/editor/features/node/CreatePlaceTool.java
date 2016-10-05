@@ -21,9 +21,9 @@ package uniol.aptgui.editor.features.node;
 
 import uniol.aptgui.commands.CreatePlaceCommand;
 import uniol.aptgui.commands.History;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
 
 /**
  * Tool that creates places in Petri net documents.

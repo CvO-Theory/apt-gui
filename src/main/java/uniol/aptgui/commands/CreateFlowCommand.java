@@ -21,8 +21,8 @@ package uniol.aptgui.commands;
 
 import uniol.apt.adt.pn.Flow;
 import uniol.apt.adt.pn.Node;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalFlow;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.edges.GraphicalFlow;
 
 public class CreateFlowCommand extends Command {
 

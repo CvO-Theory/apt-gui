@@ -17,14 +17,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical;
+package uniol.aptgui.document.graphical;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import uniol.aptgui.editor.document.RenderingOptions;
+import uniol.aptgui.document.RenderingOptions;
 
 /**
  * Base class for graphical elements of a document. It contains basic properties

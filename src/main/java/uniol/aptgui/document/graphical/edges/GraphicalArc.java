@@ -17,27 +17,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document;
+package uniol.aptgui.document.graphical.edges;
 
-public interface DocumentListener {
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.traits.HasLabel;
 
-	/**
-	 * Called when the document changes visually.
-	 */
-	void onDocumentDirty(Document<?> source);
+public class GraphicalArc extends GraphicalEdge implements HasLabel {
 
-	/**
-	 * Called when the document changes structurally.
-	 */
-	void onDocumentChanged(Document<?> source);
+	public GraphicalArc(GraphicalNode source, GraphicalNode target) {
+		super(source, target);
+	}
 
-	/**
-	 * Called when the selection in this Document changes.
-	 *
-	 * @param source
-	 *                the document that this call originates from
-	 */
-	void onSelectionChanged(Document<?> source);
+	@Override
+	public String toUserString() {
+		return "Arc from " + source.toUserString() + " to " + target.toUserString();
+	}
 
 }
 

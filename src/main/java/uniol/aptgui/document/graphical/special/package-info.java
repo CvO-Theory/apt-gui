@@ -3,4 +3,4 @@
  * but are used temporarily as replacements for real graphical elements, for
  * example by tools.
  */
-package uniol.aptgui.editor.document.graphical.special;
+package uniol.aptgui.document.graphical.special;

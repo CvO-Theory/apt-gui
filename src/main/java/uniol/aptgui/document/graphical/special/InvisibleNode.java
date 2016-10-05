@@ -17,20 +17,47 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.edges;
+package uniol.aptgui.document.graphical.special;
 
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
-import uniol.aptgui.editor.document.graphical.traits.HasLabel;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-public class GraphicalArc extends GraphicalEdge implements HasLabel {
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
-	public GraphicalArc(GraphicalNode source, GraphicalNode target) {
-		super(source, target);
+public class InvisibleNode extends GraphicalNode {
+
+	public InvisibleNode() {
+		setVisible(false);
 	}
 
 	@Override
-	public String toUserString() {
-		return "Arc from " + source.toUserString() + " to " + target.toUserString();
+	public Point getBoundaryIntersection(Point point) {
+		return center;
+	}
+
+	@Override
+	public boolean coversPoint(Point point) {
+		return false;
+	}
+
+	@Override
+	protected void drawShape(Graphics2D graphics, RenderingOptions renderingOptions) {
+	}
+
+	@Override
+	protected void drawId(Graphics2D graphics, RenderingOptions renderingOptions) {
+	}
+
+	@Override
+	protected void drawSelectionMarkers(Graphics2D graphics, RenderingOptions renderingOptions) {
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

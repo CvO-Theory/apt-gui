@@ -33,7 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.swing.JPanelView;
 import uniol.aptgui.swing.extensiontable.ExtensionTable;

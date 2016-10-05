@@ -26,8 +26,8 @@ import javax.swing.AbstractAction;
 import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.EditingOptions;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.EditingOptions;
 
 @SuppressWarnings("serial")
 public class SetGridSpacingAction extends AbstractAction {

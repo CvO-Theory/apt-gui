@@ -33,9 +33,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import uniol.apt.io.parser.impl.AptLTSParser;
 import uniol.apt.io.parser.impl.AptPNParser;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.io.FileType;
 
 @SuppressWarnings("serial")

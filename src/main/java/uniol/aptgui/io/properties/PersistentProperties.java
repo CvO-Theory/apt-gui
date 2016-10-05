@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uniol.apt.adt.extension.Extensible;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Parser for the persistent extensions that save graphical and layout

@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document;
+package uniol.aptgui.document;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.Set;
 
 import uniol.apt.adt.extension.IExtensible;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutException;
 import uniol.aptgui.io.FileType;

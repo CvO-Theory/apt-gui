@@ -27,9 +27,9 @@ import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.io.parser.ParseException;
 import uniol.apt.io.parser.impl.AptLTSParser;
 import uniol.apt.io.parser.impl.AptPNParser;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.TsDocument;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.PersistentDocumentProperties;
 

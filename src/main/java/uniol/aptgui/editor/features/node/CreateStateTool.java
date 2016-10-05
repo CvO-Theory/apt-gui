@@ -21,9 +21,9 @@ package uniol.aptgui.editor.features.node;
 
 import uniol.aptgui.commands.CreateStateCommand;
 import uniol.aptgui.commands.History;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 
 /**
  * Tool that creates states in transition system documents.

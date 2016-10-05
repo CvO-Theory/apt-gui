@@ -19,7 +19,7 @@
 
 package uniol.aptgui.events;
 
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 /**
  * Event that gets published when the selection in a document changes.

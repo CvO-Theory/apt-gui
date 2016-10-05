@@ -17,47 +17,72 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.special;
+package uniol.aptgui.document.graphical.nodes;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import uniol.aptgui.editor.document.RenderingOptions;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.RenderingOptions;
 
-public class InvisibleNode extends GraphicalNode {
+public class GraphicalPlace extends GraphicalNode {
 
-	public InvisibleNode() {
-		setVisible(false);
+	private static final int RADIUS = 20;
+	private static final int ID_OFFSET = 7;
+
+	protected long tokens;
+
+	public long getTokens() {
+		return tokens;
+	}
+
+	public void setTokens(long tokens) {
+		this.tokens = tokens;
 	}
 
 	@Override
 	public Point getBoundaryIntersection(Point point) {
-		return center;
+		return getCircleBoundaryIntersection(center, RADIUS, point);
 	}
 
 	@Override
 	public boolean coversPoint(Point point) {
-		return false;
+		return super.coversPoint(point) && center.distance(point.x, point.y) < RADIUS;
 	}
 
 	@Override
 	protected void drawShape(Graphics2D graphics, RenderingOptions renderingOptions) {
+		drawCircle(graphics, center, RADIUS);
+		// TODO draw tokens as points if it is a low number
+		drawCenteredString(graphics, center, String.valueOf(tokens));
 	}
 
 	@Override
 	protected void drawId(Graphics2D graphics, RenderingOptions renderingOptions) {
+		if (renderingOptions.isPlaceIdLabelVisible()) {
+			Point idLabelPosition = new Point(center.x + RADIUS + ID_OFFSET, center.y - RADIUS - ID_OFFSET);
+			drawCenteredString(graphics, idLabelPosition, id);
+		}
 	}
 
 	@Override
 	protected void drawSelectionMarkers(Graphics2D graphics, RenderingOptions renderingOptions) {
+		drawSelectionMarkers(graphics, center, RADIUS + 2);
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Rectangle(
+			center.x - RADIUS,
+			center.y - RADIUS - ID_OFFSET,
+			2 * RADIUS + ID_OFFSET,
+			2 * RADIUS + ID_OFFSET
+		);
+	}
+
+	@Override
+	public String toUserString() {
+		return getId() + " (Place)";
 	}
 
 }

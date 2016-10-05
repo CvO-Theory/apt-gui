@@ -22,8 +22,8 @@ package uniol.aptgui.commands;
 import uniol.apt.adt.pn.Marking;
 import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.pn.Transition;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalTransition;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalTransition;
 
 public class FireTransitionCommand extends Command {
 

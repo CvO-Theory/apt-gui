@@ -31,9 +31,9 @@ import org.w3c.dom.DOMImplementation;
 import com.google.inject.Inject;
 
 import uniol.apt.io.renderer.RenderException;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.RenderingOptions;
-import uniol.aptgui.editor.document.Viewport;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.Viewport;
 
 /**
  * Renders a document to a SVG vector image.

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.mainwindow.WindowRefProvider;

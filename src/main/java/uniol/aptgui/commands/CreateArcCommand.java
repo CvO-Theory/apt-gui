@@ -21,8 +21,8 @@ package uniol.aptgui.commands;
 
 import uniol.apt.adt.ts.Arc;
 import uniol.apt.adt.ts.State;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalArc;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.edges.GraphicalArc;
 
 public class CreateArcCommand extends Command {
 

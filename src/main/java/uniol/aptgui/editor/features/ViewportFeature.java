@@ -23,7 +23,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.editor.features.base.Feature;
 
 /**

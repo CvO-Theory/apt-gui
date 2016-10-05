@@ -28,7 +28,7 @@ import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.ApplyLayoutCommand;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.editor.layout.GraphvizLayout;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;

@@ -19,7 +19,7 @@
 
 package uniol.aptgui.editor.layout;
 
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 /**
  * Interface for layout algorithms that can be applied to documents. A layout

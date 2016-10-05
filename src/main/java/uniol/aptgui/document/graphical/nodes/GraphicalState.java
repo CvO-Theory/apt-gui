@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.nodes;
+package uniol.aptgui.document.graphical.nodes;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -25,8 +25,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import uniol.aptgui.editor.document.RenderingOptions;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
 
 /**
  * Graphical representation class of LTS states.

@@ -22,8 +22,8 @@ package uniol.aptgui.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalFlow;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.edges.GraphicalFlow;
 
 public class SetMultiplicityCommand extends SetAttributeCommand<GraphicalFlow, Integer> {
 

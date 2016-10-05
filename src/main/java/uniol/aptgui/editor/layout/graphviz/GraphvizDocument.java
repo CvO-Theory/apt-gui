@@ -29,11 +29,10 @@ import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import uniol.apt.util.Pair;
-
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
 /**
  * Document state for GraphViz interaction.

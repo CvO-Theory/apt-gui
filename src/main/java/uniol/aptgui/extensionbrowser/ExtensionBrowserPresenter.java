@@ -20,8 +20,8 @@
 package uniol.aptgui.extensionbrowser;
 
 import uniol.aptgui.Presenter;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.mainwindow.WindowRef;
 
 public interface ExtensionBrowserPresenter extends Presenter<ExtensionBrowserView> {

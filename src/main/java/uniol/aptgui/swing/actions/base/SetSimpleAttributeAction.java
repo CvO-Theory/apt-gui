@@ -28,7 +28,7 @@ import com.google.common.eventbus.EventBus;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.Command;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 /**
  * Action that allows to set an attribute on the current Document selection.

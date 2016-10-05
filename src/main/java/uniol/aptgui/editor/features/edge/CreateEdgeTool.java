@@ -22,12 +22,12 @@ package uniol.aptgui.editor.features.edge;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.Viewport;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
-import uniol.aptgui.editor.document.graphical.special.InvisibleNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.Viewport;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.special.InvisibleNode;
 import uniol.aptgui.editor.features.base.HoverEffectFeature;
 
 /**

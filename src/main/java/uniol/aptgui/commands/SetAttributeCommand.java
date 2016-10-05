@@ -22,8 +22,8 @@ package uniol.aptgui.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
 
 /***
  * This class allows to set an attribute for a set of elements. It takes a list

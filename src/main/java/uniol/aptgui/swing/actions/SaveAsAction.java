@@ -25,7 +25,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.swing.Resource;
 
 @SuppressWarnings("serial")

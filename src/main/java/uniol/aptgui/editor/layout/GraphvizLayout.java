@@ -35,9 +35,9 @@ import java.nio.charset.StandardCharsets;
 import com.google.inject.Inject;
 
 import uniol.apt.io.parser.ParseException;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.layout.graphviz.GraphvizDocument;
 import uniol.aptgui.editor.layout.graphviz.GraphvizParser;
 import uniol.aptgui.editor.layout.graphviz.GraphvizRenderer;

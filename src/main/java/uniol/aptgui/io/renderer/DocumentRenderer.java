@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 import uniol.apt.io.renderer.RenderException;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 
 public interface DocumentRenderer {
 

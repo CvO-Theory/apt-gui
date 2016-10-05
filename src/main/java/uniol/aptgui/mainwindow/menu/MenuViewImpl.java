@@ -31,8 +31,8 @@ import com.google.inject.Injector;
 
 import uniol.apt.module.Module;
 import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.RenderingOptions;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.RenderingOptions;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.JMenuBarView;
 import uniol.aptgui.swing.actions.CascadeWindowsAction;

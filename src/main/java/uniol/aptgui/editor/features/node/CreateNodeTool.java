@@ -22,10 +22,10 @@ package uniol.aptgui.editor.features.node;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.EditingOptions;
-import uniol.aptgui.editor.document.Viewport;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.EditingOptions;
+import uniol.aptgui.document.Viewport;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.features.ToolUtil;
 import uniol.aptgui.editor.features.base.Feature;
 

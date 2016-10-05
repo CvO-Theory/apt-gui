@@ -22,8 +22,8 @@ package uniol.aptgui.commands;
 import uniol.apt.adt.exception.StructureException;
 import uniol.apt.adt.ts.State;
 import uniol.apt.adt.ts.TransitionSystem;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 
 public class SetInitialStateCommand extends Command {
 

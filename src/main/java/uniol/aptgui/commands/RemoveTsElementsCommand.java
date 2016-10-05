@@ -28,11 +28,11 @@ import java.util.Set;
 import uniol.apt.adt.ts.Arc;
 import uniol.apt.adt.ts.State;
 import uniol.apt.adt.ts.TransitionSystem;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalArc;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalArc;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 
 /**
  * Command that removes a set of GraphicalElements from a transition system document and

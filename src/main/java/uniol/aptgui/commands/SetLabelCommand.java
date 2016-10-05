@@ -22,8 +22,8 @@ package uniol.aptgui.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.traits.HasLabel;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.traits.HasLabel;
 
 public class SetLabelCommand extends SetAttributeCommand<HasLabel, String> {
 

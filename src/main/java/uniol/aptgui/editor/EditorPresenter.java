@@ -22,7 +22,7 @@ package uniol.aptgui.editor;
 import java.awt.Graphics2D;
 
 import uniol.aptgui.Presenter;
-import uniol.aptgui.editor.document.Document;
+import uniol.aptgui.document.Document;
 import uniol.aptgui.mainwindow.WindowId;
 
 /**

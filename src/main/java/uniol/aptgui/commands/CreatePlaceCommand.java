@@ -20,8 +20,8 @@
 package uniol.aptgui.commands;
 
 import uniol.apt.adt.pn.Place;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
 
 public class CreatePlaceCommand extends Command {
 

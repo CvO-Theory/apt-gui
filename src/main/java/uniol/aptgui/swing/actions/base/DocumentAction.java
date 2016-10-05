@@ -25,8 +25,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import uniol.aptgui.Application;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.events.DocumentChangedEvent;
 import uniol.aptgui.events.DocumentSelectionChangedEvent;
 import uniol.aptgui.events.WindowClosedEvent;

@@ -17,49 +17,58 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.nodes;
+package uniol.aptgui.document.graphical.nodes;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import uniol.aptgui.editor.document.RenderingOptions;
+import uniol.aptgui.document.RenderingOptions;
+import uniol.aptgui.document.graphical.traits.HasLabel;
 
-public class GraphicalPlace extends GraphicalNode {
+public class GraphicalTransition extends GraphicalNode implements HasLabel {
 
 	private static final int RADIUS = 20;
 	private static final int ID_OFFSET = 7;
 
-	protected long tokens;
+	protected String label;
 
-	public long getTokens() {
-		return tokens;
+	public String getLabel() {
+		return label;
 	}
 
-	public void setTokens(long tokens) {
-		this.tokens = tokens;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	@Override
 	public Point getBoundaryIntersection(Point point) {
-		return getCircleBoundaryIntersection(center, RADIUS, point);
+		return getSquareBoundaryIntersection(center, RADIUS, point);
 	}
 
 	@Override
 	public boolean coversPoint(Point point) {
-		return super.coversPoint(point) && center.distance(point.x, point.y) < RADIUS;
+		if (!super.coversPoint(point)) {
+			return false;
+		}
+		int minX = center.x - RADIUS;
+		int maxX = center.x + RADIUS;
+		int minY = center.y - RADIUS;
+		int maxY = center.y + RADIUS;
+		return minX <= point.x && point.x <= maxX && minY <= point.y && point.y <= maxY;
 	}
 
 	@Override
 	protected void drawShape(Graphics2D graphics, RenderingOptions renderingOptions) {
-		drawCircle(graphics, center, RADIUS);
-		// TODO draw tokens as points if it is a low number
-		drawCenteredString(graphics, center, String.valueOf(tokens));
+		drawSquare(graphics, center, 20);
+		if (label != null) {
+			drawCenteredString(graphics, center, label);
+		}
 	}
 
 	@Override
 	protected void drawId(Graphics2D graphics, RenderingOptions renderingOptions) {
-		if (renderingOptions.isPlaceIdLabelVisible()) {
+		if (renderingOptions.isTransitionIdLabelVisible()) {
 			Point idLabelPosition = new Point(center.x + RADIUS + ID_OFFSET, center.y - RADIUS - ID_OFFSET);
 			drawCenteredString(graphics, idLabelPosition, id);
 		}
@@ -82,7 +91,7 @@ public class GraphicalPlace extends GraphicalNode {
 
 	@Override
 	public String toUserString() {
-		return getId() + " (Place)";
+		return getId() + " (Transition)";
 	}
 
 }

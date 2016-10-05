@@ -27,9 +27,9 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.Command;
 import uniol.aptgui.commands.SetInitialStateCommand;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
 

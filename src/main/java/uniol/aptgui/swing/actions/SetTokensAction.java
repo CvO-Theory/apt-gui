@@ -29,9 +29,9 @@ import uniol.apt.adt.pn.Place;
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.Command;
 import uniol.aptgui.commands.SetTokensCommand;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.SetSimpleAttributeAction;
 

@@ -24,12 +24,12 @@ import java.awt.Cursor;
 import uniol.apt.adt.ts.State;
 import uniol.aptgui.commands.CreateArcCommand;
 import uniol.aptgui.commands.History;
+import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalArc;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.nodes.GraphicalState;
 import uniol.aptgui.editor.EditorView;
-import uniol.aptgui.editor.document.TsDocument;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalArc;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalState;
 import uniol.aptgui.swing.Resource;
 
 /**

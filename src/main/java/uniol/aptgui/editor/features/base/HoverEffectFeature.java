@@ -19,7 +19,7 @@
 
 package uniol.aptgui.editor.features.base;
 
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.GraphicalElement;
 
 /**
  * Abstract base class for all features that need to display highlight effects

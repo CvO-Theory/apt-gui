@@ -25,8 +25,8 @@ import java.util.List;
 import uniol.apt.adt.pn.Marking;
 import uniol.apt.adt.pn.Place;
 import uniol.apt.adt.pn.Token;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
 
 /**
  * Command that sets the token count for a selection of GraphicalPlaces.

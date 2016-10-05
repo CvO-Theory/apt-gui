@@ -29,9 +29,9 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.AddBreakpointCommand;
 import uniol.aptgui.commands.Command;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
 import uniol.aptgui.swing.actions.base.DocumentAction;
 
 /**

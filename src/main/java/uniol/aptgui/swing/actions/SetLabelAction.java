@@ -27,8 +27,8 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.commands.Command;
 import uniol.aptgui.commands.SetLabelCommand;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.traits.HasLabel;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.traits.HasLabel;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.SetSimpleAttributeAction;
 

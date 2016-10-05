@@ -24,12 +24,12 @@ import java.awt.Cursor;
 import uniol.apt.adt.pn.Node;
 import uniol.aptgui.commands.CreateFlowCommand;
 import uniol.aptgui.commands.History;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalFlow;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalNode;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalPlace;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalTransition;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalFlow;
+import uniol.aptgui.document.graphical.nodes.GraphicalNode;
+import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
+import uniol.aptgui.document.graphical.nodes.GraphicalTransition;
 import uniol.aptgui.swing.Resource;
 
 /**

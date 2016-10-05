@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.document.graphical.traits;
+package uniol.aptgui.document.graphical.traits;
 
 /**
  * Interface for all GraphicalElements that have labels.

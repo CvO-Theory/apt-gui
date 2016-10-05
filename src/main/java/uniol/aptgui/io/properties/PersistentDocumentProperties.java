@@ -24,8 +24,8 @@ import com.google.common.base.Function;
 import uniol.apt.adt.extension.Extensible;
 import uniol.apt.adt.extension.ExtensionProperty;
 import uniol.apt.adt.extension.IExtensible;
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.GraphicalElement;
 
 /**
  * Helper class to parse and render persistent properties for every element in a

@@ -21,8 +21,8 @@ package uniol.aptgui.commands;
 
 import java.awt.Point;
 
-import uniol.aptgui.editor.document.Document;
-import uniol.aptgui.editor.document.graphical.edges.GraphicalEdge;
+import uniol.aptgui.document.Document;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
 
 /**
  * Command that translates a breakpoint that belongs to a graphical edge. If a

@@ -27,10 +27,10 @@ import uniol.apt.adt.pn.Transition;
 import uniol.aptgui.commands.Command;
 import uniol.aptgui.commands.FireTransitionCommand;
 import uniol.aptgui.commands.History;
-import uniol.aptgui.editor.document.PnDocument;
-import uniol.aptgui.editor.document.Viewport;
-import uniol.aptgui.editor.document.graphical.GraphicalElement;
-import uniol.aptgui.editor.document.graphical.nodes.GraphicalTransition;
+import uniol.aptgui.document.PnDocument;
+import uniol.aptgui.document.Viewport;
+import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.nodes.GraphicalTransition;
 import uniol.aptgui.editor.features.base.HoverEffectFeature;
 
 /**
