@@ -19,7 +19,7 @@
 
 package uniol.aptgui.module;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import uniol.apt.module.InterruptibleModule;
@@ -91,7 +91,7 @@ public class ModuleRunner {
 		}
 
 		// Collect return values
-		Map<String, Object> results = new HashMap<>();
+		Map<String, Object> results = new LinkedHashMap<>();
 		for (ReturnValue returnValue : ModuleUtils.getReturnValues(module)) {
 			Object value = output.getValue(returnValue.getName());
 			if (value != null) {

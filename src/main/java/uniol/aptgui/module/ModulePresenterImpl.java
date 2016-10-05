@@ -38,7 +38,6 @@ import uniol.apt.module.Module;
 import uniol.apt.module.exception.ModuleException;
 import uniol.apt.module.impl.ModuleUtils;
 import uniol.apt.module.impl.Parameter;
-import uniol.apt.module.impl.ReturnValue;
 import uniol.apt.ui.ParametersTransformer;
 import uniol.aptgui.AbstractPresenter;
 import uniol.aptgui.Application;
@@ -64,7 +63,6 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 
 	private List<Parameter> parameters;
 	private List<Parameter> allParameters;
-	private List<ReturnValue> returnValues;
 
 	private PropertyTableModel parameterTableModel;
 	private PropertyTableModel resultTableModel;
@@ -95,7 +93,6 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		this.module = module;
 		parameters = ModuleUtils.getParameters(module);
 		allParameters = ModuleUtils.getAllParameters(module);
-		returnValues = ModuleUtils.getReturnValues(module);
 
 		parameterTableModel = new PropertyTableModel("Parameter", "Value", allParameters.size());
 		parameterTableModel.setEditable(true);
@@ -247,8 +244,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		// Fill table model
 		resultTableModel = new PropertyTableModel("Result", "Value", filledReturnValues.size());
 		int row = 0;
-		for (ReturnValue rv : returnValues) {
-			String name = rv.getName();
+		for (String name : filledReturnValues.keySet()) {
 			Object value = filledReturnValues.get(name);
 			PropertyType type = PropertyType.fromModelType(value.getClass());
 
