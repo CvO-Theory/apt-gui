@@ -32,6 +32,8 @@ dependencies {
 		exclude module: 'xml-apis'
 	}
 	testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.1.0'
+    testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
 }
 
 eclipse {
