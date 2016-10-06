@@ -20,8 +20,6 @@
 package uniol.aptgui.module;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.Future;
 
 import javax.swing.SwingUtilities;
@@ -31,6 +29,7 @@ import com.google.inject.Inject;
 
 import uniol.apt.module.Module;
 import uniol.apt.module.impl.ModuleUtils;
+import uniol.apt.util.interrupt.UncheckedInterruptedException;
 import uniol.aptgui.AbstractPresenter;
 import uniol.aptgui.Application;
 import uniol.aptgui.events.ModuleExecutedEvent;
@@ -59,7 +58,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	 * Future giving access to the module execution happening in another
 	 * thread.
 	 */
-	private Future<Map<String, Object>> moduleFuture;
+	private Future<?> moduleFuture;
 
 	@Inject
 	public ModulePresenterImpl(ModuleView view, Application application, ModuleRunner moduleRunner,
@@ -94,7 +93,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	@Override
 	public void onRunButtonClicked() {
 		try {
-			Map<String, Object> paramValues = parameterHelper.fromViewParameterValues(allParameters,
+			final Map<String, Object> paramValues = parameterHelper.fromViewParameterValues(allParameters,
 					paramAdapter.getParameterValues());
 			// Make sure all required parameters are filled in
 			for (String name : requiredParameters.keySet()) {
@@ -104,53 +103,33 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 				}
 			}
 
-			// Module is executed on another thread.
-			moduleFuture = invokeModule(paramValues);
+			// Module is executed on another thread
+			moduleFuture = application.getExecutorService().submit(new Runnable() {
+				@Override
+				public void run() {
+					invokeModule(paramValues);
+				}
+			});
+
 			view.setModuleRunning(true);
-			// Invoke new thread that blocks until results are
-			// available.
-			displayResultsWhenFinished();
 		} catch (Exception e) {
 			application.getMainWindow().showException("Module exception", e);
 		}
 	}
 
-	private Future<Map<String, Object>> invokeModule(final Map<String, Object> paramValues) {
-		return application.getExecutorService().submit(new Callable<Map<String, Object>>() {
-			@Override
-			public Map<String, Object> call() throws Exception {
-				Map<String, Object> returnValues = moduleRunner.run(module, paramValues);
-				return returnValues;
-			}
-		});
-	}
-
-	private void displayResultsWhenFinished() {
-		application.getExecutorService().submit(new Runnable() {
-			@Override
-			public void run() {
-				waitForModuleExecution();
-			}
-		});
-	}
-
-	/**
-	 * Blocks until the module future result is available and then shows the
-	 * module results in the view.
-	 */
-	private void waitForModuleExecution() {
+	private void invokeModule(final Map<String, Object> paramValues) {
 		try {
-			final Map<String, Object> filledReturnValues = moduleFuture.get();
+			final Map<String, Object> returnValues = moduleRunner.run(module, paramValues);
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					showModuleResults(filledReturnValues);
+					showModuleResults(returnValues);
 					application.getEventBus().post(
 							new ModuleExecutedEvent(ModulePresenterImpl.this, module));
 				}
 			});
-		} catch (InterruptedException | CancellationException ex) {
-			// Ignore these two types of exceptions.
+		} catch (UncheckedInterruptedException ex) {
+			// Ignore this
 		} catch (final Exception ex) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
