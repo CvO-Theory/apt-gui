@@ -19,8 +19,6 @@
 
 package uniol.aptgui.module;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -31,18 +29,10 @@ import javax.swing.SwingUtilities;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import uniol.apt.adt.pn.PetriNet;
-import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.module.Module;
-import uniol.apt.module.exception.ModuleException;
 import uniol.apt.module.impl.ModuleUtils;
-import uniol.apt.module.impl.Parameter;
-import uniol.apt.ui.ParametersTransformer;
 import uniol.aptgui.AbstractPresenter;
 import uniol.aptgui.Application;
-import uniol.aptgui.document.Document;
-import uniol.aptgui.document.PnDocument;
-import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.events.ModuleExecutedEvent;
 import uniol.aptgui.events.WindowClosedEvent;
 import uniol.aptgui.mainwindow.WindowId;
@@ -52,14 +42,18 @@ import uniol.aptgui.mainwindow.WindowType;
 public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, ModuleView> implements ModulePresenter {
 
 	private final Application application;
-	private final ParametersTransformer parametersTransformer;
 	private final ModuleRunner moduleRunner;
+	private final ParameterHelper parameterHelper;
+	private final ResultHelper resultHelper;
 
 	private WindowId windowId;
 	private Module module;
 
 	private Map<String, Class<?>> allParameters;
 	private Map<String, Class<?>> requiredParameters;
+
+	private ParameterTableModelAdapter paramAdapter;
+	private ResultTableModelAdapter resultAdapter;
 
 	/**
 	 * Future giving access to the module execution happening in another
@@ -68,12 +62,13 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	private Future<Map<String, Object>> moduleFuture;
 
 	@Inject
-	public ModulePresenterImpl(ModuleView view, Application application,
-			ParametersTransformer parametersTransformer, ModuleRunner moduleRunner) {
+	public ModulePresenterImpl(ModuleView view, Application application, ModuleRunner moduleRunner,
+			ParameterHelper parameterHelper, ResultHelper resultHelper) {
 		super(view);
 		this.application = application;
-		this.parametersTransformer = parametersTransformer;
 		this.moduleRunner = moduleRunner;
+		this.parameterHelper = parameterHelper;
+		this.resultHelper = resultHelper;
 		application.getEventBus().register(this);
 	}
 
@@ -85,110 +80,22 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	@Override
 	public void setModule(Module module) {
 		this.module = module;
-		allParameters = toParameterTypeMap(ModuleUtils.getAllParameters(module));
-		requiredParameters = toParameterTypeMap(ModuleUtils.getParameters(module));
+		allParameters = parameterHelper.toParameterTypeMap(ModuleUtils.getAllParameters(module));
+		requiredParameters = parameterHelper.toParameterTypeMap(ModuleUtils.getParameters(module));
+		paramAdapter = new ParameterTableModelAdapter();
+		paramAdapter.setParameters(allParameters);
 
-		view.setParameters(allParameters);
+		view.setParameterTableModel(paramAdapter.getModel());
 		view.setDescription(module.getLongDescription());
 		view.setPNWindowRefProvider(new WindowRefProviderImpl(application, WindowType.PETRI_NET));
 		view.setTSWindowRefProvider(new WindowRefProviderImpl(application, WindowType.TRANSITION_SYSTEM));
 	}
 
-	/**
-	 * Transforms a list of module parameters into a map that matches
-	 * parameter name to the value's expected type.
-	 *
-	 * @param moduleParameters
-	 *                parameters of an APT module
-	 * @return map of parameter names to types
-	 */
-	private Map<String, Class<?>> toParameterTypeMap(List<Parameter> moduleParameters) {
-		Map<String, Class<?>> viewParameters = new LinkedHashMap<>();
-		for (Parameter param : moduleParameters) {
-			viewParameters.put(param.getName(), param.getKlass());
-		}
-		return viewParameters;
-	}
-
-	/**
-	 * Transforms a map containing parameter values from the view to a map
-	 * containing parameter values that are of the correct model types.
-	 *
-	 * @param viewParameterValues
-	 *                map of parameter names to the values input by the
-	 *                user; these will be proxy objects in some cases such
-	 *                as WindowRef objects for PetriNet or TransitionSystem
-	 * @return map of parameter names to correctly typed values
-	 * @throws ModuleException
-	 */
-	private Map<String, Object> fromViewParameterValues(Map<String, Object> viewParameterValues)
-			throws ModuleException {
-		Map<String, Object> modelParameters = new LinkedHashMap<>();
-		for (String paramName : viewParameterValues.keySet()) {
-			Object value = viewParameterValues.get(paramName);
-			Class<?> targetClass = allParameters.get(paramName);
-			modelParameters.put(paramName, viewToModel(value, targetClass));
-		}
-		return modelParameters;
-	}
-
-	private Object viewToModel(Object value, Class<?> targetClass) throws ModuleException {
-		if (targetClass.isAssignableFrom(value.getClass())) {
-			return value;
-		} else if (value instanceof WindowRef) {
-			// Unwrap window references to their
-			// model object (PetriNet or TransitionSystem)
-			WindowRef ref = (WindowRef) value;
-			return ref.getDocument().getModel();
-		} else if (value instanceof String) {
-			// Transform everything else from the
-			// string representation to its model object
-			return parametersTransformer.transform(value.toString(), targetClass);
-		} else {
-			// Should not happen because the PropertyTable should
-			// always return Strings in the non-special cases
-			throw new AssertionError();
-		}
-	}
-
-	/**
-	 * Transforms a map containing module return values to a map where the
-	 * values are replaced with the proper view proxy objects.
-	 *
-	 * @param moduleReturnValues
-	 * @return
-	 */
-	private Map<String, Object> toViewReturnValues(Map<String, Object> moduleReturnValues) {
-		Map<String, Object> viewReturnValues = new LinkedHashMap<>();
-		for (String paramName : moduleReturnValues.keySet()) {
-			Object value = moduleReturnValues.get(paramName);
-			if (value != null) {
-				viewReturnValues.put(paramName, modelToView(value));
-			}
-		}
-		return viewReturnValues;
-	}
-
-	private Object modelToView(Object value) {
-		if (value instanceof PetriNet) {
-			Document<?> doc = new PnDocument((PetriNet) value);
-			doc.setHasUnsavedChanges(true);
-			WindowRef ref = openDocument(doc);
-			return ref;
-		} else if (value instanceof TransitionSystem) {
-			Document<?> doc = new TsDocument((TransitionSystem) value);
-			doc.setHasUnsavedChanges(true);
-			WindowRef ref = openDocument(doc);
-			return ref;
-		} else {
-			return value.toString();
-		}
-	}
-
 	@Override
 	public void onRunButtonClicked() {
 		try {
-			Map<String, Object> paramValues = fromViewParameterValues(view.getParameterValues());
+			Map<String, Object> paramValues = parameterHelper.fromViewParameterValues(allParameters,
+					paramAdapter.getParameterValues());
 			// Make sure all required parameters are filled in
 			for (String name : requiredParameters.keySet()) {
 				if (paramValues.get(name) == null) {
@@ -261,22 +168,19 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		}
 	}
 
-	private void showModuleResults(Map<String, Object> filledReturnValues) {
-		view.setReturnValues(toViewReturnValues(filledReturnValues));
+	private void showModuleResults(Map<String, Object> returnValues) {
+		Map<String, Object> viewReturnValues = resultHelper.toViewReturnValues(returnValues);
+		resultAdapter = new ResultTableModelAdapter();
+		resultAdapter.setReturnValues(viewReturnValues);
+		view.setResultTableModel(resultAdapter.getModel());
 		view.showResultsPane();
-	}
-
-	private WindowRef openDocument(Document<?> document) {
-		WindowId id = application.openDocument(document);
-		WindowRef ref = new WindowRef(id, document);
-		return ref;
 	}
 
 	@Subscribe
 	public void onWindowClosedEvent(WindowClosedEvent e) {
 		// Unset window chosen as a parameter if it was closed
 		WindowRef ref = new WindowRef(e.getWindowId(), application.getDocument(e.getWindowId()));
-		view.unsetParameterValue(ref);
+		paramAdapter.unsetParameterValue(ref);
 
 		// Cancel module execution when parent window closes
 		if (e.getWindowId() == windowId && moduleFuture != null) {

@@ -26,9 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,7 +39,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
-import uniol.apt.module.exception.ModuleException;
 import uniol.aptgui.mainwindow.WindowRef;
 import uniol.aptgui.mainwindow.WindowRefProvider;
 import uniol.aptgui.swing.JPanelView;
@@ -62,6 +58,7 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 	private JTabbedPane tabbedPane;
 	private JPanel parametersContainer;
 	private PropertyTable parametersTable;
+	@SuppressWarnings("unused")
 	private PropertyTableModel parametersTableModel;
 
 	private JPanel resultsContainer;
@@ -198,50 +195,15 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 	}
 
 	@Override
-	public void setParameters(Map<String, Class<?>> parameters) {
-		parametersTableModel = new PropertyTableModel("Parameter", "Value", parameters.size());
-		parametersTableModel.setEditable(true);
-
-		int row = 0;
-		for (Entry<String, Class<?>> param : parameters.entrySet()) {
-			parametersTableModel.setProperty(row, param.getValue(), param.getKey());
-			row += 1;
-		}
-
-		parametersTable.setModel(parametersTableModel);
+	public void setParameterTableModel(PropertyTableModel parameterTableModel) {
+		this.parametersTableModel = parameterTableModel;
+		this.parametersTable.setModel(parameterTableModel);
 	}
 
 	@Override
-	public Map<String, Object> getParameterValues() throws ModuleException {
-		Map<String, Object> result = new HashMap<>();
-		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
-			if (parametersTableModel.getPropertyValueAt(row) != null) {
-				String name = parametersTableModel.getPropertyNameAt(row);
-				Object value = parametersTableModel.getPropertyValueAt(row);
-				result.put(name, value);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public void unsetParameterValue(Object value) {
-		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
-			if (value.equals(parametersTableModel.getPropertyValueAt(row))) {
-				parametersTableModel.setPropertyValue(row, null);
-			}
-		}
-	}
-
-	@Override
-	public void setReturnValues(Map<String, Object> returnValues) {
-		resultsTableModel = new PropertyTableModel("Result", "Value", returnValues.size());
-		int row = 0;
-		for (Entry<String, Object> rv : returnValues.entrySet()) {
-			resultsTableModel.setProperty(row, Object.class, rv.getKey(), rv.getValue());
-			row += 1;
-		}
-		resultsTable.setModel(resultsTableModel);
+	public void setResultTableModel(PropertyTableModel resultTableModel) {
+		this.resultsTableModel = resultTableModel;
+		this.resultsTable.setModel(resultTableModel);
 	}
 
 }
