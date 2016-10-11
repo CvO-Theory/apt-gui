@@ -25,6 +25,9 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 
+import uniol.apt.adt.PetriNetOrTransitionSystem;
+import uniol.apt.adt.pn.PetriNet;
+import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.module.exception.ModuleException;
 import uniol.apt.module.impl.Parameter;
 import uniol.apt.ui.ParametersTransformer;
@@ -89,18 +92,30 @@ public class ParameterHelper {
 		if (targetClass.isAssignableFrom(value.getClass())) {
 			return value;
 		} else if (value instanceof WindowRef) {
-			// Unwrap window references to their
-			// model object (PetriNet or TransitionSystem)
-			WindowRef ref = (WindowRef) value;
-			return ref.getDocument().getModel();
+			// Unwrap window references to their model object
+			// (PetriNet, TransitionSystem, PetriNetOrTransitionSystem)
+			return windowRefToModel((WindowRef) value, targetClass);
 		} else if (value instanceof String) {
-			// Transform everything else from the
-			// string representation to its model object
+			// Transform everything else from the string
+			// representation to its model object
 			return parametersTransformer.transform(value.toString(), targetClass);
 		} else {
 			// Should not happen because the PropertyTable should
 			// always return Strings in the non-special cases
 			throw new AssertionError();
+		}
+	}
+
+	private Object windowRefToModel(WindowRef ref, Class<?> targetClass) {
+		if (PetriNetOrTransitionSystem.class.equals(targetClass)) {
+			Object model = ref.getDocument().getModel();
+			if (model instanceof TransitionSystem) {
+				return new PetriNetOrTransitionSystem((TransitionSystem) model);
+			} else {
+				return new PetriNetOrTransitionSystem((PetriNet) model);
+			}
+		} else {
+			return ref.getDocument().getModel();
 		}
 	}
 
