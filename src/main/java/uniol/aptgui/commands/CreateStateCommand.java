@@ -47,7 +47,11 @@ public class CreateStateCommand extends Command {
 
 	@Override
 	public void execute() {
-		tsState = tsDocument.getModel().createState();
+		if (tsState != null) {
+			tsState = tsDocument.getModel().createState(tsState);
+		} else {
+			tsState = tsDocument.getModel().createState();
+		}
 		if (!hasInitialState()) {
 			tsDocument.getModel().setInitialState(tsState);
 		}

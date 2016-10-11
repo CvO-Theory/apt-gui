@@ -36,7 +36,11 @@ public class CreatePlaceCommand extends Command {
 
 	@Override
 	public void execute() {
-		pnPlace = pnDocument.getModel().createPlace();
+		if (pnPlace != null) {
+			pnPlace = pnDocument.getModel().createPlace(pnPlace);
+		} else {
+			pnPlace = pnDocument.getModel().createPlace();
+		}
 		graphicalPlace.setId(pnPlace.getId());
 		pnDocument.add(graphicalPlace, pnPlace);
 		pnDocument.fireDocumentChanged(true);
@@ -47,11 +51,6 @@ public class CreatePlaceCommand extends Command {
 		pnDocument.getModel().removePlace(pnPlace);
 		pnDocument.remove(graphicalPlace);
 		pnDocument.fireDocumentChanged(true);
-	}
-
-	@Override
-	public void redo() {
-		execute();
 	}
 
 	@Override

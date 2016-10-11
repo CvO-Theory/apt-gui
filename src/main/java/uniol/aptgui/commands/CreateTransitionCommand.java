@@ -36,7 +36,11 @@ public class CreateTransitionCommand extends Command {
 
 	@Override
 	public void execute() {
-		pnTransition = pnDocument.getModel().createTransition();
+		if (pnTransition != null) {
+			pnTransition = pnDocument.getModel().createTransition(pnTransition);
+		} else {
+			pnTransition = pnDocument.getModel().createTransition();
+		}
 		graphicalTransition.setId(pnTransition.getId());
 		pnDocument.add(graphicalTransition, pnTransition);
 		pnDocument.fireDocumentChanged(true);
