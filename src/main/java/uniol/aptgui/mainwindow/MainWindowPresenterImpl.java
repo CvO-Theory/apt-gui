@@ -179,7 +179,7 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 
 	@Subscribe
 	public void onWindowFocusGainedEvent(WindowFocusGainedEvent e) {
-		updateMainTitle();
+		updateMainTitle(e.getWindowId());
 	}
 
 	@Subscribe
@@ -374,10 +374,18 @@ public class MainWindowPresenterImpl extends AbstractPresenter<MainWindowPresent
 
 	/**
 	 * Updates the main window title so that the currently active internal
-	 * window title is a part of it.
+	 * window title as determined by the Application interface is a part of
+	 * it.
 	 */
 	private void updateMainTitle() {
-		WindowId active = application.getActiveWindow();
+		updateMainTitle(application.getActiveWindow());
+	}
+
+	/**
+	 * Updates the main window title so that the given window's title is a
+	 * part of it.
+	 */
+	private void updateMainTitle(WindowId active) {
 		if (active != null) {
 			view.setTitle(getWindowTitle(active) + " - " + TITLE);
 		} else {
