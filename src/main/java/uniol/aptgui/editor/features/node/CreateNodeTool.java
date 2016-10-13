@@ -69,7 +69,6 @@ public abstract class CreateNodeTool<T extends Document<?>, U extends GraphicalN
 		this.document = document;
 		this.viewport = document.getViewport();
 		this.editingOptions = editingOptions;
-		initPlace();
 	}
 
 	/**
