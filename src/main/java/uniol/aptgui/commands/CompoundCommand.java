@@ -57,6 +57,13 @@ public class CompoundCommand extends Command {
 		}
 	}
 
+	@Override
+	public void redo() {
+		for (Command cmd : subCommands) {
+			cmd.redo();
+		}
+	}
+
 	/**
 	 * Adds a new command that will become part of this compound command.
 	 *
