@@ -63,7 +63,9 @@ public abstract class CreateNodeTool<T extends Document<?>, U extends GraphicalN
 	 * Creates a a new CreateNodeTool for the given document.
 	 *
 	 * @param document
+	 *                document being modified by this tool
 	 * @param editingOptions
+	 *                settings that influence the tool's behavior
 	 */
 	public CreateNodeTool(T document, EditingOptions editingOptions) {
 		this.document = document;

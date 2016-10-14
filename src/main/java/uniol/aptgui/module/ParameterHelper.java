@@ -35,9 +35,6 @@ import uniol.aptgui.mainwindow.WindowRef;
 
 /**
  * Provides helper methods to work with module parameters.
- *
- * @author Jonas Prellberg
- *
  */
 public class ParameterHelper {
 
@@ -76,6 +73,8 @@ public class ParameterHelper {
 	 *                as WindowRef objects for PetriNet or TransitionSystem
 	 * @return map of parameter names to correctly typed values
 	 * @throws ModuleException
+	 *                 thrown when a parameter transformation is necessary
+	 *                 but fails
 	 */
 	public Map<String, Object> fromViewParameterValues(Map<String, Class<?>> allParameters,
 			Map<String, Object> viewParameterValues) throws ModuleException {

@@ -23,15 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import uniol.apt.module.exception.ModuleException;
 import uniol.aptgui.swing.parametertable.PropertyTableModel;
 
 /**
  * Adapter that makes allows easy interaction with a PropertyTableModel for
  * displaying parameters.
- *
- * @author Jonas Prellberg
- *
  */
 public class ParameterTableModelAdapter {
 
@@ -60,9 +56,8 @@ public class ParameterTableModelAdapter {
 	 * WindowRef.
 	 *
 	 * @return map of parameter name to its value
-	 * @throws ModuleException
 	 */
-	public Map<String, Object> getParameterValues() throws ModuleException {
+	public Map<String, Object> getParameterValues() {
 		Map<String, Object> result = new HashMap<>();
 		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
 			if (parametersTableModel.getPropertyValueAt(row) != null) {

@@ -24,6 +24,9 @@ import java.util.Set;
 import uniol.aptgui.Presenter;
 import uniol.aptgui.mainwindow.WindowId;
 
+/**
+ * Presenter interface for the main window's menu bar.
+ */
 public interface MenuPresenter extends Presenter<MenuView> {
 
 	// ACTIONS
@@ -32,7 +35,7 @@ public interface MenuPresenter extends Presenter<MenuView> {
 	 * Sets the currently opened internal windows of this application so
 	 * that they can be shown in the window menu.
 	 *
-	 * @param set
+	 * @param set set of window ids
 	 */
 	void setInternalWindows(Set<WindowId> set);
 

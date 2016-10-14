@@ -104,7 +104,9 @@ public abstract class GraphicalNode extends GraphicalElement {
 	 * a line from the given point to this GraphicalNode's center.
 	 *
 	 * @param point
-	 * @return
+	 *                any point outside of the node's boundary
+	 * @return intersection point of a linear connection between the node's
+	 *         center and the given point
 	 */
 	public abstract Point getBoundaryIntersection(Point point);
 

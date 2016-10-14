@@ -96,6 +96,11 @@ public class SelectionTool extends Feature {
 	 * Creates a new SelectionTool that operates on the given document.
 	 *
 	 * @param document
+	 *                document being modified
+	 * @param history
+	 *                history to send commands to
+	 * @param editingOptions
+	 *                settings that influence the tool's behavior
 	 */
 	public SelectionTool(Document<?> document, History history, EditingOptions editingOptions) {
 		this.document = document;

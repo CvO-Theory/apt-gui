@@ -71,8 +71,11 @@ public class TranslateBreakpointCommand extends Command {
 	 * edge in the given document.
 	 *
 	 * @param document
+	 *                document the command modifies
 	 * @param edge
+	 *                edge that the breakpoint being modified belongs to
 	 * @param breakpointIndex
+	 *                index of the breakpoint in the edge's breakpoint list
 	 */
 	public TranslateBreakpointCommand(Document<?> document, GraphicalEdge edge, int breakpointIndex) {
 		this.document = document;

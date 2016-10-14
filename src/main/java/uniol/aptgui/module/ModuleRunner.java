@@ -36,9 +36,6 @@ import uniol.apt.util.interrupt.ThreadStatusInterrupter;
 
 /**
  * Executes modules and makes them listen to thread interrupts if possible.
- *
- * @author Jonas Prellberg
- *
  */
 public class ModuleRunner {
 

@@ -48,14 +48,35 @@ public class PropertyTableModel extends AbstractTableModel {
 		this.editable = editable;
 	}
 
+	/**
+	 * Returns the property type at the given row.
+	 *
+	 * @param rowIndex
+	 *                row of the property
+	 * @return the property's type
+	 */
 	public Class<?> getPropertyTypeAt(int rowIndex) {
 		return rowTypes[rowIndex];
 	}
 
+	/**
+	 * Returns the property name at the given row.
+	 *
+	 * @param rowIndex
+	 *                row of the property
+	 * @return the property's name
+	 */
 	public String getPropertyNameAt(int rowIndex) {
 		return (String) content[rowIndex][0];
 	}
 
+	/**
+	 * Returns the property value at the given row.
+	 *
+	 * @param rowIndex
+	 *                row of the property
+	 * @return the property's value
+	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getPropertyValueAt(int rowIndex) {
 		return (T) content[rowIndex][1];
@@ -66,8 +87,11 @@ public class PropertyTableModel extends AbstractTableModel {
 	 * the name. The default value for the property is set to null.
 	 *
 	 * @param rowIndex
+	 *                row of the property to modify
 	 * @param type
+	 *                new property type
 	 * @param name
+	 *                new property name
 	 */
 	public void setProperty(int rowIndex, Class<?> type, String name) {
 		setProperty(rowIndex, type, name, null);
@@ -78,9 +102,13 @@ public class PropertyTableModel extends AbstractTableModel {
 	 * the name and value.
 	 *
 	 * @param rowIndex
+	 *                row of the property to modify
 	 * @param type
+	 *                new property type
 	 * @param name
+	 *                new property name
 	 * @param value
+	 *                new property value
 	 */
 	public void setProperty(int rowIndex, Class<?> type, String name, Object value) {
 		rowTypes[rowIndex] = type;
@@ -88,6 +116,14 @@ public class PropertyTableModel extends AbstractTableModel {
 		content[rowIndex][1] = value;
 	}
 
+	/**
+	 * Sets the value of a property.
+	 *
+	 * @param rowIndex
+	 *                row of the property to modify
+	 * @param value
+	 *                new property value
+	 */
 	public void setPropertyValue(int rowIndex, Object value) {
 		content[rowIndex][1] = value;
 	}

@@ -132,8 +132,11 @@ public abstract class GraphicalElement {
 	 * distance.
 	 *
 	 * @param graphics
+	 *                graphics context used for drawing
 	 * @param center
+	 *                center around which the marker is drawn
 	 * @param radius
+	 *                half the side length of the marker area
 	 */
 	protected static void drawSelectionMarkers(Graphics2D graphics, Point center, int radius) {
 		int len = 5;

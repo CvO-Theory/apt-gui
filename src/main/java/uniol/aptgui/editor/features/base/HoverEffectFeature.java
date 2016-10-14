@@ -85,6 +85,7 @@ public abstract class HoverEffectFeature extends Feature {
 	 * Called by the super class when new hover effects need to be applied.
 	 *
 	 * @param hoverElement
+	 *                element to apply effects to
 	 */
 	protected abstract void applyHoverEffects(GraphicalElement hoverElement);
 
@@ -93,6 +94,7 @@ public abstract class HoverEffectFeature extends Feature {
 	 * be removed.
 	 *
 	 * @param hoverElement
+	 *                element to remove effects from
 	 */
 	protected abstract void removeHoverEffects(GraphicalElement hoverElement);
 

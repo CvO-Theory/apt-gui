@@ -27,9 +27,6 @@ import uniol.aptgui.swing.parametertable.PropertyTableModel;
 /**
  * Adapter that allows easy interaction with a PropertyTableModel for displaying
  * return values.
- *
- * @author Jonas Prellberg
- *
  */
 public class ResultTableModelAdapter {
 
@@ -51,6 +48,13 @@ public class ResultTableModelAdapter {
 		}
 	}
 
+	/**
+	 * Returns the underlying table model that is being created when
+	 * {@link #setReturnValues(Map)} is called.
+	 *
+	 * @return the table model or null if {@link #setReturnValues(Map)} has
+	 *         never been called
+	 */
 	public PropertyTableModel getModel() {
 		return resultsTableModel;
 	}

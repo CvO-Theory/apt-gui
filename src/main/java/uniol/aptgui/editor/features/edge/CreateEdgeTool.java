@@ -102,7 +102,7 @@ public abstract class CreateEdgeTool<T extends Document<?>, U extends GraphicalE
 	 *                source node
 	 * @param target
 	 *                target node
-	 * @return
+	 * @return the created edge instance
 	 */
 	protected abstract U createGraphicalEdge(GraphicalNode source, GraphicalNode target);
 

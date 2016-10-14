@@ -35,9 +35,6 @@ import uniol.aptgui.mainwindow.WindowRef;
 
 /**
  * Provides helper methods to work with module results.
- *
- * @author Jonas Prellberg
- *
  */
 public class ResultHelper {
 
@@ -53,7 +50,10 @@ public class ResultHelper {
 	 * values are replaced with the proper view proxy objects.
 	 *
 	 * @param moduleReturnValues
-	 * @return
+	 *                map of return value names to their values as model
+	 *                objects
+	 * @return map of return value names to their values as view proxy
+	 *         objects
 	 */
 	public Map<String, Object> toViewReturnValues(Map<String, Object> moduleReturnValues) {
 		Map<String, Object> viewReturnValues = new LinkedHashMap<>();

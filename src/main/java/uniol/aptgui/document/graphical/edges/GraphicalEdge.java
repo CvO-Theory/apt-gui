@@ -318,6 +318,7 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	 * given point. The segment ends at path[segmentId].
 	 *
 	 * @param point
+	 *                test position
 	 * @return the segment index or -1 if the point is not near a segment
 	 */
 	protected int getSegmentIndexAt(Point point) {
@@ -413,7 +414,9 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	 * arrowhead.
 	 *
 	 * @param graphics
+	 *                graphics context used for drawing
 	 * @param path
+	 *                list of points along which the path is drawn
 	 */
 	public static void drawPathWithArrowhead(Graphics2D graphics, List<Point> path) {
 		assert path.size() >= 2;
@@ -429,7 +432,9 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	 * Draws a linear path between the given points.
 	 *
 	 * @param graphics
+	 *                graphics context used for drawing
 	 * @param path
+	 *                list of points along which the path is drawn
 	 */
 	public static void drawPath(Graphics2D graphics, List<Point> path) {
 		if (path.isEmpty()) {
@@ -449,8 +454,13 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	 * source is only useful to specify the arrowhead's orientation.
 	 *
 	 * @param graphics
+	 *                graphics context used for drawing
 	 * @param source
+	 *                source of the linear connection at the end of which
+	 *                the arrowhead will be drawn
 	 * @param target
+	 *                target of the linear connection at the end of which
+	 *                the arrowhead will be drawn
 	 */
 	public static void drawArrowhead(Graphics2D graphics, Point source, Point target) {
 		int x = target.x;

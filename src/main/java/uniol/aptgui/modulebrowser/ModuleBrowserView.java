@@ -31,6 +31,7 @@ public interface ModuleBrowserView extends View<ModuleBrowserPresenter> {
 	 * displayed in the module browser table.
 	 *
 	 * @param tableModel
+	 *                underlying table model from the presenter
 	 */
 	void setModuleTableModel(ModuleTableModel tableModel);
 
