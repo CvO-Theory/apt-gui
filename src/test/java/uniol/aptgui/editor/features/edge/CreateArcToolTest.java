@@ -72,8 +72,8 @@ public class CreateArcToolTest {
 		document = mock(TsDocument.class);
 		when(document.getViewport()).thenReturn(new Viewport());
 		when(document.getGraphicalElementAt(new Point(0, 0))).thenReturn(s1);
-		when(document.getGraphicalElementAt(new Point(1, 1))).thenReturn(s2);
-		when(document.getGraphicalElementAt(new Point(2, 2))).thenReturn(null);
+		when(document.getGraphicalElementAt(new Point(100, 0))).thenReturn(s2);
+		when(document.getGraphicalElementAt(new Point(200, 0))).thenReturn(null);
 		doAnswer(new Answer<Void>() {
 			@Override
 			public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -100,7 +100,7 @@ public class CreateArcToolTest {
 		createArcTool.onActivated();
 		createArcTool.mouseClicked(leftClickAt(0, 0));
 		verify(document).add(any(GraphicalArc.class));
-		createArcTool.mouseClicked(leftClickAt(1, 1));
+		createArcTool.mouseClicked(leftClickAt(100, 0));
 		verify(history).execute(any(CreateArcCommand.class));
 		assertThat((GraphicalState) edge.getSource(), is(equalTo(s1)));
 		assertThat((GraphicalState) edge.getTarget(), is(equalTo(s2)));
@@ -120,18 +120,18 @@ public class CreateArcToolTest {
 	public void testCreateArcBreakpoints() {
 		createArcTool.onActivated();
 		createArcTool.mouseClicked(leftClickAt(0, 0));
-		createArcTool.mouseClicked(leftClickAt(2, 2));
-		createArcTool.mouseClicked(leftClickAt(3, 3));
-		createArcTool.mouseClicked(leftClickAt(1, 1));
+		createArcTool.mouseClicked(leftClickAt(200, 0));
+		createArcTool.mouseClicked(leftClickAt(300, 0));
+		createArcTool.mouseClicked(leftClickAt(100, 0));
 		verify(history).execute(any(CreateArcCommand.class));
-		assertThat(edge.getBreakpoints(), contains(new Point(2, 2), new Point(3, 3)));
+		assertThat(edge.getBreakpoints(), contains(new Point(200, 0), new Point(300, 0)));
 	}
 
 	@Test
 	public void testCreateArcCancel() {
 		createArcTool.onActivated();
 		createArcTool.mouseClicked(leftClickAt(0, 0));
-		createArcTool.mouseClicked(rightClickAt(1, 1));
+		createArcTool.mouseClicked(rightClickAt(100, 0));
 		verifyZeroInteractions(history);
 		verify(document).remove(edge);
 	}
