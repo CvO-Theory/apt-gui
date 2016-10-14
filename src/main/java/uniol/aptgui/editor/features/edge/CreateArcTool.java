@@ -19,8 +19,6 @@
 
 package uniol.aptgui.editor.features.edge;
 
-import java.awt.Cursor;
-
 import uniol.apt.adt.ts.State;
 import uniol.aptgui.commands.CreateArcCommand;
 import uniol.aptgui.commands.History;
@@ -30,7 +28,6 @@ import uniol.aptgui.document.graphical.edges.GraphicalArc;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.document.graphical.nodes.GraphicalState;
 import uniol.aptgui.editor.EditorView;
-import uniol.aptgui.swing.Resource;
 
 /**
  * Tool that allows the user to create a new arc between states in a transition
@@ -38,7 +35,6 @@ import uniol.aptgui.swing.Resource;
  */
 public class CreateArcTool extends CreateEdgeTool<TsDocument, GraphicalArc> {
 
-	private final Cursor cursor = Resource.getCursorCreateEdge();
 	private final History history;
 	private final EditorView view;
 
@@ -46,11 +42,6 @@ public class CreateArcTool extends CreateEdgeTool<TsDocument, GraphicalArc> {
 		super(document);
 		this.history = history;
 		this.view = view;
-	}
-
-	@Override
-	public Cursor getCursor() {
-		return cursor;
 	}
 
 	@Override

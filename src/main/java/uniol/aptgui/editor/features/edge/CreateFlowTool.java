@@ -19,8 +19,6 @@
 
 package uniol.aptgui.editor.features.edge;
 
-import java.awt.Cursor;
-
 import uniol.apt.adt.pn.Node;
 import uniol.aptgui.commands.CreateFlowCommand;
 import uniol.aptgui.commands.History;
@@ -30,24 +28,17 @@ import uniol.aptgui.document.graphical.edges.GraphicalFlow;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.document.graphical.nodes.GraphicalPlace;
 import uniol.aptgui.document.graphical.nodes.GraphicalTransition;
-import uniol.aptgui.swing.Resource;
 
 /**
  * Tool that allows the user to create a new flow between nodes in a Petri net.
  */
 public class CreateFlowTool extends CreateEdgeTool<PnDocument, GraphicalFlow> {
 
-	private final Cursor cursor = Resource.getCursorCreateEdge();
 	private final History history;
 
 	public CreateFlowTool(PnDocument document, History history) {
 		super(document);
 		this.history = history;
-	}
-
-	@Override
-	public Cursor getCursor() {
-		return cursor;
 	}
 
 	@Override

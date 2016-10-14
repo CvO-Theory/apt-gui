@@ -19,6 +19,7 @@
 
 package uniol.aptgui.editor.features.edge;
 
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
@@ -29,6 +30,7 @@ import uniol.aptgui.document.graphical.edges.GraphicalEdge;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.document.graphical.special.InvisibleNode;
 import uniol.aptgui.editor.features.base.HoverEffectFeature;
+import uniol.aptgui.swing.Resource;
 
 /**
  * Base class for tools that allow the creation of edges.
@@ -74,10 +76,23 @@ public abstract class CreateEdgeTool<T extends Document<?>, U extends GraphicalE
 	 */
 	protected U graphicalEdge;
 
+	/**
+	 * Mouse cursor used for this tool.
+	 */
+	protected Cursor cursor;
+
 	public CreateEdgeTool(T document) {
 		this.document = document;
 		this.viewport = document.getViewport();
 		this.creating = false;
+	}
+
+	@Override
+	public Cursor getCursor() {
+		if (cursor == null) {
+			cursor = Resource.getCursorCreateEdge();
+		}
+		return cursor;
 	}
 
 	/**
