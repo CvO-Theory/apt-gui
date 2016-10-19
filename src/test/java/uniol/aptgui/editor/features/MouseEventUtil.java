@@ -55,7 +55,7 @@ public class MouseEventUtil {
 	 * @return the mouse event
 	 */
 	public static MouseEvent rightClickAt(int x, int y) {
-		return clickAt(MouseEvent.BUTTON2, new Point(x, y), false);
+		return clickAt(MouseEvent.BUTTON3, new Point(x, y), false);
 	}
 
 	/**
