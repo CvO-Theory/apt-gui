@@ -41,7 +41,7 @@ public class MouseEventUtil {
 	 * @return the mouse event
 	 */
 	public static MouseEvent leftClickAt(int x, int y) {
-		return clickAt(MouseEvent.BUTTON1, x, y);
+		return clickAt(MouseEvent.BUTTON1, new Point(x, y), false);
 	}
 
 	/**
@@ -55,14 +55,39 @@ public class MouseEventUtil {
 	 * @return the mouse event
 	 */
 	public static MouseEvent rightClickAt(int x, int y) {
-		return clickAt(MouseEvent.BUTTON2, x, y);
+		return clickAt(MouseEvent.BUTTON2, new Point(x, y), false);
 	}
 
-	private static MouseEvent clickAt(int type, int x, int y) {
-		MouseEvent leftClick = mock(MouseEvent.class);
-		when(leftClick.getButton()).thenReturn(type);
-		when(leftClick.getPoint()).thenReturn(new Point(x, y));
-		return leftClick;
+	/**
+	 * Returns a mocked {@link MouseEvent} that will report a left-click at
+	 * the given position.
+	 *
+	 * @param at
+	 *                mouse position
+	 * @return the mouse event
+	 */
+	public static MouseEvent leftClickAt(Point at, boolean ctrlDown) {
+		return clickAt(MouseEvent.BUTTON1, at, ctrlDown);
+	}
+
+	/**
+	 * Returns a mocked {@link MouseEvent} that will report a left-click at
+	 * the given position with the ctrl-key at the given status.
+	 *
+	 * @param type
+	 *                button type (static members of MouseEvent)
+	 * @param at
+	 *                mouse position
+	 * @param ctrlDown
+	 *                status of the control-key (true for pressed)
+	 * @return the mouse event
+	 */
+	public static MouseEvent clickAt(int type, Point at, boolean ctrlDown) {
+		MouseEvent evt = mock(MouseEvent.class);
+		when(evt.getButton()).thenReturn(type);
+		when(evt.getPoint()).thenReturn(at);
+		when(evt.isControlDown()).thenReturn(ctrlDown);
+		return evt;
 	}
 
 }
