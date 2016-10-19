@@ -42,10 +42,9 @@ import uniol.aptgui.swing.actions.tools.PnCreateFlowToolAction;
 import uniol.aptgui.swing.actions.tools.PnCreatePlaceToolAction;
 import uniol.aptgui.swing.actions.tools.PnCreateTransitionToolAction;
 import uniol.aptgui.swing.actions.tools.PnFireTransitionToolAction;
-import uniol.aptgui.swing.actions.tools.PnSelectionToolAction;
+import uniol.aptgui.swing.actions.tools.SelectionToolAction;
 import uniol.aptgui.swing.actions.tools.TsCreateArcToolAction;
 import uniol.aptgui.swing.actions.tools.TsCreateStateToolAction;
-import uniol.aptgui.swing.actions.tools.TsSelectionToolAction;
 
 @SuppressWarnings("serial")
 public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements ToolbarView {
@@ -125,7 +124,7 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 		tsToolGroup = new ButtonGroup();
 
 		// PN BUTTONS
-		pnSelectionTool = new JToggleButton(injector.getInstance(PnSelectionToolAction.class));
+		pnSelectionTool = new JToggleButton(injector.getInstance(SelectionToolAction.class));
 		pnCreatePlaceTool = new JToggleButton(injector.getInstance(PnCreatePlaceToolAction.class));
 		pnCreateTransitionTool = new JToggleButton(injector.getInstance(PnCreateTransitionToolAction.class));
 		pnCreateFlowTool = new JToggleButton(injector.getInstance(PnCreateFlowToolAction.class));
@@ -137,7 +136,7 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 		setToolButton(pnFireTransitionTool, pnToolGroup);
 
 		// TS BUTTONS
-		tsSelectionTool = new JToggleButton(injector.getInstance(TsSelectionToolAction.class));
+		tsSelectionTool = new JToggleButton(injector.getInstance(SelectionToolAction.class));
 		tsCreateStateTool = new JToggleButton(injector.getInstance(TsCreateStateToolAction.class));
 		tsCreateArcTool = new JToggleButton(injector.getInstance(TsCreateArcToolAction.class));
 		setToolButton(tsSelectionTool, tsToolGroup);
@@ -168,8 +167,15 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 	}
 
 	@Override
-	public void setActiveTool(FeatureId tool) {
+	public void setActiveTool(FeatureId tool, boolean isPnTool) {
 		switch (tool) {
+		case SELECTION:
+			if (isPnTool) {
+				pnSelectionTool.doClick();
+			} else {
+				tsSelectionTool.doClick();
+			}
+			break;
 		case PN_CREATE_FLOW:
 			pnCreateFlowTool.doClick();
 			break;
@@ -179,14 +185,8 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 		case PN_CREATE_TRANSITION:
 			pnCreateTransitionTool.doClick();
 			break;
-		case PN_SELECTION:
-			pnSelectionTool.doClick();
-			break;
 		case PN_FIRE_TRANSITION:
 			pnFireTransitionTool.doClick();
-			break;
-		case TS_SELECTION:
-			tsSelectionTool.doClick();
 			break;
 		case TS_CREATE_ARC:
 			tsCreateArcTool.doClick();

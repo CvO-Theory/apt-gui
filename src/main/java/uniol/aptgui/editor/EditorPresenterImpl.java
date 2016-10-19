@@ -148,14 +148,14 @@ public class EditorPresenterImpl extends AbstractPresenter<EditorPresenter, Edit
 		tools.clear();
 		if (document instanceof PnDocument) {
 			PnDocument pnDocument = (PnDocument) document;
-			tools.put(FeatureId.PN_SELECTION, new SelectionTool(document, hist, eo));
+			tools.put(FeatureId.SELECTION, new SelectionTool(document, hist, eo));
 			tools.put(FeatureId.PN_CREATE_PLACE, new CreatePlaceTool(pnDocument, hist, eo));
 			tools.put(FeatureId.PN_CREATE_TRANSITION, new CreateTransitionTool(pnDocument, hist, eo));
 			tools.put(FeatureId.PN_CREATE_FLOW, new CreateFlowTool(pnDocument, hist));
 			tools.put(FeatureId.PN_FIRE_TRANSITION, new FireTransitionTool(pnDocument, hist));
 		} else if (document instanceof TsDocument) {
 			TsDocument tsDocument = (TsDocument) document;
-			tools.put(FeatureId.TS_SELECTION, new SelectionTool(document, hist, eo));
+			tools.put(FeatureId.SELECTION, new SelectionTool(document, hist, eo));
 			tools.put(FeatureId.TS_CREATE_STATE, new CreateStateTool(tsDocument, hist, eo));
 			tools.put(FeatureId.TS_CREATE_ARC, new CreateArcTool(tsDocument, hist, view));
 		}

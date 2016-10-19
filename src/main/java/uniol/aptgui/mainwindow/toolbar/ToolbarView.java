@@ -28,7 +28,7 @@ public interface ToolbarView extends View<ToolbarPresenter> {
 
 	public void setTransitionSystemToolsVisible(boolean visible);
 
-	public void setActiveTool(FeatureId tool);
+	public void setActiveTool(FeatureId tool, boolean isPnTool);
 
 }
 

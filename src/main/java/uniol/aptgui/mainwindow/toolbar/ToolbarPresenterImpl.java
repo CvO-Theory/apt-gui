@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 
 import uniol.aptgui.AbstractPresenter;
 import uniol.aptgui.Application;
+import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.editor.features.base.FeatureId;
 import uniol.aptgui.events.ToolSelectedEvent;
 import uniol.aptgui.events.WindowFocusGainedEvent;
@@ -42,8 +43,8 @@ public class ToolbarPresenterImpl extends AbstractPresenter<ToolbarPresenter, To
 		super(view);
 		this.eventBus = eventBus;
 		this.application = application;
-		this.activePnTool = FeatureId.PN_SELECTION;
-		this.activeTsTool = FeatureId.TS_SELECTION;
+		this.activePnTool = FeatureId.SELECTION;
+		this.activeTsTool = FeatureId.SELECTION;
 
 		this.eventBus.register(this);
 		view.setPetriNetToolsVisible(false);
@@ -65,12 +66,12 @@ public class ToolbarPresenterImpl extends AbstractPresenter<ToolbarPresenter, To
 		case PETRI_NET:
 			view.setTransitionSystemToolsVisible(false);
 			view.setPetriNetToolsVisible(true);
-			view.setActiveTool(activePnTool);
+			view.setActiveTool(activePnTool, true);
 			break;
 		case TRANSITION_SYSTEM:
 			view.setPetriNetToolsVisible(false);
 			view.setTransitionSystemToolsVisible(true);
-			view.setActiveTool(activeTsTool);
+			view.setActiveTool(activeTsTool, false);
 			break;
 		default:
 			break;
@@ -79,10 +80,9 @@ public class ToolbarPresenterImpl extends AbstractPresenter<ToolbarPresenter, To
 
 	@Subscribe
 	public void onToolSelectedEvent(ToolSelectedEvent e) {
-		if (e.getSelectionId().isPetriNetTool()) {
+		if (application.getActiveDocument() instanceof PnDocument) {
 			activePnTool = e.getSelectionId();
-		}
-		if (e.getSelectionId().isTransitionSystemTool()) {
+		} else {
 			activeTsTool = e.getSelectionId();
 		}
 	}
