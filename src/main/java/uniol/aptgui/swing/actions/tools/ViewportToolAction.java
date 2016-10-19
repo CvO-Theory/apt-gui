@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.swing.actions;
+package uniol.aptgui.swing.actions.tools;
 
 import java.awt.event.ActionEvent;
 
@@ -38,9 +38,9 @@ public class ViewportToolAction extends AbstractAction {
 	@Inject
 	public ViewportToolAction(EventBus eventBus) {
 		this.eventBus = eventBus;
-		String name = "Transform viewport";
+		String name = "Transform Viewport";
 		putValue(NAME, name);
-		putValue(SMALL_ICON, Resource.getIconSelect());
+		putValue(SMALL_ICON, Resource.getIconHand());
 		putValue(SHORT_DESCRIPTION, name);
 	}
 

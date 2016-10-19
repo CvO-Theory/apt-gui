@@ -71,6 +71,10 @@ public class Resource {
 		return getIcon("FireTransition16.gif");
 	}
 
+	public static ImageIcon getIconHand() {
+		return getIcon("Hand16.gif");
+	}
+
 	public static ImageIcon getIconFlow() {
 		return getIconArc();
 	}
