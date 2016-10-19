@@ -113,6 +113,14 @@ public class SelectionToolTest {
 	}
 
 	@Test
+	public void testSelectWithFrame() {
+		Point topLeft = add(ps1, new Point(-50, -50));
+		Point btmRight = add(ps2, new Point(50, 50));
+		simulateDrag(topLeft, btmRight);
+		assertThat(document.getSelection(), containsInAnyOrder(gs1, gs2, ga1));
+	}
+
+	@Test
 	public void testDeselectWithCtrl() {
 		simulateClick(ps1, false);
 		simulateClick(ps1, true);
@@ -135,6 +143,17 @@ public class SelectionToolTest {
 		simulateDrag(ps2, add(ps2, offset));
 		assertThat(gs1.getCenter(), is(equalTo(add(ps1, offset))));
 		assertThat(gs2.getCenter(), is(equalTo(add(ps2, offset))));
+	}
+
+	@Test
+	public void testDragSelectionFailure() {
+		simulateClick(ps1, false);
+		Point midpoint = midpoint(ps1, ps2);
+		simulateClick(midpoint, true);
+		Point offset = new Point(100, 50);
+		// Try dragging the edge; this should fail
+		simulateDrag(midpoint, add(midpoint, offset));
+		assertThat(gs1.getCenter(), is(equalTo(ps1)));
 	}
 
 	@Test
