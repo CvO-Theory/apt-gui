@@ -42,7 +42,8 @@ import uniol.aptgui.editor.features.ContextMenuFeature;
 import uniol.aptgui.editor.features.FireTransitionTool;
 import uniol.aptgui.editor.features.HoverFeature;
 import uniol.aptgui.editor.features.SelectionTool;
-import uniol.aptgui.editor.features.ViewportFeature;
+import uniol.aptgui.editor.features.ViewportTool;
+import uniol.aptgui.editor.features.ZoomFeature;
 import uniol.aptgui.editor.features.base.Feature;
 import uniol.aptgui.editor.features.base.FeatureCollection;
 import uniol.aptgui.editor.features.base.FeatureId;
@@ -138,6 +139,7 @@ public class EditorPresenterImpl extends AbstractPresenter<EditorPresenter, Edit
 
 		features.onDeactivated();
 		features.put(FeatureId.HOVER, new HoverFeature(document));
+		features.put(FeatureId.ZOOM, new ZoomFeature(document));
 		features.put(FeatureId.CONTEXT_MENU, new ContextMenuFeature(document, view));
 		features.onActivated();
 		features.setListening(true);
@@ -147,7 +149,7 @@ public class EditorPresenterImpl extends AbstractPresenter<EditorPresenter, Edit
 		tools.clear();
 		if (document instanceof PnDocument) {
 			PnDocument pnDocument = (PnDocument) document;
-			tools.put(FeatureId.VIEWPORT, new ViewportFeature(document));
+			tools.put(FeatureId.VIEWPORT, new ViewportTool(document));
 			tools.put(FeatureId.SELECTION, new SelectionTool(document, hist, eo));
 			tools.put(FeatureId.PN_CREATE_PLACE, new CreatePlaceTool(pnDocument, hist, eo));
 			tools.put(FeatureId.PN_CREATE_TRANSITION, new CreateTransitionTool(pnDocument, hist, eo));
@@ -155,7 +157,7 @@ public class EditorPresenterImpl extends AbstractPresenter<EditorPresenter, Edit
 			tools.put(FeatureId.PN_FIRE_TRANSITION, new FireTransitionTool(pnDocument, hist));
 		} else if (document instanceof TsDocument) {
 			TsDocument tsDocument = (TsDocument) document;
-			tools.put(FeatureId.VIEWPORT, new ViewportFeature(document));
+			tools.put(FeatureId.VIEWPORT, new ViewportTool(document));
 			tools.put(FeatureId.SELECTION, new SelectionTool(document, hist, eo));
 			tools.put(FeatureId.TS_CREATE_STATE, new CreateStateTool(tsDocument, hist, eo));
 			tools.put(FeatureId.TS_CREATE_ARC, new CreateArcTool(tsDocument, hist, view));

@@ -25,7 +25,10 @@ package uniol.aptgui.editor.features.base;
 public enum FeatureId {
 
 	// Features
-	VIEWPORT, SELECTION, HOVER, CONTEXT_MENU,
+	ZOOM, SELECTION, HOVER, CONTEXT_MENU,
+
+	// General tools
+	VIEWPORT,
 
 	// PN specific tools
 	PN_CREATE_PLACE, PN_CREATE_TRANSITION, PN_CREATE_FLOW, PN_FIRE_TRANSITION,

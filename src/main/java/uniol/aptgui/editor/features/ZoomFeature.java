@@ -19,18 +19,15 @@
 
 package uniol.aptgui.editor.features;
 
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import uniol.aptgui.document.Document;
 import uniol.aptgui.editor.features.base.Feature;
 
 /**
- * The viewport feature gives the user the ability to translate and scale the
- * view.
+ * The zoom feature gives the user the ability to scale the view.
  */
-public class ViewportFeature extends Feature {
+public class ZoomFeature extends Feature {
 
 	/**
 	 * Document this tool operates on.
@@ -38,60 +35,14 @@ public class ViewportFeature extends Feature {
 	private final Document<?> document;
 
 	/**
-	 * True, while the user is dragging the mouse with LMB pressed.
-	 */
-	private boolean dragging;
-
-	/**
-	 * Initial cursor position or cursor position at last mouseDragged call.
-	 */
-	private Point dragSource;
-
-	/**
-	 * Creates a new viewport feature that operates on the given document.
+	 * Creates a new zoom feature that operates on the given document.
 	 *
 	 * @param document
 	 *                document whose transform will be modified by this
 	 *                feature
 	 */
-	public ViewportFeature(Document<?> document) {
+	public ZoomFeature(Document<?> document) {
 		this.document = document;
-		this.dragging = false;
-		this.dragSource = null;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (e.getButton() != MouseEvent.BUTTON1) {
-			return;
-		}
-
-		Point modelPosition = document.getViewport().transformInverse(e.getPoint());
-		if (document.getGraphicalElementAt(modelPosition) != null) {
-			return;
-		}
-
-		// User pressed LMB and did not click an element: Move view.
-		dragging = true;
-		dragSource = e.getPoint();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		if (!dragging) {
-			return;
-		}
-
-		Point dragTarget = e.getPoint();
-		int dx = dragTarget.x - dragSource.x;
-		int dy = dragTarget.y - dragSource.y;
-		translateView(dx, dy);
-		dragSource = dragTarget;
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		dragging = false;
 	}
 
 	@Override
@@ -101,11 +52,6 @@ public class ViewportFeature extends Feature {
 		} else {
 			document.getViewport().increaseScale(-e.getWheelRotation());
 		}
-		document.fireDocumentDirty();
-	}
-
-	private void translateView(int dx, int dy) {
-		document.getViewport().translateView(dx, dy);
 		document.fireDocumentDirty();
 	}
 
