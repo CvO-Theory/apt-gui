@@ -136,6 +136,15 @@ public abstract class GraphicalElement {
 	 */
 	protected abstract void drawImpl(Graphics2D graphics, RenderingOptions renderingOptions);
 
+	/**
+	 * Returns true if the given point is visually a part of the element.
+	 * That means if the user clicks on a position he would think belongs to
+	 * this element, then this method should return true.
+	 *
+	 * @param point
+	 *                test point
+	 * @return true if the point is covered by this element
+	 */
 	public abstract boolean coversPoint(Point point);
 
 	/**
