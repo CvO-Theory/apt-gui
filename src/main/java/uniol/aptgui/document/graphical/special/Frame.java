@@ -34,6 +34,9 @@ public class Frame extends GraphicalElement {
 
 	private Rectangle rect;
 
+	/**
+	 * Creates a new frame.
+	 */
 	public Frame() {
 		setColor(Color.BLACK);
 		setVisible(false);
@@ -42,10 +45,7 @@ public class Frame extends GraphicalElement {
 	/**
 	 * Sets position and dimension of the frame.
 	 *
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param rect frame bounds
 	 */
 	public void setRectangle(Rectangle rect) {
 		this.rect = rect;
