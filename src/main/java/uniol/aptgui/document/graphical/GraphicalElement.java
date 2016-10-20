@@ -181,7 +181,8 @@ public abstract class GraphicalElement {
 
 	/**
 	 * Returns an axis-aligned minimum bounding box that contains this
-	 * element.
+	 * element. The returned rectangle should never be empty, i.e. width or
+	 * height should never be 0.
 	 *
 	 * @return an axis-aligned minimum bounding box that contains this
 	 *         element

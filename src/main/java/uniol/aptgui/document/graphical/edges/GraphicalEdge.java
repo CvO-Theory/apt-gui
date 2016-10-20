@@ -25,7 +25,6 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 import java.awt.BasicStroke;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -141,12 +140,17 @@ public abstract class GraphicalEdge extends GraphicalElement {
 
 	@Override
 	public Rectangle getBounds() {
-		// Prevent width or height from being 0 as this messes with Rectangle#contains
-		Rectangle bounds = new Rectangle(source.getCenter(), new Dimension(1, 1));
+		Rectangle bounds = new Rectangle(source.getCenter());
 		for (Point bp : breakpoints) {
 			bounds = bounds.union(new Rectangle(bp));
 		}
-		return bounds.union(new Rectangle(target.getCenter()));
+		bounds = bounds.union(new Rectangle(target.getCenter()));
+		// Prevent width or height from being 0 as this messes with
+		// Rectangle#contains
+		int width = (int) Math.max(1, bounds.getWidth());
+		int height = (int) Math.max(1, bounds.getHeight());
+		bounds.setSize(width, height);
+		return bounds;
 	}
 
 	/**
