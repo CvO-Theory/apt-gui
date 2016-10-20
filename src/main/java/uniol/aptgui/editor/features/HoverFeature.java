@@ -23,6 +23,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import uniol.aptgui.document.Document;
+import uniol.aptgui.document.DocumentListener;
 import uniol.aptgui.document.Viewport;
 import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.document.graphical.edges.GraphicalEdge;
@@ -41,6 +42,13 @@ public class HoverFeature extends HoverEffectFeature {
 	private final Document<?> document;
 
 	/**
+	 * Listener that reacts to document changes. It is necessary to hide the
+	 * breakpoint handle and stop the edge from being highlighted when
+	 * breakpoints get removed.
+	 */
+	private final DocumentListener listener;
+
+	/**
 	 * Reference to the Document's viewport object.
 	 */
 	private final Viewport viewport;
@@ -50,28 +58,64 @@ public class HoverFeature extends HoverEffectFeature {
 	 */
 	private final BreakpointHandle breakpointHandle;
 
+	/**
+	 * Saves the last mouse event that was received.
+	 */
+	private MouseEvent lastMouseEvent;
+
+	/**
+	 * Creates a new HoverFeature that operates on the given document.
+	 *
+	 * @param document
+	 *                data source for the feature
+	 */
 	public HoverFeature(Document<?> document) {
 		this.document = document;
 		this.viewport = document.getViewport();
 		this.breakpointHandle = new BreakpointHandle();
+		this.listener = new DocumentListener() {
+			@Override
+			public void onSelectionChanged(Document<?> source) {
+				// Empty
+			}
+
+			@Override
+			public void onDocumentDirty(Document<?> source) {
+				// Empty
+			}
+
+			@Override
+			public void onDocumentChanged(Document<?> source) {
+				mouseMoved(lastMouseEvent);
+			}
+		};
 	}
 
 	@Override
 	public void onActivated() {
 		document.add(breakpointHandle);
+		document.addListener(listener);
 	}
 
 	@Override
 	public void onDeactivated() {
+		document.removeListener(listener);
 		document.remove(breakpointHandle);
 	}
 
 	@Override
+	public void mouseDragged(MouseEvent e) {
+		lastMouseEvent = e;
+	}
+
+	@Override
 	public void mouseMoved(MouseEvent e) {
+		lastMouseEvent = e;
+
 		Point modelPosition = viewport.transformInverse(e.getPoint());
 		GraphicalElement elem = document.getGraphicalElementAt(modelPosition, true);
 
-		// Display breakpoint handle if necessary.
+		// Display breakpoint handle if necessary
 		if (elem instanceof GraphicalEdge) {
 			GraphicalEdge edge = (GraphicalEdge) elem;
 			int bpIndex = edge.getClosestBreakpointIndex(modelPosition);
