@@ -25,10 +25,15 @@ import java.awt.Rectangle;
 
 import uniol.aptgui.document.RenderingOptions;
 
+/**
+ * Graphical element for Petri net places.
+ */
 public class GraphicalPlace extends GraphicalNode {
 
 	private static final int RADIUS = 20;
 	private static final int ID_OFFSET = 7;
+	private static final long SMALL_TOKEN_THRESHOLD = 5;
+	private static final int TOKEN_DOT_RADIUS = 2;
 
 	protected long tokens;
 
@@ -53,8 +58,66 @@ public class GraphicalPlace extends GraphicalNode {
 	@Override
 	protected void drawShape(Graphics2D graphics, RenderingOptions renderingOptions) {
 		drawCircle(graphics, center, RADIUS);
-		// TODO draw tokens as points if it is a low number
-		drawCenteredString(graphics, center, String.valueOf(tokens));
+		if (tokens <= SMALL_TOKEN_THRESHOLD) {
+			drawTokens(graphics);
+		} else {
+			drawCenteredString(graphics, center, String.valueOf(tokens));
+		}
+	}
+
+	/**
+	 * Draws tokens as dots in the correct layout.
+	 *
+	 * @param graphics
+	 *                graphics object
+	 */
+	private void drawTokens(Graphics2D graphics) {
+		int offset = RADIUS / 3;
+		Point topLeft = new Point(center.x - offset, center.y - offset);
+		Point topRight = new Point(center.x + offset, center.y - offset);
+		Point topCenter = new Point(center.x, center.y - offset);
+		Point btmLeft = new Point(center.x - offset, center.y + offset);
+		Point btmRight = new Point(center.x + offset, center.y + offset);
+		Point centerLeft = new Point(center.x - offset, center.y);
+		Point centerRight = new Point(center.x + offset, center.y);
+		if (tokens == 1) {
+			drawTokenDot(graphics, center);
+		} else if (tokens == 2) {
+			drawTokenDot(graphics, centerLeft);
+			drawTokenDot(graphics, centerRight);
+		} else if (tokens == 3) {
+			drawTokenDot(graphics, btmLeft);
+			drawTokenDot(graphics, btmRight);
+			drawTokenDot(graphics, topCenter);
+		} else if (tokens == 4) {
+			drawTokenDot(graphics, btmLeft);
+			drawTokenDot(graphics, btmRight);
+			drawTokenDot(graphics, topLeft);
+			drawTokenDot(graphics, topRight);
+		} else if (tokens == 5) {
+			drawTokenDot(graphics, btmLeft);
+			drawTokenDot(graphics, btmRight);
+			drawTokenDot(graphics, topLeft);
+			drawTokenDot(graphics, topRight);
+			drawTokenDot(graphics, center);
+		}
+	}
+
+	/**
+	 * Draws a token as a dot at the given position.
+	 *
+	 * @param graphics
+	 *                graphics object
+	 * @param at
+	 *                position to draw the dot at
+	 */
+	private void drawTokenDot(Graphics2D graphics, Point at) {
+		graphics.fillOval(
+			at.x - TOKEN_DOT_RADIUS,
+			at.y - TOKEN_DOT_RADIUS,
+			2 * TOKEN_DOT_RADIUS,
+			2 * TOKEN_DOT_RADIUS
+		);
 	}
 
 	@Override
