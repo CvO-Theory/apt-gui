@@ -45,18 +45,15 @@ public class Frame extends GraphicalElement {
 	/**
 	 * Sets position and dimension of the frame.
 	 *
-	 * @param rect frame bounds
+	 * @param rect
+	 *                frame bounds
 	 */
 	public void setRectangle(Rectangle rect) {
 		this.rect = rect;
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, RenderingOptions renderingOptions) {
-		if (!visible) {
-			return;
-		}
-		super.draw(graphics, renderingOptions);
+	protected void drawImpl(Graphics2D graphics, RenderingOptions renderingOptions) {
 		graphics.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 	}
 

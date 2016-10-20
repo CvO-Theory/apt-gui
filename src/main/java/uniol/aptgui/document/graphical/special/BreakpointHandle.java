@@ -27,8 +27,15 @@ import java.awt.Rectangle;
 import uniol.aptgui.document.RenderingOptions;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
+/**
+ * Graphical element shown to indicate breakpoint positions and to manipulate
+ * them.
+ */
 public class BreakpointHandle extends GraphicalNode {
 
+	/**
+	 * Creates a new breakpoint handle.
+	 */
 	public BreakpointHandle() {
 		setColor(Color.BLUE);
 		setVisible(false);
@@ -41,7 +48,12 @@ public class BreakpointHandle extends GraphicalNode {
 
 	@Override
 	public boolean coversPoint(Point point) {
-		return false;
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -51,16 +63,12 @@ public class BreakpointHandle extends GraphicalNode {
 
 	@Override
 	protected void drawId(Graphics2D graphics, RenderingOptions renderingOptions) {
+		// Empty
 	}
 
 	@Override
 	protected void drawSelectionMarkers(Graphics2D graphics, RenderingOptions renderingOptions) {
-	}
-
-	@Override
-	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		// Empty
 	}
 
 }

@@ -78,12 +78,7 @@ public abstract class GraphicalNode extends GraphicalElement {
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, RenderingOptions renderingOptions) {
-		if (!visible) {
-			return;
-		}
-		super.draw(graphics, renderingOptions);
-
+	protected void drawImpl(Graphics2D graphics, RenderingOptions renderingOptions) {
 		drawShape(graphics, renderingOptions);
 		if (id != null) {
 			drawId(graphics, renderingOptions);

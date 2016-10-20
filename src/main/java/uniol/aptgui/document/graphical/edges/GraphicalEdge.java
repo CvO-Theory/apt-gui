@@ -125,16 +125,10 @@ public abstract class GraphicalEdge extends GraphicalElement {
 	}
 
 	@Override
-	public void draw(Graphics2D graphics, RenderingOptions renderingOptions) {
-		if (!visible) {
-			return;
-		}
-		super.draw(graphics, renderingOptions);
-
+	protected void drawImpl(Graphics2D graphics, RenderingOptions renderingOptions) {
 		List<Point> path = getPath();
 		drawPathWithArrowhead(graphics, path);
 		drawLabel(graphics, path, label);
-
 		if (selected) {
 			drawSelectionMarkers(graphics, path);
 		}

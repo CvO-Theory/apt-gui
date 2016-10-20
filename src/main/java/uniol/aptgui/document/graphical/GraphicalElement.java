@@ -110,20 +110,31 @@ public abstract class GraphicalElement {
 	 *                settings that influence the rendering
 	 */
 	public void draw(Graphics2D graphics, RenderingOptions renderingOptions) {
-		if (!visible) {
-			return;
-		}
-
-		if (highlightedError) {
-			graphics.setColor(HIGHLIGHT_COLOR_ERROR);
-		} else if (highlightedSuccess) {
-			graphics.setColor(HIGHLIGHT_COLOR_SUCCESS);
-		} else if (highlighted) {
-			graphics.setColor(HIGHLIGHT_COLOR);
-		} else {
-			graphics.setColor(color);
+		if (visible) {
+			if (highlightedError) {
+				graphics.setColor(HIGHLIGHT_COLOR_ERROR);
+			} else if (highlightedSuccess) {
+				graphics.setColor(HIGHLIGHT_COLOR_SUCCESS);
+			} else if (highlighted) {
+				graphics.setColor(HIGHLIGHT_COLOR);
+			} else {
+				graphics.setColor(color);
+			}
+			drawImpl(graphics, renderingOptions);
 		}
 	}
+
+	/**
+	 * Called by the draw method if necessary. This method should be
+	 * overwritten by subclasses to implement their specific drawing
+	 * behavior.
+	 *
+	 * @param graphics
+	 *                graphics object
+	 * @param renderingOptions
+	 *                settings that influence the rendering
+	 */
+	protected abstract void drawImpl(Graphics2D graphics, RenderingOptions renderingOptions);
 
 	public abstract boolean coversPoint(Point point);
 

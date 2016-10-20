@@ -26,8 +26,14 @@ import java.awt.Rectangle;
 import uniol.aptgui.document.RenderingOptions;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 
+/**
+ * Invisible graphical node that is used temporarily during edge creation.
+ */
 public class InvisibleNode extends GraphicalNode {
 
+	/**
+	 * Creates a new invisible node.
+	 */
 	public InvisibleNode() {
 		setVisible(false);
 	}
@@ -39,25 +45,27 @@ public class InvisibleNode extends GraphicalNode {
 
 	@Override
 	public boolean coversPoint(Point point) {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	protected void drawShape(Graphics2D graphics, RenderingOptions renderingOptions) {
+		// Empty
 	}
 
 	@Override
 	protected void drawId(Graphics2D graphics, RenderingOptions renderingOptions) {
+		// Empty
 	}
 
 	@Override
 	protected void drawSelectionMarkers(Graphics2D graphics, RenderingOptions renderingOptions) {
+		// Empty
 	}
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 }
