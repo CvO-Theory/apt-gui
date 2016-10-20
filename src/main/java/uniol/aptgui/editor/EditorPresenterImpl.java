@@ -41,6 +41,7 @@ import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.editor.features.ContextMenuFeature;
 import uniol.aptgui.editor.features.FireTransitionTool;
 import uniol.aptgui.editor.features.HoverFeature;
+import uniol.aptgui.editor.features.ModifyTokensTool;
 import uniol.aptgui.editor.features.SelectionTool;
 import uniol.aptgui.editor.features.ViewportTool;
 import uniol.aptgui.editor.features.ZoomFeature;
@@ -154,6 +155,7 @@ public class EditorPresenterImpl extends AbstractPresenter<EditorPresenter, Edit
 			tools.put(FeatureId.PN_CREATE_PLACE, new CreatePlaceTool(pnDocument, hist, eo));
 			tools.put(FeatureId.PN_CREATE_TRANSITION, new CreateTransitionTool(pnDocument, hist, eo));
 			tools.put(FeatureId.PN_CREATE_FLOW, new CreateFlowTool(pnDocument, hist));
+			tools.put(FeatureId.PN_MODIFY_TOKENS, new ModifyTokensTool(pnDocument, hist));
 			tools.put(FeatureId.PN_FIRE_TRANSITION, new FireTransitionTool(pnDocument, hist));
 		} else if (document instanceof TsDocument) {
 			TsDocument tsDocument = (TsDocument) document;

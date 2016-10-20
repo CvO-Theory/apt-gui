@@ -42,6 +42,7 @@ import uniol.aptgui.swing.actions.tools.PnCreateFlowToolAction;
 import uniol.aptgui.swing.actions.tools.PnCreatePlaceToolAction;
 import uniol.aptgui.swing.actions.tools.PnCreateTransitionToolAction;
 import uniol.aptgui.swing.actions.tools.PnFireTransitionToolAction;
+import uniol.aptgui.swing.actions.tools.PnModifyTokensToolAction;
 import uniol.aptgui.swing.actions.tools.SelectionToolAction;
 import uniol.aptgui.swing.actions.tools.TsCreateArcToolAction;
 import uniol.aptgui.swing.actions.tools.TsCreateStateToolAction;
@@ -71,6 +72,7 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 	private final JToggleButton pnCreatePlaceTool;
 	private final JToggleButton pnCreateTransitionTool;
 	private final JToggleButton pnCreateFlowTool;
+	private final JToggleButton pnModifyTokensTool;
 	private final JToggleButton pnFireTransitionTool;
 
 	// TS BUTTONS
@@ -132,12 +134,14 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 		pnCreatePlaceTool = new JToggleButton(injector.getInstance(PnCreatePlaceToolAction.class));
 		pnCreateTransitionTool = new JToggleButton(injector.getInstance(PnCreateTransitionToolAction.class));
 		pnCreateFlowTool = new JToggleButton(injector.getInstance(PnCreateFlowToolAction.class));
+		pnModifyTokensTool = new JToggleButton(injector.getInstance(PnModifyTokensToolAction.class));
 		pnFireTransitionTool = new JToggleButton(injector.getInstance(PnFireTransitionToolAction.class));
 		setToolButton(pnViewportTool, pnToolGroup);
 		setToolButton(pnSelectionTool, pnToolGroup);
 		setToolButton(pnCreatePlaceTool, pnToolGroup);
 		setToolButton(pnCreateTransitionTool, pnToolGroup);
 		setToolButton(pnCreateFlowTool, pnToolGroup);
+		setToolButton(pnModifyTokensTool, pnToolGroup);
 		setToolButton(pnFireTransitionTool, pnToolGroup);
 
 		// TS BUTTONS
@@ -164,6 +168,7 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 		pnCreatePlaceTool.setVisible(visible);
 		pnCreateTransitionTool.setVisible(visible);
 		pnCreateFlowTool.setVisible(visible);
+		pnModifyTokensTool.setVisible(visible);
 		pnFireTransitionTool.setVisible(visible);
 	}
 
@@ -200,6 +205,9 @@ public class ToolbarViewImpl extends JToolBarView<ToolbarPresenter> implements T
 			break;
 		case PN_CREATE_TRANSITION:
 			pnCreateTransitionTool.doClick();
+			break;
+		case PN_MODIFY_TOKENS:
+			pnModifyTokensTool.doClick();
 			break;
 		case PN_FIRE_TRANSITION:
 			pnFireTransitionTool.doClick();

@@ -17,24 +17,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package uniol.aptgui.editor.features.base;
+package uniol.aptgui.swing.actions.tools;
 
-/**
- * Enumeration to identify features.
- */
-public enum FeatureId {
+import java.awt.event.ActionEvent;
 
-	// Features
-	ZOOM, SELECTION, HOVER, CONTEXT_MENU,
+import javax.swing.AbstractAction;
 
-	// General tools
-	VIEWPORT,
+import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
 
-	// PN specific tools
-	PN_CREATE_PLACE, PN_CREATE_TRANSITION, PN_CREATE_FLOW, PN_MODIFY_TOKENS, PN_FIRE_TRANSITION,
+import uniol.aptgui.editor.features.base.FeatureId;
+import uniol.aptgui.events.ToolSelectedEvent;
+import uniol.aptgui.swing.Resource;
 
-	// TS specific tools
-	TS_CREATE_STATE, TS_CREATE_ARC;
+@SuppressWarnings("serial")
+public class PnModifyTokensToolAction extends AbstractAction {
+
+	private final EventBus eventBus;
+
+	@Inject
+	public PnModifyTokensToolAction(EventBus eventBus) {
+		this.eventBus = eventBus;
+		String name = "Add or Remove Tokens";
+		putValue(NAME, name);
+		putValue(SMALL_ICON, Resource.getIconFireTransition());
+		putValue(SHORT_DESCRIPTION, name);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		eventBus.post(new ToolSelectedEvent(FeatureId.PN_MODIFY_TOKENS));
+	}
 
 }
 
