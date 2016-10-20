@@ -182,6 +182,15 @@ public class SelectionToolTest {
 		assertThat(ga1.getBreakpoints(), contains(add(pbp1, offset)));
 	}
 
+	@Test
+	public void testDragBreakpointBecomesUnnecessary() {
+		Point target = add(pbp1, new Point(0, 100));
+		simulateDrag(pbp1, target);
+		// Move breakpoint back down in line with the other elements
+		simulateDrag(target, pbp1);
+		assertThat(ga1.getBreakpoints(), is(empty()));
+	}
+
 	private void simulateClick(Point pos, boolean ctrlPressed) {
 		MouseEvent evt = leftClickAt(pos, ctrlPressed);
 		selectionTool.mousePressed(evt);
