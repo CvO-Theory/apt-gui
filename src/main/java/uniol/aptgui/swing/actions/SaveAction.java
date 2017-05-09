@@ -32,6 +32,7 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
@@ -39,10 +40,12 @@ import uniol.aptgui.swing.filechooser.AptFileChooser;
 
 @SuppressWarnings("serial")
 public class SaveAction extends DocumentAction {
+	private final DocumentRendererFactory documentRendererFactory;
 
 	@Inject
-	public SaveAction(Application app, EventBus eventBus) {
+	public SaveAction(Application app, EventBus eventBus, DocumentRendererFactory documentRendererFactory) {
 		super(app, eventBus);
+		this.documentRendererFactory = documentRendererFactory;
 		String name = "Save";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconSaveFile());
@@ -58,7 +61,8 @@ public class SaveAction extends DocumentAction {
 		if (shouldShowSaveDialog(document)) {
 			handleSaveDialogInteraction(document);
 		} else {
-			app.saveToFile(document, document.getFile(), document.getFileType());
+			app.saveToFile(document, document.getFile(),
+					documentRendererFactory.get(document.getFileType()));
 		}
 	}
 
@@ -69,7 +73,7 @@ public class SaveAction extends DocumentAction {
 		if (fc.performSaveInteraction(parent)) {
 			File file = fc.getSelectedFileWithExtension();
 			FileType type = fc.getSelectedFileType();
-			app.saveToFile(document, file, type);
+			app.saveToFile(document, file, documentRendererFactory.get(type));
 		}
 	}
 

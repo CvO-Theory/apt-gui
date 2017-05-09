@@ -53,8 +53,8 @@ import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.events.WindowFocusGainedEvent;
-import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.parser.AptParser;
+import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
@@ -225,10 +225,10 @@ public class ApplicationImpl implements Application {
 	}
 
 	@Override
-	public void saveToFile(Document<?> document, File file, FileType type) {
+	public void saveToFile(Document<?> document, File file, DocumentRenderer renderer) {
 		assert document != null;
 		try {
-			documentRendererFactory.get(type).render(document, file);
+			renderer.render(document, file);
 		} catch (Exception e) {
 			mainWindow.showException("Save Error", e);
 		}
@@ -290,7 +290,7 @@ public class ApplicationImpl implements Application {
 		}
 		if (res == JOptionPane.YES_OPTION) {
 			focusWindow(id);
-			new SaveAction(this, eventBus).actionPerformed(null);
+			new SaveAction(this, eventBus, documentRendererFactory).actionPerformed(null);
 		}
 		return false;
 	}

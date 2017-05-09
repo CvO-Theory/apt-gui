@@ -26,14 +26,15 @@ import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
+import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.swing.Resource;
 
 @SuppressWarnings("serial")
 public class SaveAsAction extends SaveAction {
 
 	@Inject
-	public SaveAsAction(Application app, EventBus eventBus) {
-		super(app, eventBus);
+	public SaveAsAction(Application app, EventBus eventBus, DocumentRendererFactory documentRendererFactory) {
+		super(app, eventBus, documentRendererFactory);
 		String name = "Save As...";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconSaveFileAs());

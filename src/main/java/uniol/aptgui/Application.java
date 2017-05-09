@@ -33,7 +33,7 @@ import uniol.aptgui.document.EditingOptions;
 import uniol.aptgui.document.RenderingOptions;
 import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.LayoutOptions;
-import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
 
@@ -210,10 +210,10 @@ public interface Application {
 	 *                the document to save
 	 * @param file
 	 *                file to save to
-	 * @param type
-	 *                type of the saved file
+	 * @param renderer
+	 *                renderer for the saved file
 	 */
-	void saveToFile(Document<?> document, File file, FileType type);
+	void saveToFile(Document<?> document, File file, DocumentRenderer renderer);
 
 	/**
 	 * Opens a window that allows to use the given module.

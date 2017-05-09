@@ -28,7 +28,8 @@ import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
-import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.renderer.DocumentRenderer;
+import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
@@ -36,10 +37,12 @@ import uniol.aptgui.swing.filechooser.AptFileChooser;
 
 @SuppressWarnings("serial")
 public class ExportAction extends DocumentAction {
+	private final DocumentRendererFactory documentRendererFactory;
 
 	@Inject
-	public ExportAction(Application app, EventBus eventBus) {
+	public ExportAction(Application app, EventBus eventBus, DocumentRendererFactory documentRendererFactory) {
 		super(app, eventBus);
+		this.documentRendererFactory = documentRendererFactory;
 		String name = "Export...";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconExport());
@@ -55,13 +58,8 @@ public class ExportAction extends DocumentAction {
 		Component parent = (Component) app.getMainWindow().getView();
 		if (fc.performSaveInteraction(parent)) {
 			File exportFile = fc.getSelectedFileWithExtension();
-			if (fc.getSelectedFileType() == FileType.SVG) {
-				app.saveToFile(document, exportFile, FileType.SVG);
-			} else if (fc.getSelectedFileType() == FileType.PNG) {
-				app.saveToFile(document, exportFile, FileType.PNG);
-			} else {
-				assert false;
-			}
+			DocumentRenderer renderer = documentRendererFactory.get(fc.getSelectedFileType());
+			app.saveToFile(document, exportFile, renderer);
 		}
 	}
 
