@@ -38,9 +38,13 @@ import uniol.apt.io.parser.impl.AptPNParser;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.document.TsDocument;
-import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.renderer.DocumentRenderer;
-import uniol.aptgui.io.renderer.DocumentRendererFactory;
+import uniol.aptgui.io.renderer.PnDocumentRenderer;
+import uniol.aptgui.io.renderer.PnStructureDocumentRenderer;
+import uniol.aptgui.io.renderer.PngDocumentRenderer;
+import uniol.aptgui.io.renderer.SvgDocumentRenderer;
+import uniol.aptgui.io.renderer.TsDocumentRenderer;
+import uniol.aptgui.io.renderer.TsStructureDocumentRenderer;
 
 @SuppressWarnings("serial")
 public class AptFileChooser extends JFileChooser implements AptFileChooserFactory {
@@ -53,25 +57,36 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	private static FileFilter filterSvg = new FileNameExtensionFilter("SVG vector image", "svg");
 	private static FileFilter filterPng = new FileNameExtensionFilter("PNG raster image", "png");
 
-	private static Map<FileFilter, FileType> fileTypeMapping;
-
 	private static final String PREF_KEY_INIT_DIRECTORY = "initialFileChooserDirectory";
 
-	static {
-		fileTypeMapping = new HashMap<>();
-		fileTypeMapping.put(filterPn, FileType.PETRI_NET);
-		fileTypeMapping.put(filterPnNoLayout, FileType.PETRI_NET_ONLY_STRUCTURE);
-		fileTypeMapping.put(filterTs, FileType.TRANSITION_SYSTEM);
-		fileTypeMapping.put(filterTsNoLayout, FileType.TRANSITION_SYSTEM_ONLY_STRUCTURE);
-		fileTypeMapping.put(filterSvg, FileType.SVG);
-		fileTypeMapping.put(filterPng, FileType.PNG);
+	private final Map<FileFilter, DocumentRenderer> fileTypeMapping;
+
+	private AptFileChooser(Map<FileFilter, DocumentRenderer> fileTypeMapping) {
+		this.fileTypeMapping = fileTypeMapping;
 	}
 
-	private final DocumentRendererFactory documentRendererFactory;
+	@Inject
+	public AptFileChooser(PnDocumentRenderer pnRenderer,
+			PnStructureDocumentRenderer pnStructureRenderer,
+			TsDocumentRenderer tsRenderer,
+			TsStructureDocumentRenderer tsStructureRenderer,
+			PngDocumentRenderer pngRenderer,
+			SvgDocumentRenderer svgRenderer) {
+		setCurrentDirectory(getInitialDirectory());
+
+		Map<FileFilter, DocumentRenderer> mapping = new HashMap<>();
+		mapping.put(filterPn, pnRenderer);
+		mapping.put(filterPnNoLayout, pnStructureRenderer);
+		mapping.put(filterTs, tsRenderer);
+		mapping.put(filterTsNoLayout, tsStructureRenderer);
+		mapping.put(filterSvg, svgRenderer);
+		mapping.put(filterPng, pngRenderer);
+		this.fileTypeMapping = mapping;
+	}
 
 	@Override
 	public AptFileChooser saveChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
+		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
 		fc.setAcceptAllFileFilterUsed(false);
 		if (document instanceof PnDocument) {
 			fc.addChoosableFileFilter(filterPn);
@@ -90,7 +105,7 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 
 	@Override
 	public AptFileChooser openChooser() {
-		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
+		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
 		fc.addChoosableFileFilter(filterPn);
 		fc.addChoosableFileFilter(filterTs);
 		fc.setFileFilter(fc.getAcceptAllFileFilter());
@@ -99,7 +114,7 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 
 	@Override
 	public AptFileChooser exportChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
+		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
 		fc.addChoosableFileFilter(filterSvg);
 		fc.addChoosableFileFilter(filterPng);
 		fc.setAcceptAllFileFilterUsed(false);
@@ -120,12 +135,6 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	 */
 	private static String toValidFileName(String str) {
 		return str.replaceAll("[^a-zA-Z0-9.-]", "_");
-	}
-
-	@Inject
-	public AptFileChooser(DocumentRendererFactory documentRendererFactory) {
-		setCurrentDirectory(getInitialDirectory());
-		this.documentRendererFactory = documentRendererFactory;
 	}
 
 	/**
@@ -174,13 +183,7 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	 * @return the document renderer that was selected by the user
 	 */
 	public DocumentRenderer getSelectedFileDocumentRenderer() {
-		FileType type;
-		if (fileTypeMapping.containsKey(getFileFilter())) {
-			type = fileTypeMapping.get(getFileFilter());
-		} else {
-			type = FileType.ANY;
-		}
-		return documentRendererFactory.get(type);
+		return fileTypeMapping.get(getFileFilter());
 	}
 
 	@Override

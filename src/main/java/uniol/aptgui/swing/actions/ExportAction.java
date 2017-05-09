@@ -29,7 +29,6 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.io.renderer.DocumentRenderer;
-import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;

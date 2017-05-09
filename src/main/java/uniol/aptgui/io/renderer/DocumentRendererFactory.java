@@ -54,10 +54,6 @@ public class DocumentRendererFactory {
 			return injector.getInstance(TsDocumentRenderer.class);
 		case TRANSITION_SYSTEM_ONLY_STRUCTURE:
 			return injector.getInstance(TsStructureDocumentRenderer.class);
-		case PNG:
-			return injector.getInstance(PngDocumentRenderer.class);
-		case SVG:
-			return injector.getInstance(SvgDocumentRenderer.class);
 		default:
 			throw new AssertionError("Requested DocumentRenderer for unsupported file type: " + fileType);
 		}
