@@ -33,8 +33,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.inject.Inject;
 
+import uniol.apt.adt.pn.PetriNet;
+import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.io.parser.impl.AptLTSParser;
 import uniol.apt.io.parser.impl.AptPNParser;
+import uniol.apt.io.renderer.LTSRenderers;
+import uniol.apt.io.renderer.PNRenderers;
+import uniol.apt.io.renderer.Renderer;
+import uniol.apt.io.renderer.RendererNotFoundException;
+import uniol.apt.io.renderer.Renderers;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.document.TsDocument;
@@ -42,6 +49,7 @@ import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.io.renderer.PnDocumentRenderer;
 import uniol.aptgui.io.renderer.PnStructureDocumentRenderer;
 import uniol.aptgui.io.renderer.PngDocumentRenderer;
+import uniol.aptgui.io.renderer.RendererDocumentRenderer;
 import uniol.aptgui.io.renderer.SvgDocumentRenderer;
 import uniol.aptgui.io.renderer.TsDocumentRenderer;
 import uniol.aptgui.io.renderer.TsStructureDocumentRenderer;
@@ -114,14 +122,37 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 
 	@Override
 	public AptFileChooser exportChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
+		Map<FileFilter, DocumentRenderer> mapping = new HashMap<>(fileTypeMapping);
+		AptFileChooser fc = new AptFileChooser(mapping);
 		fc.addChoosableFileFilter(filterSvg);
 		fc.addChoosableFileFilter(filterPng);
 		fc.setAcceptAllFileFilterUsed(false);
+		if (document instanceof PnDocument) {
+			addRenderers(fc, mapping, PNRenderers.INSTANCE, PetriNet.class);
+		} else if (document instanceof TsDocument) {
+			addRenderers(fc, mapping, LTSRenderers.INSTANCE, TransitionSystem.class);
+		}
 		File defaultSave = new File(toValidFileName(document.getName()));
 		fc.setSelectedFile(defaultSave);
 		fc.setDialogTitle("Export " + document.getName());
 		return fc;
+	}
+
+	private <T> void addRenderers(AptFileChooser fc,
+			Map<FileFilter, DocumentRenderer> mapping,
+			Renderers<T> renderers,
+			Class<T> klass) {
+		for (String format : renderers.getSupportedFormats()) {
+			Renderer<T> renderer;
+			try {
+				renderer = renderers.getRenderer(format);
+			} catch (RendererNotFoundException ex) {
+				throw new RuntimeException("Format " + format + " is supported, but unsupported!?", ex);
+			}
+			FileFilter filter = new RendererFileFilter(renderer);
+			mapping.put(filter, new RendererDocumentRenderer<T>(klass, renderer));
+			fc.addChoosableFileFilter(filter);
+		}
 	}
 
 	/**
