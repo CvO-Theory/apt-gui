@@ -35,6 +35,11 @@ import com.google.inject.Inject;
 
 import uniol.apt.adt.pn.PetriNet;
 import uniol.apt.adt.ts.TransitionSystem;
+import uniol.apt.io.parser.LTSParsers;
+import uniol.apt.io.parser.PNParsers;
+import uniol.apt.io.parser.Parser;
+import uniol.apt.io.parser.ParserNotFoundException;
+import uniol.apt.io.parser.Parsers;
 import uniol.apt.io.parser.impl.AptLTSParser;
 import uniol.apt.io.parser.impl.AptPNParser;
 import uniol.apt.io.renderer.LTSRenderers;
@@ -45,6 +50,9 @@ import uniol.apt.io.renderer.Renderers;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.io.parser.AptParser;
+import uniol.aptgui.io.parser.DocumentParser;
+import uniol.aptgui.io.parser.ParserDocumentParser;
 import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.io.renderer.PnDocumentRenderer;
 import uniol.aptgui.io.renderer.PnStructureDocumentRenderer;
@@ -67,10 +75,13 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 
 	private static final String PREF_KEY_INIT_DIRECTORY = "initialFileChooserDirectory";
 
-	private final Map<FileFilter, DocumentRenderer> fileTypeMapping;
+	private final Map<FileFilter, DocumentRenderer> rendererMapping;
+	private final Map<FileFilter, DocumentParser> parserMapping;
 
-	private AptFileChooser(Map<FileFilter, DocumentRenderer> fileTypeMapping) {
-		this.fileTypeMapping = fileTypeMapping;
+	private AptFileChooser(Map<FileFilter, DocumentRenderer> rendererMapping,
+			Map<FileFilter, DocumentParser> parserMapping) {
+		this.rendererMapping = rendererMapping;
+		this.parserMapping = parserMapping;
 	}
 
 	@Inject
@@ -79,22 +90,26 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 			TsDocumentRenderer tsRenderer,
 			TsStructureDocumentRenderer tsStructureRenderer,
 			PngDocumentRenderer pngRenderer,
-			SvgDocumentRenderer svgRenderer) {
+			SvgDocumentRenderer svgRenderer,
+			AptParser aptParser) {
 		setCurrentDirectory(getInitialDirectory());
 
-		Map<FileFilter, DocumentRenderer> mapping = new HashMap<>();
-		mapping.put(filterPn, pnRenderer);
-		mapping.put(filterPnNoLayout, pnStructureRenderer);
-		mapping.put(filterTs, tsRenderer);
-		mapping.put(filterTsNoLayout, tsStructureRenderer);
-		mapping.put(filterSvg, svgRenderer);
-		mapping.put(filterPng, pngRenderer);
-		this.fileTypeMapping = mapping;
+		this.rendererMapping = new HashMap<>();
+		rendererMapping.put(filterPn, pnRenderer);
+		rendererMapping.put(filterPnNoLayout, pnStructureRenderer);
+		rendererMapping.put(filterTs, tsRenderer);
+		rendererMapping.put(filterTsNoLayout, tsStructureRenderer);
+		rendererMapping.put(filterSvg, svgRenderer);
+		rendererMapping.put(filterPng, pngRenderer);
+
+		this.parserMapping = new HashMap<>();
+		parserMapping.put(filterPn, aptParser);
+		parserMapping.put(filterTs, aptParser);
 	}
 
 	@Override
 	public AptFileChooser saveChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
+		AptFileChooser fc = new AptFileChooser(rendererMapping, parserMapping);
 		fc.setAcceptAllFileFilterUsed(false);
 		if (document instanceof PnDocument) {
 			fc.addChoosableFileFilter(filterPn);
@@ -113,7 +128,7 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 
 	@Override
 	public AptFileChooser openChooser() {
-		AptFileChooser fc = new AptFileChooser(fileTypeMapping);
+		AptFileChooser fc = new AptFileChooser(rendererMapping, parserMapping);
 		fc.addChoosableFileFilter(filterPn);
 		fc.addChoosableFileFilter(filterTs);
 		fc.setFileFilter(fc.getAcceptAllFileFilter());
@@ -121,9 +136,39 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	}
 
 	@Override
+	public AptFileChooser importChooser() {
+		Map<FileFilter, DocumentParser> mapping = new HashMap<>(parserMapping);
+		AptFileChooser fc = new AptFileChooser(rendererMapping, mapping);
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.addChoosableFileFilter(filterPn);
+		fc.addChoosableFileFilter(filterTs);
+		addParsers(fc, mapping, PNParsers.INSTANCE, PetriNet.class, "Petri net");
+		addParsers(fc, mapping, LTSParsers.INSTANCE, TransitionSystem.class, "Transition system");
+		return fc;
+	}
+
+	private <T> void addParsers(AptFileChooser fc,
+			Map<FileFilter, DocumentParser> mapping,
+			Parsers<T> parsers,
+			Class<T> klass,
+			String name) {
+		for (String format : parsers.getSupportedFormats()) {
+			Parser<T> parser;
+			try {
+				parser = parsers.getParser(format);
+			} catch (ParserNotFoundException ex) {
+				throw new RuntimeException("Format " + format + " is supported, but unsupported!?", ex);
+			}
+			FileFilter filter = new ParserFileFilter(name, parser);
+			mapping.put(filter, new ParserDocumentParser<T>(klass, parser));
+			fc.addChoosableFileFilter(filter);
+		}
+	}
+
+	@Override
 	public AptFileChooser exportChooser(Document<?> document) {
-		Map<FileFilter, DocumentRenderer> mapping = new HashMap<>(fileTypeMapping);
-		AptFileChooser fc = new AptFileChooser(mapping);
+		Map<FileFilter, DocumentRenderer> mapping = new HashMap<>(rendererMapping);
+		AptFileChooser fc = new AptFileChooser(mapping, parserMapping);
 		fc.addChoosableFileFilter(filterSvg);
 		fc.addChoosableFileFilter(filterPng);
 		fc.setAcceptAllFileFilterUsed(false);
@@ -214,7 +259,16 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	 * @return the document renderer that was selected by the user
 	 */
 	public DocumentRenderer getSelectedFileDocumentRenderer() {
-		return fileTypeMapping.get(getFileFilter());
+		return rendererMapping.get(getFileFilter());
+	}
+
+	/**
+	 * Returns the document parser that was selected by the user.
+	 *
+	 * @return the document parser that was selected by the user
+	 */
+	public DocumentParser getSelectedFileDocumentParser() {
+		return parserMapping.get(getFileFilter());
 	}
 
 	@Override

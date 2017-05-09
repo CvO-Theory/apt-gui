@@ -71,7 +71,7 @@ public class ParserFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return String.format("%s %s", name, parser.getFileExtensions());
+		return String.format("%s %s %s", parser.getFormat(), name, parser.getFileExtensions());
 	}
 
 }

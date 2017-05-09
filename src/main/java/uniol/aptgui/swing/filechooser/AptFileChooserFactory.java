@@ -40,6 +40,13 @@ public interface AptFileChooserFactory {
 	public AptFileChooser saveChooser(Document<?> document);
 
 	/**
+	 * Creates a new file chooser that allows the user to import documents.
+	 *
+	 * @return file chooser set-up for import action
+	 */
+	public AptFileChooser importChooser();
+
+	/**
 	 * Creates a new file chooser that allows the user to export documents
 	 * into other formats.
 	 *

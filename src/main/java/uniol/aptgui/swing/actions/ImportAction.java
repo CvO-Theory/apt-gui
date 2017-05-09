@@ -19,7 +19,12 @@
 
 package uniol.aptgui.swing.actions;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.io.File;
+
+import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -27,13 +32,18 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
+import uniol.aptgui.swing.filechooser.AptFileChooser;
+import uniol.aptgui.swing.filechooser.AptFileChooserFactory;
 
 @SuppressWarnings("serial")
-public class ImportAction extends DocumentAction {
+public class ImportAction extends AbstractAction {
+	private final Application app;
+	private final AptFileChooserFactory aptFileChooserFactory;
 
 	@Inject
-	public ImportAction(Application app, EventBus eventBus) {
-		super(app, eventBus);
+	public ImportAction(Application app, AptFileChooserFactory aptFileChooserFactory) {
+		this.app = app;
+		this.aptFileChooserFactory = aptFileChooserFactory;
 		String name = "Import...";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconImport());
@@ -42,7 +52,12 @@ public class ImportAction extends DocumentAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		throw new UnsupportedOperationException("Not implemented");
+		AptFileChooser fc = aptFileChooserFactory.importChooser();
+		int res = fc.showOpenDialog((Component) app.getMainWindow().getView());
+		if (res == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			app.openFile(file, fc.getSelectedFileDocumentParser());
+		}
 	}
 
 }
