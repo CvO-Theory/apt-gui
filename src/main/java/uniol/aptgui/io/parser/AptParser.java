@@ -33,7 +33,7 @@ import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.io.FileType;
 import uniol.aptgui.io.properties.PersistentDocumentProperties;
 
-public class AptParser {
+public class AptParser implements DocumentParser {
 
 	private File file;
 	private PetriNet petriNet;

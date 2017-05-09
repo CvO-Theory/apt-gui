@@ -33,6 +33,7 @@ import uniol.aptgui.document.EditingOptions;
 import uniol.aptgui.document.RenderingOptions;
 import uniol.aptgui.document.graphical.GraphicalElement;
 import uniol.aptgui.editor.layout.LayoutOptions;
+import uniol.aptgui.io.parser.DocumentParser;
 import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
@@ -201,6 +202,17 @@ public interface Application {
 	 *         be opened
 	 */
 	WindowId openFile(File file);
+
+	/**
+	 * Opens the given file and shows its contents in an editor window.
+	 *
+	 * @param file
+	 *                file to open
+	 * @param parser parser to use for opening the file
+	 * @return id of the opened editor window or null if the file could not
+	 *         be opened
+	 */
+	WindowId openFile(File file, DocumentParser parser);
 
 	/**
 	 * Saves the given document to a file. The file will be set as the

@@ -54,6 +54,7 @@ import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.events.WindowFocusGainedEvent;
 import uniol.aptgui.io.parser.AptParser;
+import uniol.aptgui.io.parser.DocumentParser;
 import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
@@ -182,8 +183,12 @@ public class ApplicationImpl implements Application {
 
 	@Override
 	public WindowId openFile(File file) {
+		return openFile(file, new AptParser());
+	}
+
+	@Override
+	public WindowId openFile(File file, DocumentParser parser) {
 		try {
-			AptParser parser = new AptParser();
 			return openDocument(parser.parse(file));
 		} catch (ParseException|IOException e) {
 			mainWindow.showException("Open Error", e);
