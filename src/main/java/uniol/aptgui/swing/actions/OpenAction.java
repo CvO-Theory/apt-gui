@@ -32,15 +32,17 @@ import com.google.inject.Inject;
 import uniol.aptgui.Application;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.filechooser.AptFileChooser;
+import uniol.aptgui.swing.filechooser.AptFileChooserFactory;
 
 @SuppressWarnings("serial")
 public class OpenAction extends AbstractAction {
-
 	private final Application app;
+	private final AptFileChooserFactory aptFileChooserFactory;
 
 	@Inject
-	public OpenAction(Application app) {
+	public OpenAction(Application app, AptFileChooserFactory aptFileChooserFactory) {
 		this.app = app;
+		this.aptFileChooserFactory = aptFileChooserFactory;
 		String name = "Open File...";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconOpenFile());
@@ -51,7 +53,7 @@ public class OpenAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		AptFileChooser fc = AptFileChooser.openChooser();
+		AptFileChooser fc = aptFileChooserFactory.openChooser();
 		int res = fc.showOpenDialog((Component) app.getMainWindow().getView());
 		if (res == JFileChooser.APPROVE_OPTION) {
 			app.openFile(fc.getSelectedFile());

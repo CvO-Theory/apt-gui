@@ -31,21 +31,27 @@ import com.google.inject.Inject;
 
 import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
-import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.renderer.DocumentRenderer;
 import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
 import uniol.aptgui.swing.filechooser.AptFileChooser;
+import uniol.aptgui.swing.filechooser.AptFileChooserFactory;
 
 @SuppressWarnings("serial")
 public class SaveAction extends DocumentAction {
 	private final DocumentRendererFactory documentRendererFactory;
+	private final AptFileChooserFactory aptFileChooserFactory;
 
 	@Inject
-	public SaveAction(Application app, EventBus eventBus, DocumentRendererFactory documentRendererFactory) {
+	public SaveAction(Application app,
+			EventBus eventBus,
+			DocumentRendererFactory documentRendererFactory,
+			AptFileChooserFactory aptFileChooserFactory) {
 		super(app, eventBus);
 		this.documentRendererFactory = documentRendererFactory;
+		this.aptFileChooserFactory = aptFileChooserFactory;
 		String name = "Save";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconSaveFile());
@@ -67,13 +73,13 @@ public class SaveAction extends DocumentAction {
 	}
 
 	private void handleSaveDialogInteraction(Document<?> document) {
-		AptFileChooser fc = AptFileChooser.saveChooser(document);
+		AptFileChooser fc = aptFileChooserFactory.saveChooser(document);
 		Component parent = (Component) app.getMainWindow().getView();
 
 		if (fc.performSaveInteraction(parent)) {
 			File file = fc.getSelectedFileWithExtension();
-			FileType type = fc.getSelectedFileType();
-			app.saveToFile(document, file, documentRendererFactory.get(type));
+			DocumentRenderer renderer = fc.getSelectedFileDocumentRenderer();
+			app.saveToFile(document, file, renderer);
 		}
 	}
 

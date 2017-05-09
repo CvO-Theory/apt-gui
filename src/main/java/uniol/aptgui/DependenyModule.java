@@ -62,6 +62,8 @@ import uniol.aptgui.modulebrowser.ModuleBrowserPresenter;
 import uniol.aptgui.modulebrowser.ModuleBrowserPresenterImpl;
 import uniol.aptgui.modulebrowser.ModuleBrowserView;
 import uniol.aptgui.modulebrowser.ModuleBrowserViewImpl;
+import uniol.aptgui.swing.filechooser.AptFileChooser;
+import uniol.aptgui.swing.filechooser.AptFileChooserFactory;
 import uniol.aptgui.window.external.ExternalWindowPresenter;
 import uniol.aptgui.window.external.ExternalWindowPresenterImpl;
 import uniol.aptgui.window.external.ExternalWindowView;
@@ -108,6 +110,7 @@ public class DependenyModule extends AbstractModule {
 		bind(ModulePresenter.class).to(ModulePresenterImpl.class);
 		bind(ModuleView.class).to(ModuleViewImpl.class);
 		bind(Layout.class).to(PreservingRandomLayout.class);
+		bind(AptFileChooserFactory.class).to(AptFileChooser.class);
 	}
 
 	private RenderingOptions getRenderingOptionsInstance() {

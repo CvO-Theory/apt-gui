@@ -34,15 +34,16 @@ import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.Resource;
 import uniol.aptgui.swing.actions.base.DocumentAction;
 import uniol.aptgui.swing.filechooser.AptFileChooser;
+import uniol.aptgui.swing.filechooser.AptFileChooserFactory;
 
 @SuppressWarnings("serial")
 public class ExportAction extends DocumentAction {
-	private final DocumentRendererFactory documentRendererFactory;
+	private final AptFileChooserFactory aptFileChooserFactory;
 
 	@Inject
-	public ExportAction(Application app, EventBus eventBus, DocumentRendererFactory documentRendererFactory) {
+	public ExportAction(Application app, EventBus eventBus, AptFileChooserFactory aptFileChooserFactory) {
 		super(app, eventBus);
-		this.documentRendererFactory = documentRendererFactory;
+		this.aptFileChooserFactory = aptFileChooserFactory;
 		String name = "Export...";
 		putValue(NAME, name);
 		putValue(SMALL_ICON, Resource.getIconExport());
@@ -54,11 +55,11 @@ public class ExportAction extends DocumentAction {
 		WindowId activeWindow = app.getActiveWindow();
 		Document<?> document = app.getDocument(activeWindow);
 
-		AptFileChooser fc = AptFileChooser.exportChooser(document);
+		AptFileChooser fc = aptFileChooserFactory.exportChooser(document);
 		Component parent = (Component) app.getMainWindow().getView();
 		if (fc.performSaveInteraction(parent)) {
 			File exportFile = fc.getSelectedFileWithExtension();
-			DocumentRenderer renderer = documentRendererFactory.get(fc.getSelectedFileType());
+			DocumentRenderer renderer = fc.getSelectedFileDocumentRenderer();
 			app.saveToFile(document, exportFile, renderer);
 		}
 	}

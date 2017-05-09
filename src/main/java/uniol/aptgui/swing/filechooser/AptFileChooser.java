@@ -31,15 +31,19 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.google.inject.Inject;
+
 import uniol.apt.io.parser.impl.AptLTSParser;
 import uniol.apt.io.parser.impl.AptPNParser;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.document.TsDocument;
 import uniol.aptgui.io.FileType;
+import uniol.aptgui.io.renderer.DocumentRenderer;
+import uniol.aptgui.io.renderer.DocumentRendererFactory;
 
 @SuppressWarnings("serial")
-public class AptFileChooser extends JFileChooser {
+public class AptFileChooser extends JFileChooser implements AptFileChooserFactory {
 
 	private static FileFilter filterPn = new ParserFileFilter("Petri Net", new AptPNParser());
 	private static FileFilter filterPnNoLayout = new ParserFileFilter("Petri Net, only structure", new AptPNParser());
@@ -63,16 +67,11 @@ public class AptFileChooser extends JFileChooser {
 		fileTypeMapping.put(filterPng, FileType.PNG);
 	}
 
-	/**
-	 * Creates a new file chooser that allows the user to save the given
-	 * document to a file of the correct type.
-	 *
-	 * @param document
-	 *                document to save
-	 * @return file chooser set-up for save action
-	 */
-	public static AptFileChooser saveChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser();
+	private final DocumentRendererFactory documentRendererFactory;
+
+	@Override
+	public AptFileChooser saveChooser(Document<?> document) {
+		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
 		fc.setAcceptAllFileFilterUsed(false);
 		if (document instanceof PnDocument) {
 			fc.addChoosableFileFilter(filterPn);
@@ -89,29 +88,18 @@ public class AptFileChooser extends JFileChooser {
 		return fc;
 	}
 
-	/**
-	 * Creates a new file chooser that allows the user to open documents.
-	 *
-	 * @return file chooser set-up for open action
-	 */
-	public static AptFileChooser openChooser() {
-		AptFileChooser fc = new AptFileChooser();
+	@Override
+	public AptFileChooser openChooser() {
+		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
 		fc.addChoosableFileFilter(filterPn);
 		fc.addChoosableFileFilter(filterTs);
 		fc.setFileFilter(fc.getAcceptAllFileFilter());
 		return fc;
 	}
 
-	/**
-	 * Creates a new file chooser that allows the user to export documents
-	 * into other formats.
-	 *
-	 * @param document
-	 *                document to export
-	 * @return file chooser set-up for export action
-	 */
-	public static AptFileChooser exportChooser(Document<?> document) {
-		AptFileChooser fc = new AptFileChooser();
+	@Override
+	public AptFileChooser exportChooser(Document<?> document) {
+		AptFileChooser fc = new AptFileChooser(documentRendererFactory);
 		fc.addChoosableFileFilter(filterSvg);
 		fc.addChoosableFileFilter(filterPng);
 		fc.setAcceptAllFileFilterUsed(false);
@@ -134,11 +122,10 @@ public class AptFileChooser extends JFileChooser {
 		return str.replaceAll("[^a-zA-Z0-9.-]", "_");
 	}
 
-	/**
-	 * Force creation through static factory methods.
-	 */
-	private AptFileChooser() {
+	@Inject
+	public AptFileChooser(DocumentRendererFactory documentRendererFactory) {
 		setCurrentDirectory(getInitialDirectory());
+		this.documentRendererFactory = documentRendererFactory;
 	}
 
 	/**
@@ -182,16 +169,18 @@ public class AptFileChooser extends JFileChooser {
 	}
 
 	/**
-	 * Returns the file type that was selected by the user.
+	 * Returns the document renderer that was selected by the user.
 	 *
-	 * @return the file type that was selected by the user
+	 * @return the document renderer that was selected by the user
 	 */
-	public FileType getSelectedFileType() {
+	public DocumentRenderer getSelectedFileDocumentRenderer() {
+		FileType type;
 		if (fileTypeMapping.containsKey(getFileFilter())) {
-			return fileTypeMapping.get(getFileFilter());
+			type = fileTypeMapping.get(getFileFilter());
 		} else {
-			return FileType.ANY;
+			type = FileType.ANY;
 		}
+		return documentRendererFactory.get(type);
 	}
 
 	@Override
