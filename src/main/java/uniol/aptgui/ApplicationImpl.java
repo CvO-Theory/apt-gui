@@ -55,7 +55,6 @@ import uniol.aptgui.editor.layout.LayoutOptions;
 import uniol.aptgui.events.WindowFocusGainedEvent;
 import uniol.aptgui.io.parser.AptParser;
 import uniol.aptgui.io.renderer.DocumentRenderer;
-import uniol.aptgui.io.renderer.DocumentRendererFactory;
 import uniol.aptgui.mainwindow.MainWindowPresenter;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.swing.actions.SaveAction;
@@ -68,7 +67,7 @@ public class ApplicationImpl implements Application {
 	private final RenderingOptions renderingOptions;
 	private final EditingOptions editingOptions;
 	private final LayoutOptions layoutOptions;
-	private final DocumentRendererFactory documentRendererFactory;
+	private final SaveAction saveAction;
 
 	/**
 	 * Standard layout algorithm that gets applied when no layout information is available.
@@ -100,7 +99,7 @@ public class ApplicationImpl implements Application {
 			EditingOptions editingOptions,
 			LayoutOptions layoutOptions,
 			Layout defaultLayout,
-			DocumentRendererFactory documentRendererFactory) {
+			SaveAction saveAction) {
 		this.mainWindow = mainWindow;
 		this.eventBus = eventBus;
 		this.history = history;
@@ -109,7 +108,7 @@ public class ApplicationImpl implements Application {
 		this.editingOptions = editingOptions;
 		this.layoutOptions = layoutOptions;
 		this.layout = defaultLayout;
-		this.documentRendererFactory = documentRendererFactory;
+		this.saveAction = saveAction;
 		this.executor = new ThreadPoolExecutor(2, Integer.MAX_VALUE, 1, TimeUnit.SECONDS,
 				new LinkedBlockingQueue<Runnable>());
 		eventBus.register(this);
@@ -290,7 +289,7 @@ public class ApplicationImpl implements Application {
 		}
 		if (res == JOptionPane.YES_OPTION) {
 			focusWindow(id);
-			new SaveAction(this, eventBus, documentRendererFactory).actionPerformed(null);
+			saveAction.actionPerformed(null);
 		}
 		return false;
 	}
