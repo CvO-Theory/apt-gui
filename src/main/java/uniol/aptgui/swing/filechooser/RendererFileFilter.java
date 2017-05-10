@@ -33,16 +33,20 @@ import uniol.apt.io.renderer.Renderer;
  */
 public class RendererFileFilter extends FileFilter {
 
+	private final String name;
 	private final Renderer<?> renderer;
 
 	/**
 	 * Constructs a new file filter that accepts files with the extension
 	 * specified by the given renderer.
 	 *
+	 * @param name
+	 *                filter name
 	 * @param renderer
 	 *                renderer whose file extensions will be accepted
 	 */
-	public RendererFileFilter(Renderer<?> renderer) {
+	public RendererFileFilter(String name, Renderer<?> renderer) {
+		this.name = name;
 		this.renderer = renderer;
 	}
 
@@ -67,7 +71,7 @@ public class RendererFileFilter extends FileFilter {
 
 	@Override
 	public String getDescription() {
-		return renderer.getFormat();
+		return String.format("%s %s %s", renderer.getFormat(), name, renderer.getFileExtensions());
 	}
 
 }

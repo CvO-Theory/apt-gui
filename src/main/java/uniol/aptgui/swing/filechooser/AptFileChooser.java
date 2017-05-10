@@ -173,9 +173,9 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 		fc.addChoosableFileFilter(filterPng);
 		fc.setAcceptAllFileFilterUsed(false);
 		if (document instanceof PnDocument) {
-			addRenderers(fc, mapping, PNRenderers.INSTANCE, PetriNet.class);
+			addRenderers(fc, mapping, PNRenderers.INSTANCE, PetriNet.class, "Petri net");
 		} else if (document instanceof TsDocument) {
-			addRenderers(fc, mapping, LTSRenderers.INSTANCE, TransitionSystem.class);
+			addRenderers(fc, mapping, LTSRenderers.INSTANCE, TransitionSystem.class, "Transition system");
 		}
 		File defaultSave = new File(toValidFileName(document.getName()));
 		fc.setSelectedFile(defaultSave);
@@ -186,7 +186,8 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 	private <T> void addRenderers(AptFileChooser fc,
 			Map<FileFilter, DocumentRenderer> mapping,
 			Renderers<T> renderers,
-			Class<T> klass) {
+			Class<T> klass,
+			String name) {
 		for (String format : renderers.getSupportedFormats()) {
 			Renderer<T> renderer;
 			try {
@@ -194,7 +195,7 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 			} catch (RendererNotFoundException ex) {
 				throw new RuntimeException("Format " + format + " is supported, but unsupported!?", ex);
 			}
-			FileFilter filter = new RendererFileFilter(renderer);
+			FileFilter filter = new RendererFileFilter(name, renderer);
 			mapping.put(filter, new RendererDocumentRenderer<T>(klass, renderer));
 			fc.addChoosableFileFilter(filter);
 		}
