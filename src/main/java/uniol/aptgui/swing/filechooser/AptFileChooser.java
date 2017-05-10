@@ -244,6 +244,11 @@ public class AptFileChooser extends JFileChooser implements AptFileChooserFactor
 			if (!pFilter.accept(file)) {
 				file = new File(file.getAbsolutePath() + "." + pFilter.getDefaultExtension());
 			}
+		} else if (filter instanceof RendererFileFilter) {
+			RendererFileFilter rFilter = (RendererFileFilter) filter;
+			if (!rFilter.accept(file)) {
+				file = new File(file.getAbsolutePath() + "." + rFilter.getDefaultExtension());
+			}
 		} else if (filter instanceof FileNameExtensionFilter) {
 			FileNameExtensionFilter extFilter = (FileNameExtensionFilter) filter;
 			if (!extFilter.accept(file)) {
