@@ -106,6 +106,10 @@ public abstract class GraphicalNode extends GraphicalElement {
 	public abstract Point getBoundaryIntersection(Point point);
 
 	protected static Point getCircleBoundaryIntersection(Point center, int radius, Point test) {
+		if (center.equals(test))
+			// Not much we can do, so let's pretend the intersection is in the center
+			return center;
+
 		double deltaCenterTestX = (center.x - test.x);
 		double deltaCenterTestY = (center.y - test.y);
 		double alpha = atan(deltaCenterTestY / deltaCenterTestX);
@@ -123,6 +127,10 @@ public abstract class GraphicalNode extends GraphicalElement {
 	}
 
 	protected static Point getSquareBoundaryIntersection(Point center, int radius, Point test) {
+		if (center.equals(test))
+			// Not much we can do, so let's pretend the intersection is in the center
+			return center;
+
 		double deltaCenterTestX = (center.x - test.x);
 		double deltaCenterTestY = (center.y - test.y);
 		double alpha = atan(deltaCenterTestY / deltaCenterTestX);
