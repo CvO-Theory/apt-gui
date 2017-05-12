@@ -20,6 +20,7 @@
 package uniol.aptgui.module;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.swing.SwingUtilities;
@@ -54,11 +55,7 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	private ParameterTableModelAdapter paramAdapter;
 	private ResultTableModelAdapter resultAdapter;
 
-	/**
-	 * Future giving access to the module execution happening in another
-	 * thread.
-	 */
-	private Future<?> moduleFuture;
+	private AbortableExecution moduleExecution;
 
 	@Inject
 	public ModulePresenterImpl(ModuleView view, Application application, ModuleRunner moduleRunner,
@@ -91,7 +88,15 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 	}
 
 	@Override
-	public void onRunButtonClicked() {
+	public void onRunAbortButtonClicked() {
+		if (moduleExecution != null) {
+			moduleExecution.abort();
+		} else {
+			runModule();
+		}
+	}
+
+	private void runModule() {
 		try {
 			final Map<String, Object> paramValues = parameterHelper.fromViewParameterValues(allParameters,
 					paramAdapter.getParameterValues());
@@ -104,12 +109,23 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 			}
 
 			// Module is executed on another thread
-			moduleFuture = application.getExecutorService().submit(new Runnable() {
+			moduleExecution = new AbortableExecution(application.getExecutorService()) {
 				@Override
 				public void run() {
 					invokeModule(paramValues);
 				}
-			});
+
+				@Override
+				public void cleanup() {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							view.setModuleRunning(false);
+							moduleExecution = null;
+						}
+					});
+				}
+			};
 
 			view.setModuleRunning(true);
 		} catch (Exception e) {
@@ -137,13 +153,6 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 					application.getMainWindow().showException("Module execution exception", ex);
 				}
 			});
-		} finally {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					view.setModuleRunning(false);
-				}
-			});
 		}
 	}
 
@@ -162,8 +171,8 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		paramAdapter.unsetParameterValue(ref);
 
 		// Cancel module execution when parent window closes
-		if (e.getWindowId() == windowId && moduleFuture != null) {
-			moduleFuture.cancel(true);
+		if (e.getWindowId() == windowId && moduleExecution != null) {
+			moduleExecution.abort();
 		}
 	}
 
@@ -173,6 +182,55 @@ public class ModulePresenterImpl extends AbstractPresenter<ModulePresenter, Modu
 		if (application.getDocument(ref.getWindowId()) != null) {
 			application.focusWindow(ref.getWindowId());
 		}
+	}
+
+	private abstract class AbortableExecution {
+		private boolean running = false;
+		private boolean cleanupCalled = false;
+		private final Future<?> future;
+
+		public AbortableExecution(ExecutorService service) {
+			this.future = service.submit(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						synchronized(future) {
+							if (cleanupCalled)
+								// We were cancelled
+								return;
+							running = true;
+						}
+						AbortableExecution.this.run();
+					} finally {
+						boolean doCleanup;
+						synchronized(future) {
+							running = false;
+							doCleanup = !cleanupCalled;
+							cleanupCalled = true;
+						}
+						if (doCleanup)
+							AbortableExecution.this.cleanup();
+					}
+				}
+			});
+		}
+
+		public void abort() {
+			boolean doCleanup;
+			synchronized(future) {
+				future.cancel(true);
+				// If the thread is running, it will cleanup() once it is really done
+				doCleanup = !cleanupCalled && !running;
+				if (doCleanup)
+					cleanupCalled = true;
+			}
+			if (doCleanup)
+				cleanup();
+		}
+
+		abstract public void run();
+
+		abstract public void cleanup();
 	}
 
 }

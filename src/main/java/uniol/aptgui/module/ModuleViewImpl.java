@@ -142,7 +142,7 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 		runButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getPresenter().onRunButtonClicked();
+				getPresenter().onRunAbortButtonClicked();
 			}
 		});
 		bottomPanel = new JPanel();
@@ -158,12 +158,13 @@ public class ModuleViewImpl extends JPanelView<ModulePresenter> implements Modul
 	@Override
 	public void setModuleRunning(boolean running) {
 		if (running) {
+			runButton.setText("Abort");
 			progressSpinner.setIcon(Resource.getIconSpinner());
 		} else {
+			runButton.setText("Run");
 			progressSpinner.setIcon(null);
 		}
 
-		runButton.setEnabled(!running);
 		parametersTable.setEnabled(!running);
 	}
 

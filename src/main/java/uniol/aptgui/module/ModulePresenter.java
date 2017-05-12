@@ -49,9 +49,9 @@ public interface ModulePresenter extends Presenter<ModuleView> {
 	// VIEW EVENTS
 
 	/**
-	 * Called when the run module button is clicked.
+	 * Called when the run/abort module button is clicked.
 	 */
-	void onRunButtonClicked();
+	void onRunAbortButtonClicked();
 
 	/**
 	 * Focuses the window identified by the window reference.
