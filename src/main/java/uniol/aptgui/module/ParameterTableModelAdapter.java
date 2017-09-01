@@ -60,9 +60,9 @@ public class ParameterTableModelAdapter {
 	public Map<String, Object> getParameterValues() {
 		Map<String, Object> result = new HashMap<>();
 		for (int row = 0; row < parametersTableModel.getRowCount(); row++) {
-			if (parametersTableModel.getPropertyValueAt(row) != null) {
+			Object value = parametersTableModel.getPropertyValueAt(row);
+			if (value != null && !"".equals(value)) {
 				String name = parametersTableModel.getPropertyNameAt(row);
-				Object value = parametersTableModel.getPropertyValueAt(row);
 				result.put(name, value);
 			}
 		}
