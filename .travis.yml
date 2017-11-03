@@ -7,6 +7,11 @@ notifications:
     recipients: pg-apt-info@informatik.uni-oldenburg.de
   on_failure: always
   on_success: change
+install:
+  # services.gradle.org wants to use elliptic curve crypto with SSL, Java 7 does not. Work around this by using another crypto provider.
+  - sudo wget "https://bouncycastle.org/download/bcprov-ext-jdk15on-158.jar" -O "${JAVA_HOME}/jre/lib/ext/bcprov-ext-jdk15on-158.jar"
+  - sudo perl -pi.bak -e 's/^(security\.provider\.)([0-9]+)/$1.($2+1)/ge' /etc/java-7-openjdk/security/java.security
+  - echo "security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider" | sudo tee -a /etc/java-7-openjdk/security/java.security
 script:
   - ./gradlew test
   - ./gradlew javadoc
