@@ -34,6 +34,7 @@ import java.util.Set;
 
 import uniol.apt.adt.extension.IExtensible;
 import uniol.aptgui.document.graphical.GraphicalElement;
+import uniol.aptgui.document.graphical.edges.GraphicalEdge;
 import uniol.aptgui.document.graphical.nodes.GraphicalNode;
 import uniol.aptgui.editor.layout.Layout;
 import uniol.aptgui.editor.layout.LayoutException;
@@ -200,6 +201,18 @@ public abstract class Document<T> {
 	 */
 	public void addToSelection(GraphicalElement elem) {
 		selection.addToSelection(elem);
+
+		// When a node is selected, also select all self-loops of it
+		if (elem instanceof GraphicalNode) {
+			for (GraphicalElement otherElem : elements.keySet()) {
+				if (otherElem instanceof GraphicalEdge) {
+					GraphicalEdge loop = (GraphicalEdge) otherElem;
+					if (loop.getSource().equals(elem) && loop.getTarget().equals(elem)) {
+						selection.addToSelection(loop);
+					}
+				}
+			}
+		}
 	}
 
 	/**
