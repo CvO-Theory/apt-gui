@@ -109,8 +109,7 @@ public class ModuleRunnerTest {
 		InterruptibleModule module = mock(InterruptibleModule.class);
 		ModuleRunner moduleRunner = new ModuleRunner();
 		moduleRunner.run(module, new HashMap<String, Object>());
-		verify(module, never()).run(any(ModuleInput.class), any(ModuleOutput.class));
-		verify(module).run(any(ModuleInput.class), any(ModuleOutput.class), any(ThreadStatusInterrupter.class));
+		verify(module).run(any(ModuleInput.class), any(ModuleOutput.class));
 	}
 
 }

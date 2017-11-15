@@ -22,7 +22,6 @@ package uniol.aptgui.module;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import uniol.apt.module.InterruptibleModule;
 import uniol.apt.module.Module;
 import uniol.apt.module.exception.ModuleException;
 import uniol.apt.module.exception.ModuleInvocationException;
@@ -32,6 +31,7 @@ import uniol.apt.module.impl.ModuleUtils;
 import uniol.apt.module.impl.OptionalParameter;
 import uniol.apt.module.impl.Parameter;
 import uniol.apt.module.impl.ReturnValue;
+import uniol.apt.util.interrupt.InterrupterRegistry;
 import uniol.apt.util.interrupt.ThreadStatusInterrupter;
 
 /**
@@ -80,12 +80,8 @@ public class ModuleRunner {
 		}
 
 		// Run module
-		if (module instanceof InterruptibleModule) {
-			InterruptibleModule interruptibleModule = (InterruptibleModule) module;
-			interruptibleModule.run(input, output, new ThreadStatusInterrupter());
-		} else {
-			module.run(input, output);
-		}
+		InterrupterRegistry.setCurrentThreadInterrupter(new ThreadStatusInterrupter());
+		module.run(input, output);
 
 		// Collect return values
 		Map<String, Object> results = new LinkedHashMap<>();
