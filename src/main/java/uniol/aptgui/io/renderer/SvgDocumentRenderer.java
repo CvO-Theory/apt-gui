@@ -71,6 +71,8 @@ public class SvgDocumentRenderer implements DocumentRenderer {
 		document.draw(svgGenerator, renderingOptions);
 		document.setViewport(original);
 
+		svgGenerator.setSVGCanvasSize(bounds.getSize());
+
 		// Save to file.
 		svgGenerator.stream(file.getAbsolutePath());
 	}
