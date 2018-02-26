@@ -43,6 +43,13 @@ eclipse {
 	}
 }
 
+task thinJar(type: Jar) {
+    dependsOn compileJava
+    baseName = "apt-gui-thin"
+    from sourceSets.main.output
+}
+assemble.dependsOn thinJar
+
 jar {
     manifest {
         attributes 'Main-Class': 'uniol.aptgui.Main'

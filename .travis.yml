@@ -15,7 +15,7 @@ install:
 script:
   - ./gradlew test
   - ./gradlew javadoc
-  - ./gradlew jar
+  - ./gradlew assemble
 after_success:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ]; then ./publish-jar.sh; fi
 env:

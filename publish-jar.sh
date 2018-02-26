@@ -28,6 +28,7 @@ git clone --depth 1 --quiet --branch gh-pages $REPO_APIDOC /tmp/gh-pages
 cd /tmp/gh-pages
 
 cp "${REPO_DIR}/build/libs/apt-gui.jar" .
+cp "${REPO_DIR}/build/libs/apt-gui-thin.jar" .
 git add --all .
 
 # Commit the relevant changes.
