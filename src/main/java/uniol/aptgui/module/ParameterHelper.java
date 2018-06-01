@@ -31,6 +31,8 @@ import uniol.apt.adt.ts.TransitionSystem;
 import uniol.apt.module.exception.ModuleException;
 import uniol.apt.module.impl.Parameter;
 import uniol.apt.ui.ParametersTransformer;
+import uniol.aptgui.io.properties.GraphicalElementTransformer;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 import uniol.aptgui.mainwindow.WindowRef;
 
 /**
@@ -106,6 +108,10 @@ public class ParameterHelper {
 	}
 
 	private Object windowRefToModel(WindowRef ref, Class<?> targetClass) {
+		// Save layout; if the module returns (a copy of) this object, ResultHelper will restore the layout
+		new PersistentDocumentProperties(ref.getDocument())
+			.renderPersistentModelExtensions(new GraphicalElementTransformer());
+
 		if (PetriNetOrTransitionSystem.class.equals(targetClass)) {
 			Object model = ref.getDocument().getModel();
 			if (model instanceof TransitionSystem) {

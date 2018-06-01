@@ -30,6 +30,7 @@ import uniol.aptgui.Application;
 import uniol.aptgui.document.Document;
 import uniol.aptgui.document.PnDocument;
 import uniol.aptgui.document.TsDocument;
+import uniol.aptgui.io.properties.PersistentDocumentProperties;
 import uniol.aptgui.mainwindow.WindowId;
 import uniol.aptgui.mainwindow.WindowRef;
 
@@ -67,19 +68,21 @@ public class ResultHelper {
 	}
 
 	private Object modelToView(Object value) {
+		Document<?> doc;
 		if (value instanceof PetriNet) {
-			Document<?> doc = new PnDocument((PetriNet) value);
-			doc.setHasUnsavedChanges(true);
-			WindowRef ref = openDocument(doc);
-			return ref;
+			doc = new PnDocument((PetriNet) value);
 		} else if (value instanceof TransitionSystem) {
-			Document<?> doc = new TsDocument((TransitionSystem) value);
-			doc.setHasUnsavedChanges(true);
-			WindowRef ref = openDocument(doc);
-			return ref;
+			doc = new TsDocument((TransitionSystem) value);
 		} else {
 			return value.toString();
 		}
+
+		// Restore layout if possible
+		new PersistentDocumentProperties(doc).parsePersistentModelExtensions();
+
+		doc.setHasUnsavedChanges(true);
+		WindowRef ref = openDocument(doc);
+		return ref;
 	}
 
 	private WindowRef openDocument(Document<?> document) {
